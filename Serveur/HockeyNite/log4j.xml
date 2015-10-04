@@ -1,0 +1,31 @@
+<?xmlversion="1.0" encoding="ISO‐8859‐1"?> 
+<!DOCTYPE log4j:configurationSYSTEM "log4j.dtd"> <log4j:configurationxmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
+<!--APPENDERS -->
+<appendername="stdout" class="org.apache.log4j.ConsoleAppender">
+    <layoutclass="org.apache.log4j.PatternLayout">
+        <paramname="ConversionPattern" value="%5p [%t] (%F:%L) ‐%m%n"/>
+    </layout>
+</appender>
+
+<appendername="R" class="org.apache.log4j.RollingFileAppender">
+    <paramname="File" value="example.log"/>
+    <paramname="MaxFileSize" value="100KB"/>
+    <paramname="MaxBackupIndex" value="1"/>
+    <layoutclass="org.apache.log4j.PatternLayout">
+        <paramname="ConversionPattern" value="%d %p %t %c ‐%m%n"/>
+    </layout>
+</appender>
+
+<!--CATEGORIES -->
+<categoryname="com">
+    <priorityvalue="FATAL"/>
+</category>
+
+<categoryname="com.foo">
+     <priorityvalue="DEBUG"/>
+</category>
+ <categoryname="org">
+    <priorityvalue="DEBUG"/>
+</category>
+<!--ROOT -->
+<root> <priorityvalue="INFO"/> <appender‐refref="stdout"/> <appender‐refref="R"/> </root> </log4j:configuration>
