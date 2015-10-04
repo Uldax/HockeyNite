@@ -6,7 +6,7 @@ import java.net.SocketException;
 
 import protocole.Message;
 import protocole.MessageHandler;
-
+import org.apache.log4j.Logger;
 import utils.Marshallizer;
 
 public class UDPServer {
@@ -15,29 +15,34 @@ public class UDPServer {
 	private DatagramSocket mySocket;
 	private String serverIP;
 	private int serverPort;
+	private static final Logger logger = Logger.getLogger(UDPServer.class);
+
 
 	//UDP server repeatedly receives a request and sends it back to the client 
 	public UDPServer(){ 
-		serverPort = 6789;
-		serverIP = "192.169.0.1";
+		serverPort = 6780;
+		serverIP = "127.0.0.1";
 	}	
 	
-	public void startServer() {
+	public void start() {
 		mySocket = null;
+		logger.info("server start on port " + String.valueOf(serverPort));
 		try {
 			mySocket = new DatagramSocket(serverPort); // port convenu avec les clients
 			byte[] buffer = new byte[1000];
 			while (true) {
 				DatagramPacket datagram = new DatagramPacket(buffer, buffer.length);
 				mySocket.receive(datagram); // réception bloquante
-
+				logger.info("data receive");
 				Message message = (Message) Marshallizer.unmarshall(datagram);
 				//IF client ask something
 				if (message.isRequest()) {
+					logger.info("start thread for answer");
 					new Thread(new MessageHandler(message,this)).start();					
 				} else {
 					//new Thread(new ReplyHandler((Reply) message, this)).start();
 				}
+				logger.info("end of reception");
 			}
 		} catch (SocketException e) {
 			System.out.println("Socket: " + e.getMessage());

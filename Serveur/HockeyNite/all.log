@@ -1,0 +1,2 @@
+2015-10-04 18:03:52.463 [main] INFO  server.UDPServer - server start on port 6780
+2015-10-04 18:03:58.815 [main] INFO  server.UDPServer - data receive

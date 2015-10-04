@@ -9,12 +9,13 @@ import java.net.SocketException;
 import org.apache.log4j.Logger;
 
 import server.UDPServer;
+import utils.Marshallizer;
 
 public class MessageHandler implements Runnable {
 
 	private Message message;
 	private UDPServer myServer;
-	private static final Logger logger = Logger.getLogger("Runable");
+	private static final Logger logger = Logger.getLogger(MessageHandler.class);
 
 	public MessageHandler(Message message, UDPServer udpServer) {
 		super();
@@ -46,7 +47,9 @@ public class MessageHandler implements Runnable {
 		try {
 			aSocket = new DatagramSocket(message.getDestinationPort()); // port convenu avec les clients
 			while (true) {
-				DatagramPacket datagram = new DatagramPacket(message.getData(),
+				//Message.getData()
+				
+				DatagramPacket datagram = new DatagramPacket(Marshallizer.marshallize(message),
 						message.getLength(), 
 						message.getDestination(),
 						message.getDestinationPort());

@@ -1,11 +1,10 @@
-package protocole;
+package utils;
+
 
 import java.io.Serializable;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-
-import utils.Marshallizer;
 
 public class Message implements Serializable {
 

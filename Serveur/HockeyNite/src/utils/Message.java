@@ -1,4 +1,4 @@
-package protocole;
+package utils;
 
 import java.io.Serializable;
 import java.net.DatagramPacket;
