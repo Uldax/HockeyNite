@@ -37,19 +37,21 @@ public class MessageHandler implements Runnable {
 	}
 	
 	//Answer to the request
-		private Message buildResponse(Message request) {
+		private <T> Message buildResponse(Message request) {
 			Message reply = new Message();
 			reply.setType(Message.REPLY);
 			reply.setDestinationPort(request.getSenderPort());
 			reply.setDestination(request.getSender());
 			//Access to dao and set resultat
-			Match[] listMatch = data.getAllMatch();
-			if(listMatch != null){
-				reply.setValue(listMatch);
+			if(request.isRequestDetail()){
+				@SuppressWarnings("unchecked")
+				MessageParam<T> paramObject = (MessageParam<T>)request.getValue();
+				Match matchDetail = data.getMatch((int)paramObject.getParam());
+				reply.setValue(matchDetail);	
 			} else {
-				reply.setValue(new Error());
-			}
-			
+				Match[] listMatch = data.getAllMatch();
+				reply.setValue(listMatch);	
+			}								
 			logger.info("Message reply crafted");		
 			return reply;
 		}
