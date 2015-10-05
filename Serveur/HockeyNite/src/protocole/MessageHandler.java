@@ -26,6 +26,7 @@ public class MessageHandler implements Runnable {
 	
 	@Override
 	public void run() {
+		//build the response of the request
 		Message reply = buildResponse(message);
 		respond(reply);
 		logger.info("reply done");
@@ -38,19 +39,20 @@ public class MessageHandler implements Runnable {
 			reply.setDestinationPort(request.getSenderPort());
 			reply.setDestination(request.getSender());
 			//Access to dao and set resultat
-			
+			logger.info("Message reply crafted");
 			return reply;
 		}
 
 	protected void respond(Message message) {
 		DatagramSocket aSocket = null;
 		try {
-			aSocket = new DatagramSocket(message.getDestinationPort()); // port convenu avec les clients
+			aSocket = myServer.getMySocket();
 			while (true) {
 				//Message.getData()
-				
-				DatagramPacket datagram = new DatagramPacket(Marshallizer.marshallize(message),
-						message.getLength(), 
+				logger.debug(message.toString());
+				byte[] reply = Marshallizer.marshallize(message);
+				DatagramPacket datagram = new DatagramPacket(reply,
+						reply.length, 
 						message.getDestination(),
 						message.getDestinationPort());
 				aSocket.send(datagram); // émission non-bloquante

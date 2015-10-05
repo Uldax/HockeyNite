@@ -1,7 +1,8 @@
+package test;
 import java.net.*;
 
 import utils.Marshallizer;
-import utils.Message;
+import protocole.Message;
 
 import java.io.*; 
 //UDP client sends a message to the server and gets a reply
@@ -20,12 +21,13 @@ public class UDPClient{
 		// socket + port quelconque pour envoyer et recevoir la réponse
          //Envoi non blocant
     	 Message test = Protocole.craftMessage(); 
-         Protocole.respond(test);
+    	 aSocket = new DatagramSocket(); // port convenu avec les clients
+    	 Protocole.respond(test,aSocket);
+    	 
          System.out.println("message send"); 
          //réception bloquante 		                        
          byte[] buffer = new byte[1000];
          DatagramPacket reply = new DatagramPacket(buffer, buffer.length);	
-         aSocket = new DatagramSocket(test.getDestinationPort()); // port convenu avec les clients
          aSocket.receive(reply);
          System.out.println("reply reçu"); 
 		Message message = (Message) Marshallizer.unmarshall(reply);

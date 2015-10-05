@@ -10,6 +10,8 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.DatagramPacket;
 
+import protocole.Message;
+
 
 
 public class Marshallizer {

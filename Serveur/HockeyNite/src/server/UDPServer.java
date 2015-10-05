@@ -13,6 +13,14 @@ public class UDPServer {
 	
 	
 	private DatagramSocket mySocket;
+	public DatagramSocket getMySocket() {
+		return mySocket;
+	}
+
+	public void setMySocket(DatagramSocket mySocket) {
+		this.mySocket = mySocket;
+	}
+
 	private String serverIP;
 	private int serverPort;
 	private static final Logger logger = Logger.getLogger(UDPServer.class);
@@ -35,6 +43,7 @@ public class UDPServer {
 				mySocket.receive(datagram); // réception bloquante
 				logger.info("data receive");
 				Message message = (Message) Marshallizer.unmarshall(datagram);
+				logger.info("message receive " + String.valueOf(message.getType()));
 				//IF client ask something
 				if (message.isRequest()) {
 					logger.info("start thread for answer");

@@ -1,7 +1,6 @@
 package protocole;
 
 import java.io.Serializable;
-import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -27,7 +26,7 @@ public class Message implements Serializable {
 		private InetAddress destination; 		// destinataire du message
 		private int destinationPort;					// port du destinataire
 
-		private Object value;				// dans le cas d'une requéte, le nom symbolique dont on recherche l'adresse IP
+		private Serializable value;				// dans le cas d'une requéte, le nom symbolique dont on recherche l'adresse IP
 											// dans le cas d'une rŽponse, l'adresse IP correspondant au nom symbolique
 		public int getType() {
 			return type;
@@ -44,7 +43,7 @@ public class Message implements Serializable {
 		public Object getValue() {
 			return value;
 		}
-		public void setValue(Object value) {
+		public void setValue(Serializable value) {
 			this.value = value;
 		}
 		
@@ -57,10 +56,7 @@ public class Message implements Serializable {
 		public boolean isRequest() {
 			return type == REQUEST;
 		}
-		public InetAddress getDestinationAsInet() {
-			// TODO Auto-generated method stub
-			return null;
-		}
+
 		public InetAddress getSender() {
 			return sender;
 		}
@@ -92,5 +88,10 @@ public class Message implements Serializable {
 		}
 		public void setDestination(InetAddress destination) {
 			this.destination = destination;
+		}
+		@Override
+		public String toString() {
+			return "Message [type=" + type + ", sender=" + sender + ", senderPort=" + senderPort + ", destination="
+					+ destination + ", destinationPort=" + destinationPort + "]";
 		}
 }
