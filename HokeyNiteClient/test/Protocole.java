@@ -18,13 +18,11 @@ public class Protocole {
 		try {
 			aHost = InetAddress.getByName("localhost");
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		reply.setDestination(aHost);
 		reply.setSender(aHost);
 		reply.setSenderPort(6779);
-		//reply.setValue(new MyObject(1, "coucou"));
 		return reply;
 	}
 
@@ -46,5 +44,13 @@ public class Protocole {
 		} catch (IOException e) {
 			System.out.println("IO: " + e.getMessage());
 		}
+	}
+	
+	public static void askListMatch(){
+		
+	}
+	
+	public static Object[] getListMatch(){
+		return null;	
 	}
 }

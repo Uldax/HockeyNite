@@ -3,6 +3,7 @@ import java.net.*;
 
 import utils.Marshallizer;
 import protocole.Message;
+import affichage.Menu;
 
 import java.io.*; 
 //UDP client sends a message to the server and gets a reply
@@ -17,8 +18,9 @@ public class UDPClient{
 
      DatagramSocket aSocket = null;
 
-     try {
-		// socket + port quelconque pour envoyer et recevoir la réponse
+     try {   	 
+    	 
+    	 // socket + port quelconque pour envoyer et recevoir la réponse
     	 Message test = Protocole.craftMessage(); 
     	 aSocket = new DatagramSocket(6779); 
     	 //send
@@ -39,6 +41,52 @@ public class UDPClient{
      catch (SocketException e){System.out.println("Socket: " + e.getMessage());} 
      catch (IOException e){System.out.println("IO: " + e.getMessage());}
 	 finally {if(aSocket != null) aSocket.close();}
+    }
+    
+    public static void mainv2(){
+    	int choix = -1;
+    	do{
+    		// Demande de la liste des matchs
+    	  	Protocole.askListMatch();
+    		
+        	// Récupération de la liste des matchs
+    	  	Object[] ListMatch = Protocole.getListMatch();
+    		
+    		
+       	 	// Affichage de la liste des matchs
+    		Menu.affListMatch(ListMatch);
+    		
+    		
+        	// Choix dans le menu
+    		System.out.println("Faites votre choix ?");
+    		do{
+    			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    	    	try{
+    	            choix = Integer.parseInt(br.readLine());
+    	        }catch(NumberFormatException nfe){
+    	            System.err.println("Invalid Format!");
+    	            choix = -1;
+    	        } catch (IOException e) {
+    				e.printStackTrace();
+    				choix = -1;
+    			}        
+    		}while(choix == -1);
+    		if((choix > 0)&&(choix <= ListMatch.length)) detailMatch(choix-1);
+    		//  récupération des détails du match et affichage
+    		
+    	}while(choix != 0);
+    	// choix == 0 -> exit
+    	// other choix -> refresh list 	
+    }
+    
+    public static void detailMatch(int id){
+    	// Demande d'information sur le match
+    	
+    	// Récupération des informations
+    	
+    	// Affichage des infomations
+    	
+    	// Réponse utilisateur
     }
     
  
