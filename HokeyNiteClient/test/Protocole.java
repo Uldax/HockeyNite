@@ -24,7 +24,7 @@ public class Protocole {
 		}
 		reply.setDestination(aHost);
 		reply.setSender(aHost);
-		reply.setSenderPort(6780);
+		reply.setSenderPort(6779);
 		//reply.setValue(new MyObject(1, "coucou"));
 		return reply;
 	}

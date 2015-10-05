@@ -20,7 +20,7 @@ public class UDPClient{
      try {
 		// socket + port quelconque pour envoyer et recevoir la réponse
     	 Message test = Protocole.craftMessage(); 
-    	 aSocket = new DatagramSocket(); 
+    	 aSocket = new DatagramSocket(6779); 
     	 //send
     	 Protocole.respond(test,aSocket);
          System.out.println("message send"); 
