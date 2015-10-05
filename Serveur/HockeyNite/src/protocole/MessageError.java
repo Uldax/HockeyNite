@@ -2,7 +2,7 @@ package protocole;
 
 import java.io.Serializable;
 
-public class Error implements Serializable{
+public class MessageError implements Serializable{
 	
 	/**
 	 * 
@@ -12,11 +12,11 @@ public class Error implements Serializable{
 	private int code;
 	private String message;
 	
-	public Error() {
+	public MessageError() {
 		message = "An error apear";
 	}
 	
-	public Error(int code){
+	public MessageError(int code){
 		this.code = code;
 		defineMessage(code);
 	}

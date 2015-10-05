@@ -3,6 +3,9 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import protocole.Message;
 import protocole.MessageHandler;
@@ -12,35 +15,23 @@ import utils.Marshallizer;
 public class UDPServer {
 	
 	
-	private DatagramSocket mySocket;
-	public DatagramSocket getMySocket() {
-		return mySocket;
-	}
+	private DatagramSocket mySocket = null;
 
-	public void setMySocket(DatagramSocket mySocket) {
-		this.mySocket = mySocket;
-	}
-
-	private String serverIP;
-	private int serverPort;
-	private DAO data;
-	
-	public DAO getData() {
-		return data;
-	}
-
-	public void setData(DAO data) {
-		this.data = data;
-	}
-
+	//thread pool
+	private ExecutorService pool;
+	private String serverIP = null;
+	private int serverPort = 0;
+	private DAO data = null;
 	private static final Logger logger = Logger.getLogger(UDPServer.class);
 
 
 	//UDP server repeatedly receives a request and sends it back to the client 
-	public UDPServer(){ 
-		serverPort = 6780;
+	public UDPServer(int port,int poolSize){ 
+		serverPort = port;
 		serverIP = "127.0.0.1";
 		data = new DAO();
+		pool = Executors.newFixedThreadPool(poolSize);
+
 	}	
 	
 	public void start() {
@@ -58,7 +49,9 @@ public class UDPServer {
 				//IF client ask something
 				if (message.isRequest()) {
 					logger.info("start thread for answer");
-					new Thread(new MessageHandler(message,this)).start();					
+					//What append if pool full ?
+		            pool.execute(new MessageHandler(message,this));
+					//new Thread(new MessageHandler(message,this)).start();					
 				} else {
 					//new Thread(new ReplyHandler((Reply) message, this)).start();
 				}
@@ -78,18 +71,30 @@ public class UDPServer {
 	}
 
 	public void stopServer() {
-		// TODO : faire quelque chose de plus élégant
-		if (mySocket != null)
-			mySocket.close();
+	   pool.shutdown(); // Disable new tasks from being submitted
+	   try {
+	     // Wait a while for existing tasks to terminate
+	     if (!pool.awaitTermination(60, TimeUnit.SECONDS)) {
+	       pool.shutdownNow(); // Cancel currently executing tasks
+	       // Wait a while for tasks to respond to being cancelled
+	       if (!pool.awaitTermination(60, TimeUnit.SECONDS))
+	           logger.debug("Pool did not terminate");
+	     }
+	   } catch (InterruptedException ie) {
+	     // (Re-)Cancel if current thread also interrupted
+	     pool.shutdownNow();
+	     // Preserve interrupt status
+	     Thread.currentThread().interrupt();
+	   }
+		if (mySocket != null) {
+			mySocket.close();	
+		}		
 	}
 	//curent id
 	public void manageDuplicate(){
 		
 	}
-	//Get all the information from the Datagram
-	public void unmarshallData(){
-		
-	}
+
 
 	public String getServerIP() {
 		return serverIP;
@@ -105,5 +110,19 @@ public class UDPServer {
 
 	public void setServerPort(int serverPort) {
 		this.serverPort = serverPort;
+	}
+	public DatagramSocket getMySocket() {
+		return mySocket;
+	}
+
+	public void setMySocket(DatagramSocket mySocket) {
+		this.mySocket = mySocket;
+	}
+	public DAO getData() {
+		return data;
+	}
+
+	public void setData(DAO data) {
+		this.data = data;
 	}
 }
