@@ -1,6 +1,13 @@
 package dataObject;
 
-public class Match {
+import java.io.Serializable;
+import java.util.Arrays;
+
+public class Match implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8080958380151755727L;
 	private int time = 0;
 	private Team domicile = null;
 	private int domicileScore = 0;
@@ -38,5 +45,11 @@ public class Match {
 	}
 	public void setMatchEvent(Event[] matchEvent) {
 		this.matchEvent = matchEvent;
+	}
+	@Override
+	public String toString() {
+		return "Match [time=" + time + ", domicile=" + domicile + ", domicileScore=" + domicileScore + ", exterieur="
+				+ exterieur + ", exterieurScore=" + exterieurScore + ", matchEvent=" + Arrays.toString(matchEvent)
+				+ ", periode=" + periode + "]";
 	}
 }

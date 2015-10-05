@@ -23,6 +23,16 @@ public class UDPServer {
 
 	private String serverIP;
 	private int serverPort;
+	private DAO data;
+	
+	public DAO getData() {
+		return data;
+	}
+
+	public void setData(DAO data) {
+		this.data = data;
+	}
+
 	private static final Logger logger = Logger.getLogger(UDPServer.class);
 
 
@@ -30,6 +40,7 @@ public class UDPServer {
 	public UDPServer(){ 
 		serverPort = 6780;
 		serverIP = "127.0.0.1";
+		data = new DAO();
 	}	
 	
 	public void start() {

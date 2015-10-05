@@ -1,6 +1,12 @@
 package dataObject;
 
-public class Event {
+import java.io.Serializable;
+
+public class Event implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5590704311853640594L;
 	private int time;
 	private String message;
 	
@@ -15,5 +21,9 @@ public class Event {
 	}
 	public void setMessage(String message) {
 		this.message = message;
+	}
+	@Override
+	public String toString() {
+		return "Event [time=" + time + ", message=" + message + "]";
 	}
 }

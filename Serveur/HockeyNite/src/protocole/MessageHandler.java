@@ -8,6 +8,8 @@ import java.net.SocketException;
 
 import org.apache.log4j.Logger;
 
+import dataObject.Match;
+import server.DAO;
 import server.UDPServer;
 import utils.Marshallizer;
 
@@ -15,12 +17,14 @@ public class MessageHandler implements Runnable {
 
 	private Message message;
 	private UDPServer myServer;
+	private DAO data = null;
 	private static final Logger logger = Logger.getLogger(MessageHandler.class);
 
 	public MessageHandler(Message message, UDPServer udpServer) {
 		super();
 		this.message = message;
 		this.myServer = udpServer;
+		data = myServer.getData();
 		logger.info("new runnable");
 	}
 	
@@ -39,7 +43,14 @@ public class MessageHandler implements Runnable {
 			reply.setDestinationPort(request.getSenderPort());
 			reply.setDestination(request.getSender());
 			//Access to dao and set resultat
-			logger.info("Message reply crafted");
+			Match[] listMatch = data.getAllMatch();
+			if(listMatch != null){
+				reply.setValue(listMatch);
+			} else {
+				reply.setValue(new Error());
+			}
+			
+			logger.info("Message reply crafted");		
 			return reply;
 		}
 

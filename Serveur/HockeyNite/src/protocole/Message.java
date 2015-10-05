@@ -91,7 +91,11 @@ public class Message implements Serializable {
 		}
 		@Override
 		public String toString() {
-			return "Message [type=" + type + ", sender=" + sender + ", senderPort=" + senderPort + ", destination="
-					+ destination + ", destinationPort=" + destinationPort + "]";
+			String output = "Message [type=" + type + ", numero=" + numero + ", sender=" + sender + ", senderPort=" + senderPort
+					+ ", destination=" + destination + ", destinationPort=" + destinationPort; 
+			if (value != null) {
+				output += 	", value=" + value.toString()+ "]";
+			}
+			return output;	
 		}
 }
