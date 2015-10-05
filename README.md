@@ -20,10 +20,13 @@ Exporter ensuite la classe protocle.message.java ainsi que tous le package dataO
 Clic droit sur le projet > Export > Java > Jar file
 
 ### TODO LIST
-- Implémenter pull de thread
-- S'assurer de la bonne reception des messages
-- Service de pari avec TCP
-- Thread de mise a jour des données de match
+- [x] Service de match via UDP
+- [x] Implémenter une pool de thread
+- [ ] S'assurer de la bonne reception des messages
+- [ ] Service de pari avec TCP
+- [ ] Thread de mise a jour des données de match
+- [ ] Thread de mise a jour du temps de match
+- [ ] Résolution du problème lecteur/ecrivain sur le DAO
 
 ## Client
 Reproduiser la même procedure que précédament
@@ -32,7 +35,7 @@ Reproduiser la même procedure que précédament
 Onglet "Libraries" > "Add External JARs" et ajouter le fichier de la classe Message précédament généré.
 
 ### TODO LIST
-- Implémenter le client console
-- Implémenter le client Android
+- [ ] Implémenter le client console
+- [ ] Implémenter le client Android
 
 
