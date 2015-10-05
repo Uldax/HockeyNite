@@ -19,28 +19,22 @@ public class UDPClient{
 
      try {
 		// socket + port quelconque pour envoyer et recevoir la réponse
-         //Envoi non blocant
     	 Message test = Protocole.craftMessage(); 
-    	 aSocket = new DatagramSocket(); // port convenu avec les clients
+    	 aSocket = new DatagramSocket(); 
+    	 //send
     	 Protocole.respond(test,aSocket);
-    	 
          System.out.println("message send"); 
+         
          //réception bloquante 		                        
          byte[] buffer = new byte[1000];
          DatagramPacket reply = new DatagramPacket(buffer, buffer.length);	
          aSocket.receive(reply);
          System.out.println("reply reçu"); 
-		Message message = (Message) Marshallizer.unmarshall(reply);
-		System.out.println("Reply: " + message.toString()); 
-       /*  MyObject MO = null;         
-         try { // désériallisation de l'objet
-			ByteArrayInputStream bis = new ByteArrayInputStream(reply.getData());
-			ObjectInput in = null;
-			in = new ObjectInputStream(bis);
-			MO = (MyObject) in.readObject(); 
-         } catch (IOException | ClassNotFoundException e1) {e1.printStackTrace();} 
          
-         System.out.println("Reply: " + MO.toString()); */
+         //Unmarshal the receive object
+         Message message = (Message) Marshallizer.unmarshall(reply);
+         System.out.println("Reply: " + message.toString()); 
+ 
      } 
      catch (SocketException e){System.out.println("Socket: " + e.getMessage());} 
      catch (IOException e){System.out.println("IO: " + e.getMessage());}
