@@ -8,7 +8,7 @@ public class DAO {
 	private static final Logger logger = Logger.getLogger("DAO");
 	private Match ListMatch[] = null;
 	
-	//Initialisation with somme ramdom value	
+	//Initialisation with some ramdom value	
 	public DAO(){
 		Team t1 =  new Team("A");
 		Team t2 =  new Team("B");

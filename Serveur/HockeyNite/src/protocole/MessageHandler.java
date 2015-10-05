@@ -47,16 +47,14 @@ public class MessageHandler implements Runnable {
 		DatagramSocket aSocket = null;
 		try {
 			aSocket = myServer.getMySocket();
-			while (true) {
-				//Message.getData()
-				logger.debug(message.toString());
-				byte[] reply = Marshallizer.marshallize(message);
-				DatagramPacket datagram = new DatagramPacket(reply,
-						reply.length, 
-						message.getDestination(),
-						message.getDestinationPort());
-				aSocket.send(datagram); // émission non-bloquante
-			}
+			//Message.getData()
+			logger.debug(message.toString());
+			byte[] reply = Marshallizer.marshallize(message);
+			DatagramPacket datagram = new DatagramPacket(reply,
+					reply.length, 
+					message.getDestination(),
+					message.getDestinationPort());
+			aSocket.send(datagram); // émission non-bloquante
 		} catch (SocketException e) {
 			System.out.println("Socket: " + e.getMessage());
 		} catch (IOException e) {
