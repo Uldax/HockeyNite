@@ -1,7 +1,8 @@
 package dataObject;
 
 import java.io.Serializable;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Match implements Serializable {
 	/**
@@ -13,8 +14,15 @@ public class Match implements Serializable {
 	private int domicileScore = 0;
 	private Team exterieur = null;
 	private int exterieurScore = 0;
-	private Event matchEvent[] = null;
+	private List<Event> matchEvent = new ArrayList<Event>();
+	//20 minute per periode with 15min of break
 	private int periode;
+	//for easy the time gestion
+	private int periodeStart = 0;
+	private boolean pause = false;
+	private final int PERIODE_TIME = 20*60;
+	private final int BREAK_TIME = 15*60;
+	private final int MAX_TIME = 3 * PERIODE_TIME + 2 * BREAK_TIME;
 	
 	
 	public Match(Team domicile,Team exterieur){
@@ -25,8 +33,50 @@ public class Match implements Serializable {
 	public int getTime() {
 		return time;
 	}
+	
+	//Set time 
 	public void setTime(int time) {
-		this.time = time;
+		if( time <= MAX_TIME) {
+			this.time = time;
+			handlePeriode();
+		}	
+	}
+	
+	private void handlePeriode(){
+		switch (periode) {
+		case 1:
+			if (time >= PERIODE_TIME && pause == false) {
+				pause = true;
+				matchEvent.add( new Event(time, "First time break"));
+			}
+			else if ((time >= PERIODE_TIME + BREAK_TIME) && pause == true) {
+				pause = false;
+				matchEvent.add( new Event(time, "Here we go for the second periode"));
+				periodeStart = time;
+				periode = 2;
+			}
+			break;
+		case 2:
+			if ((time >= periodeStart + PERIODE_TIME ) && pause == false ) {
+				pause = true;
+				matchEvent.add( new Event(time, "Second time break"));
+			}
+			else if ((time >= periodeStart + PERIODE_TIME + BREAK_TIME ) && pause == true) {
+				pause = false;
+				matchEvent.add( new Event(time, "here we go for the last periode"));
+				periodeStart = time;
+				periode = 3;
+			}
+			break;
+		case 3:
+			if ((time >= periodeStart + PERIODE_TIME ) && pause == false ) {
+				pause = true;
+				matchEvent.add( new Event(time, "This is the end of the game"));
+			}	
+			break;
+		default:
+			break;
+		}
 	}
 	public Team getDomicile() {
 		return domicile;
@@ -40,16 +90,21 @@ public class Match implements Serializable {
 	public void setExterieur(Team exterieur) {
 		this.exterieur = exterieur;
 	}
-	public Event[] getMatchEvent() {
+	public List<Event> getMatchEvent() {
 		return matchEvent;
 	}
-	public void setMatchEvent(Event[] matchEvent) {
+	public void setMatchEvent(List<Event> matchEvent) {
 		this.matchEvent = matchEvent;
 	}
 	@Override
 	public String toString() {
-		return "Match [time=" + time + ", domicile=" + domicile + ", domicileScore=" + domicileScore + ", exterieur="
-				+ exterieur + ", exterieurScore=" + exterieurScore + ", matchEvent=" + Arrays.toString(matchEvent)
-				+ ", periode=" + periode + "]";
+		String echo =  "Match [time=" + time + ", domicile=" + domicile + ", domicileScore=" + domicileScore + ", exterieur="
+				+ exterieur + ", exterieurScore=" + exterieurScore + ", matchEvent=" ; 
+				for (Event e : matchEvent)
+				{
+				    echo += e.toString() + "\t";
+				}
+				echo += ", periode=" + periode + "]";
+		return echo;
 	}
 }

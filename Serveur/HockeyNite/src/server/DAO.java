@@ -30,6 +30,9 @@ public class DAO {
 		
 	}
 	public Match[] getAllMatch(){
+		if (ListMatch.length < 1) {
+		    return null;
+		}
 		return ListMatch;
 	}
 }

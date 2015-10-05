@@ -27,24 +27,7 @@ public class Marshallizer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null; 
-		
-		/*
-		try {
-			byte[] recvBuf = new byte[1000];
-			ByteArrayInputStream byteStream = new ByteArrayInputStream(recvBuf);
-			ObjectInputStream is = new ObjectInputStream(new BufferedInputStream(byteStream));
-			Object o =  is.readObject();
-			is.close();
-			return o;
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null; */
+		return null; 		
 	}
 	
 	
