@@ -16,9 +16,14 @@ Onglet "Libraries" > "Add External JARs" et ajouter les fichiers de l'archive de
 - log4j-api-2.4.jar
 - log4j-core-2.4.jar
 
-Exporter ensuite la classe protocle.message.java :
+Exporter ensuite la classe protocle.message.java ainsi que tous le package dataObject :
 Clic droit sur le projet > Export > Java > Jar file
-Selectionner la classe message.java dans protocle.
+
+### TODO LIST
+- Implémenter pull de thread
+- S'assurer de la bonne reception des messages
+- Service de pari avec TCP
+- Thread de mise a jour des données de match
 
 ## Client
 Reproduiser la même procedure que précédament
@@ -26,10 +31,8 @@ Reproduiser la même procedure que précédament
 "Link Source" et choisez le dossier "HockeyNite\HockeyNiteClient"
 Onglet "Libraries" > "Add External JARs" et ajouter le fichier de la classe Message précédament généré.
 
-
-# TODO LIST
-- Implémenter pull de thread
-- Implémenter le client
+### TODO LIST
+- Implémenter le client console
 - Implémenter le client Android
-- S'assurer de la bonne reception des messages
-- etc ...
+
+
