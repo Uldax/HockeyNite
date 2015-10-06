@@ -45,12 +45,22 @@ public class UDPClient{
     
     public static void mainv2(){
     	int choix = -1;
+    	Object[] ListMatch = null;
     	do{
-    		// Demande de la liste des matchs
-    	  	Protocole.askListMatch();
+    		DatagramSocket aSocket = null;
+    		try {
+    			// Demande de la liste des matchs
+        	  	Protocole.askListMatch(aSocket);
+        		
+            	// Récupération de la liste des matchs
+        	  	ListMatch = Protocole.getListMatch(aSocket);
+    	    } 
+    	    catch (SocketException e){System.out.println("Socket: " + e.getMessage());} 
+    	    catch (IOException e){System.out.println("IO: " + e.getMessage());} 
+    		finally {if(aSocket != null) aSocket.close();}
     		
-        	// Récupération de la liste des matchs
-    	  	Object[] ListMatch = Protocole.getListMatch();
+    		
+    		if(ListMatch == null) return;
     		
     		
        	 	// Affichage de la liste des matchs

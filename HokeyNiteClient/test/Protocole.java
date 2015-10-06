@@ -46,11 +46,27 @@ public class Protocole {
 		}
 	}
 	
-	public static void askListMatch(){
-		
+	public static void askListMatch(DatagramSocket aSocket) throws SocketException,IOException{
+		Message send = Protocole.craftMessage(); 
+		aSocket = new DatagramSocket(6779); 
+
+		Protocole.respond(send,aSocket);
+		System.out.println("Ask server for Matchs"); 
 	}
 	
-	public static Object[] getListMatch(){
+	public static Object[] getListMatch(DatagramSocket aSocket) throws IOException{
+		//réception bloquante 		                        
+		byte[] buffer = new byte[1000];
+		DatagramPacket reply = new DatagramPacket(buffer, buffer.length);	
+		aSocket.receive(reply);
+		System.out.println("reply received");
+		
+		//Unmarshal the receive object
+		Message message = (Message) Marshallizer.unmarshall(reply);
+		System.out.println("Reply: " + message.toString()); 
+		
+		//Object[] ListMatch = (Object[]) Marshallizer.unmarshall(message.getData());
+		
 		return null;	
 	}
 }
