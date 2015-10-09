@@ -89,12 +89,22 @@ public class UDPClient{
     	// other choix -> refresh list 	
     }
     
-    public static void detailMatch(int id){
-    	// Demande d'information sur le match
-    	
-    	// Récupération des informations
-    	
+    public static void detailMatch(int idMatch){
+    	DatagramSocket aSocket = null;
+    	Object Match = null;
+		try {
+			// Demande d'information sur le match
+    	  	Protocole.askInfoMatch(aSocket, idMatch);
+    		
+    	  	// Récupération des informations
+    	  	Match = Protocole.getInfoMatch(aSocket);
+	    } 
+	    catch (SocketException e){System.out.println("Socket: " + e.getMessage());} 
+	    catch (IOException e){System.out.println("IO: " + e.getMessage());} 
+		finally {if(aSocket != null) aSocket.close();}
+		
     	// Affichage des infomations
+		Match.toString();
     	
     	// Réponse utilisateur
     }
