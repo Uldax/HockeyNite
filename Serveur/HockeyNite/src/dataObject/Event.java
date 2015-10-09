@@ -10,7 +10,10 @@ public class Event implements Serializable {
 	private int time;
 	private String message;
 
-	
+	public Event(String message){
+		this.time = 0;
+		this.message = message;
+	}
 	public Event(int time,String message){
 		this.time = time;
 		this.message = message;

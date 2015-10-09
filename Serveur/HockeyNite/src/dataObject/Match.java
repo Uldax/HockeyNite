@@ -84,17 +84,30 @@ public class Match implements Serializable {
 	public void setDomicile(Team domicile) {
 		this.domicile = domicile;
 	}
+	public synchronized void goalDomicile(){
+		this.domicileScore += 1;
+	}
 	public Team getExterieur() {
 		return exterieur;
 	}
 	public void setExterieur(Team exterieur) {
 		this.exterieur = exterieur;
 	}
+	public synchronized void goalExterieur(){
+		this.exterieurScore += 1;
+	}
 	public List<Event> getMatchEvent() {
 		return matchEvent;
 	}
 	public void setMatchEvent(List<Event> matchEvent) {
 		this.matchEvent = matchEvent;
+	}
+	public synchronized void addEvent(Event event){
+		event.setTime(this.time);
+		this.matchEvent.add(event);
+	}
+	public Boolean isPause(){
+		return this.pause;
 	}
 	@Override
 	public String toString() {

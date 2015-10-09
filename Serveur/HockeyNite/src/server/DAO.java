@@ -6,7 +6,9 @@ import dataObject.Match;
 import dataObject.Team;
 public class DAO {
 	private static final Logger logger = Logger.getLogger(DAO.class);
-	private Match ListMatch[] = new Match[10];
+	public final static int MAX_MATCH = 10;
+	private Match ListMatch[] = new Match[MAX_MATCH];
+	public static int MODIF_TIME = 5000;
 	
 	//Initialisation with some ramdom value	
 	public DAO(){
@@ -19,6 +21,8 @@ public class DAO {
 		ListMatch[0] = M1;
 		ListMatch[1]  = M2;
 		logger.info("Dao ini");	
+		this.startEventManager();
+		
 	}
 	public Match getMatch(int index){
 		if(ListMatch[index] != null){
@@ -34,5 +38,9 @@ public class DAO {
 		    return null;
 		}
 		return ListMatch;
+	}
+	
+	private void startEventManager(){
+		new Thread(new EventManager(this)).start();
 	}
 }
