@@ -40,7 +40,7 @@ public class MessageHandler implements Runnable {
 		if (message.isRequest()) {
 			//build the response of the request
 			logger.info("build answer");
-			Reply reply = (Reply) buildResponse((Request)message);
+			Reply reply = buildResponse((Request)message);
 			respond(reply);
 		}
 		logger.info("reply done");
@@ -70,7 +70,7 @@ public class MessageHandler implements Runnable {
 			return reply;
 		}
 
-	protected void respond(Message message) {
+	protected void respond(Reply message) {
 		DatagramSocket aSocket = null;
 		try {
 			aSocket = myServer.getMySocket();
