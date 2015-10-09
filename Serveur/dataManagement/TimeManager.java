@@ -1,4 +1,4 @@
-package server;
+package dataManagement;
 
 import org.apache.log4j.Logger;
 
@@ -7,10 +7,10 @@ import dataObject.Match;
 public class TimeManager implements Runnable {
 	
 	private static final Logger logger = Logger.getLogger(TimeManager.class);
-	private DAO data;
+	private ListeDesMatchs data;
 	private int interval =0;
 	
-	public TimeManager(DAO data,int interval) {
+	public TimeManager(ListeDesMatchs data,int interval) {
 		this.data = data;
 		this.interval = interval;
 		logger.info("Time manager with "+ String.valueOf(interval) + " interval created");
@@ -26,7 +26,8 @@ public class TimeManager implements Runnable {
 		}
 	}
 	
-	private void updateMatchTime(Match[] listMatch){
+	//Thread safe
+	private synchronized void updateMatchTime(Match[] listMatch){
 		for(int i=0; i< listMatch.length; i++) {
 			if(listMatch[i] != null){
 				Match match = listMatch[i];

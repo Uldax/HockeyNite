@@ -13,39 +13,31 @@ import java.util.concurrent.TimeUnit;
 import protocole.Message;
 
 import org.apache.log4j.Logger;
+
+import dataManagement.ListeDesMatchs;
 import utils.Marshallizer;
 
-public class UDPServer {
-	
-	
+public class UDPServer implements Runnable{
+
 	private DatagramSocket mySocket = null;
 
 	//request thread pool
 	private ExecutorService pool;
-	// update play time every 30sec
-	private ScheduledExecutorService scheduler =  null;
-	private ScheduledFuture<?> timerHandle = null;
-	
-	private static final int INTERVAL_TIME = 10;
-	private String serverIP = null;
+
 	private int serverPort = 0;
-	private DAO data = null;
+	private ListeDesMatchs listMatch = null;
 	private static final Logger logger = Logger.getLogger(UDPServer.class);
 
-	public UDPServer(int port,int poolSize){ 
+	public UDPServer(int port,int poolSize,ListeDesMatchs list){ 
 		serverPort = port;
-		serverIP = "127.0.0.1";
-		data = new DAO();
+		listMatch = list;
 		pool = Executors.newFixedThreadPool(poolSize);
-		scheduler = Executors.newScheduledThreadPool(1);
 	}	
 	
 	
 	public void start() {
 		mySocket = null;
 		logger.info("server start on port " + String.valueOf(serverPort));
-		startTimer();
-		logger.info("timer scheduler started");
 		try {
 			mySocket = new DatagramSocket(serverPort); // port convenu avec les clients
 			byte[] buffer = new byte[1000];
@@ -68,7 +60,6 @@ public class UDPServer {
 	}
 	//Stop the server in the clean way
 	public void stop() {
-		stopTimer();	
 		// Disable new tasks from being submitted
 		pool.shutdown(); 
 		try {
@@ -90,37 +81,6 @@ public class UDPServer {
 		}
 	}
 	
-	//Create a task that run every INTERVAL_TIME second
-	//Manage the time of every Match
-	private void startTimer() {
-		//Waring : writter
-	   Runnable timer = new TimeManager(data,INTERVAL_TIME);
-	   // start the timer task
-	   timerHandle = scheduler.scheduleAtFixedRate(timer, INTERVAL_TIME, INTERVAL_TIME, TimeUnit.SECONDS);
-	  
-	}
-	
-	private void stopTimer(){
-		if(timerHandle != null ){
-			timerHandle.cancel(true);
-		}
-	}
-
-	//curent id
-	public void manageDuplicate(){
-		
-	}
-	
-
-
-	public String getServerIP() {
-		return serverIP;
-	}
-
-	public void setServerIP(String serverIP) {
-		this.serverIP = serverIP;
-	}
-
 	public int getServerPort() {
 		return serverPort;
 	}
@@ -135,11 +95,17 @@ public class UDPServer {
 	public void setMySocket(DatagramSocket mySocket) {
 		this.mySocket = mySocket;
 	}
-	public DAO getData() {
-		return data;
+	public ListeDesMatchs getListMatch() {
+		return listMatch;
 	}
 
-	public void setData(DAO data) {
-		this.data = data;
+	public void setData(ListeDesMatchs listMatch) {
+		this.listMatch = listMatch;
+	}
+
+
+	@Override
+	public void run() {
+		start();	
 	}
 }
