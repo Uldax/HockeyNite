@@ -8,7 +8,8 @@ public class MessageError implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = -8965673978924406565L;
-	private final static int POINTEUR =1;
+	public final static int NULLPOINTEUR = 1;
+	public final static int METHODEERROR = 2;
 	private int code;
 	private String message;
 	
@@ -39,10 +40,13 @@ public class MessageError implements Serializable{
 
 	private void defineMessage(int code){
 		switch (code) {
-		case POINTEUR:
+		case NULLPOINTEUR:
 			message= "null pointer exeption";
 			break;
-
+		case METHODEERROR:
+			message= "this method doesn't exist";
+			break;
+			
 		default:
 			message = "unknow error";
 			break;

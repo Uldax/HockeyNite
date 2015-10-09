@@ -1,4 +1,4 @@
-package protocole;
+package server;
 
 import java.io.IOException;
 
@@ -9,48 +9,62 @@ import java.net.SocketException;
 import org.apache.log4j.Logger;
 
 import dataObject.Match;
-import server.DAO;
-import server.UDPServer;
+import protocole.Message;
+import protocole.MessageError;
+import protocole.Reply;
+import protocole.Request;
 import utils.Marshallizer;
 
+//Extact data from datagram
+//send respons
 public class MessageHandler implements Runnable {
 
-	private Message message;
 	private UDPServer myServer;
 	private DAO data = null;
 	private static final Logger logger = Logger.getLogger(MessageHandler.class);
+	private DatagramPacket packetReceive;
 
-	public MessageHandler(Message message, UDPServer udpServer) {
+	public MessageHandler(DatagramPacket packetReceive, UDPServer udpServer) {
 		super();
-		this.message = message;
+		this.packetReceive = packetReceive;
 		this.myServer = udpServer;
-		data = myServer.getData();
 		logger.info("new runnable");
 	}
 	
 	@Override
 	public void run() {
-		//build the response of the request
-		Message reply = buildResponse(message);
-		respond(reply);
+		//extract data from packet
+		data = myServer.getData();
+		Message message = (Message) Marshallizer.unmarshall(packetReceive);
+		logger.info("message receive " + String.valueOf(message.getType()));	
+		if (message.isRequest()) {
+			//build the response of the request
+			logger.info("build answer");
+			Reply reply = (Reply) buildResponse((Request)message);
+			respond(reply);
+		}
 		logger.info("reply done");
 	}
 	
-	//Answer to the request
-		private <T> Message buildResponse(Message request) {
-			Message reply = new Message();
-			reply.setType(Message.REPLY);
-			reply.setDestinationPort(request.getSenderPort());
-			reply.setDestination(request.getSender());
-			//Access to dao and set resultat
-			if(request.isRequestDetail()){
-				@SuppressWarnings("unchecked")
-				MessageParam<T> paramObject = (MessageParam<T>)request.getValue();
-				Match matchDetail = data.getMatch((int)paramObject.getParam());
-				reply.setValue(matchDetail);	
-			} else {
+		//Answer to the request
+		private Reply buildResponse(Request request) {
+			Reply reply = new Reply(packetReceive.getAddress(),packetReceive.getPort(),request.getNumero());
+			switch(request.getMethode()) {
+			case list :
 				Match[] listMatch = data.getAllMatch();
 				reply.setValue(listMatch);	
+				break;
+				
+			case detail:
+				Object[] arguments = request.getArgument();
+				int matchID = (int) arguments[0];
+				Match matchDetail = data.getMatch(matchID);
+				reply.setValue(matchDetail);			
+				break;
+				
+			default:
+				reply.setValue(new MessageError(MessageError.METHODEERROR)); 
+				break;
 			}								
 			logger.info("Message reply crafted");		
 			return reply;
@@ -75,20 +89,5 @@ public class MessageHandler implements Runnable {
 		}
 	}
 
-	public Message getMessage() {
-		return message;
-	}
-
-	public void setMessage(Message message) {
-		this.message = message;
-	}
-
-	public UDPServer getMyServer() {
-		return myServer;
-	}
-
-	public void setMyServer(UDPServer myServer) {
-		this.myServer = myServer;
-	}
 
 }

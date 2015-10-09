@@ -1,8 +1,11 @@
 package test;
 import java.net.*;
 
+
+
 import utils.Marshallizer;
 import protocole.Message;
+import protocole.Request;
 
 import java.io.*; 
 //UDP client sends a message to the server and gets a reply
@@ -19,10 +22,17 @@ public class UDPClient{
 
      try {
 		// socket + port quelconque pour envoyer et recevoir la réponse
-    	 Message test = Protocole.craftMessage(); 
+    	 	InetAddress aHost = null;
+	 		try {
+	 			aHost = InetAddress.getByName("localhost");
+	 		} catch (UnknownHostException e) {
+	 			// TODO Auto-generated catch block
+	 			e.printStackTrace();
+	 		}
+    	  Message test = Request.craftGetMatchList(aHost,6780); 
     	 aSocket = new DatagramSocket(6779); 
     	 //send
-    	 Protocole.respond(test,aSocket);
+    	 Protocole.send(test,aSocket);
          System.out.println("message send"); 
          
          //réception bloquante 		                        

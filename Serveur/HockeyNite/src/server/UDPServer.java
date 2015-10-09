@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 
 import protocole.Message;
-import protocole.MessageHandler;
+
 import org.apache.log4j.Logger;
 import utils.Marshallizer;
 
@@ -24,6 +24,7 @@ public class UDPServer {
 	private ExecutorService pool;
 	// update play time every 30sec
 	private ScheduledExecutorService scheduler =  null;
+	private ScheduledFuture<?> timerHandle = null;
 	
 	private static final int INTERVAL_TIME = 10;
 	private String serverIP = null;
@@ -51,18 +52,9 @@ public class UDPServer {
 			while (true) {
 				DatagramPacket datagram = new DatagramPacket(buffer, buffer.length);
 				mySocket.receive(datagram); // réception bloquante
-				logger.info("data receive");
-				Message message = (Message) Marshallizer.unmarshall(datagram);
-				logger.info("message receive " + String.valueOf(message.getType()));
-				//IF client ask something
-				if (message.isRequest()) {
-					logger.info("start thread for answer");
-					//What append if pool full ?
-		            pool.execute(new MessageHandler(message,this));
-					//new Thread(new MessageHandler(message,this)).start();					
-				} else {
-					//new Thread(new ReplyHandler((Reply) message, this)).start();
-				}
+				logger.info("datafram receive");						
+				//What append if pool full ?
+	            pool.execute(new MessageHandler(datagram,this));					
 			}
 		} catch (SocketException e) {
 			System.out.println("Socket: " + e.getMessage());
@@ -74,11 +66,9 @@ public class UDPServer {
 			stop();
 		}
 	}
-
+	//Stop the server in the clean way
 	public void stop() {
-		// Stop the timmer
-		//timerHandle.cancel(true);
-		
+		stopTimer();	
 		// Disable new tasks from being submitted
 		pool.shutdown(); 
 		try {
@@ -100,11 +90,20 @@ public class UDPServer {
 		}
 	}
 	
+	//Create a task that run every INTERVAL_TIME second
+	//Manage the time of every Match
 	private void startTimer() {
 		//Waring : writter
-	   final Runnable timer = new TimeManager(data,INTERVAL_TIME);
+	   Runnable timer = new TimeManager(data,INTERVAL_TIME);
 	   // start the timer task
-	   final ScheduledFuture<?> timerHandle = scheduler.scheduleAtFixedRate(timer, INTERVAL_TIME, INTERVAL_TIME, TimeUnit.SECONDS);
+	   timerHandle = scheduler.scheduleAtFixedRate(timer, INTERVAL_TIME, INTERVAL_TIME, TimeUnit.SECONDS);
+	  
+	}
+	
+	private void stopTimer(){
+		if(timerHandle != null ){
+			timerHandle.cancel(true);
+		}
 	}
 
 	//curent id

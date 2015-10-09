@@ -10,25 +10,8 @@ import utils.Marshallizer;
 import protocole.Message;
 
 public class Protocole {
-	public static Message craftMessage(){
-		Message reply = new Message();
-		reply.setType(Message.REQUEST);
-		reply.setDestinationPort(6780);
-		InetAddress aHost = null;
-		try {
-			aHost = InetAddress.getByName("localhost");
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		reply.setDestination(aHost);
-		reply.setSender(aHost);
-		reply.setSenderPort(6779);
-		//reply.setValue(new MyObject(1, "coucou"));
-		return reply;
-	}
 
-	public static void respond(Message message,DatagramSocket aSocket ) {
+	public static void send(Message message,DatagramSocket aSocket ) {
 		try {
 			
 				//Message.getData()
@@ -36,7 +19,7 @@ public class Protocole {
 				byte[] stream = Marshallizer.marshallize(message);
 				System.out.println("Stream length " + stream.length);
 				DatagramPacket datagram = new DatagramPacket(stream,
-						message.getLength(), 
+						stream.length, 
 						message.getDestination(),
 						message.getDestinationPort());
 				aSocket.send(datagram); // émission non-bloquante
