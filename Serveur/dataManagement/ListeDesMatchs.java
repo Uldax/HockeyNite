@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 
-
+import dataObject.ListMatchName;
 import dataObject.Match;
 import dataObject.Team;
 
@@ -85,6 +85,15 @@ public class ListeDesMatchs {
 		    return null;
 		}
 		return ListMatch;
+	}
+	
+	//Get list of match name with associate id 
+	public ListMatchName getAllMatchName(){
+		if (ListMatch.length < 1) {
+		    return null;
+		}
+		ListMatchName matchName = new ListMatchName(ListMatch);
+		return matchName;
 	}
 	
 	private void startEventManager(){

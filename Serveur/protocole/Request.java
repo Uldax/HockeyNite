@@ -34,8 +34,7 @@ public class Request extends Message {
 	static synchronized public Request craftGetMatchDetail(InetAddress adress, int port,int idMatch) {
 		Request request = new Request();
 		request.setMethode(methodes.detail);
-		Object[] arg = new Object[1];
-		arg[0] = idMatch;
+		Object[] arg = {idMatch};
 		request.setArgument(arg);
 		request.setDestinationPort(port);
 		request.setDestination(adress);

@@ -9,6 +9,7 @@ import java.net.SocketException;
 import org.apache.log4j.Logger;
 
 import dataManagement.ListeDesMatchs;
+import dataObject.ListMatchName;
 import dataObject.Match;
 import protocole.Message;
 import protocole.MessageError;
@@ -52,8 +53,14 @@ public class MessageHandler implements Runnable {
 			Reply reply = new Reply(packetReceive.getAddress(),packetReceive.getPort(),request.getNumero());
 			switch(request.getMethode()) {
 			case list :
-				Match[] listMatch = data.getAllMatch();
+				//old version with every detail
+				//Match[] listMatch = data.getAllMatch();
+				//reply.setValue(listMatch);	
+				
+				//new version
+				ListMatchName listMatch = data.getAllMatchName();
 				reply.setValue(listMatch);	
+				
 				break;
 				
 			case detail:

@@ -8,6 +8,7 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 
 import affichage.Menu;
+import dataObject.ListMatchName;
 import dataObject.Match;
 import protocole.Message;
 import protocole.Reply;
@@ -42,6 +43,7 @@ public class Communication {
 		this.clientPort = clientPort;
 	}
 	
+	//old version
 	public Match[] getListMatch(){
 		tentative = 0;
 		do{
@@ -73,8 +75,40 @@ public class Communication {
 		return (Match[]) this.reponse.getValue();
 	}
 	
+<<<<<<< HEAD
 	public Match GetMatchDetail(int idMatch){
 		tentative = 0;
+=======
+	//New methode
+	public ListMatchName getListMatchName(){
+		do{
+			error = false;
+			try {
+				aSocket = new DatagramSocket(this.clientPort);
+			
+				Message ask = Request.craftGetMatchList(this.adress,this.serveurPort);		
+				Protocole.send(ask,aSocket);
+				
+				System.out.println("message send");
+				
+				WaitingMessage = new Thread(new Menu.WaitMessage(1000));
+				WaitingMessage.start();
+				
+				synchronized (MutexLock) {
+					new Thread(new WaitReponse()).start();
+					MutexLock.wait();
+				}			
+			}
+			catch (SocketException e){System.out.println("Socket: " + e.getMessage());} 
+			catch (InterruptedException e) {e.printStackTrace();} 
+			finally {aSocket.close(); aSocket = null; WaitingMessage.interrupt();}			
+		}while(error);
+			
+		return (ListMatchName) this.reponse.getValue();
+	}
+	
+	public Match getMatchDetail(int idMatch){
+>>>>>>> origin/dataUpdate
 		do{
 			error = false;
 			try {
@@ -115,7 +149,7 @@ public class Communication {
 		public void run() {
 			synchronized (MutexLock) {
 				try { 		                        
-					byte[] buffer = new byte[1000];
+					byte[] buffer = new byte[10000];
 					DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
 					aSocket.setSoTimeout(TIMEOUT);
 					aSocket.receive(reply);
