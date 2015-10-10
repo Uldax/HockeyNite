@@ -10,13 +10,14 @@ public class StartPoint {
 	
 	public static void main(String[] args) {
 		//Contain all data
-		//Warning must be thread safe
-		ListeDesMatchs matchList = new ListeDesMatchs();
+		ListeDesMatchs matchList = ListeDesMatchs.getInstance();
+		//Need to wait for instance of matchList before started the 2 thread that update value
+		matchList.startThreadUpdate();
 		
 		//Create match service
 		int port = 6780;
 		int threadPoolSize = 4;	
-		Thread matchServer = new Thread( new  UDPServer(port,threadPoolSize,matchList));
+		Thread matchServer = new Thread( new  UDPServer(port,threadPoolSize));
 		matchServer.start();
 	
 		//Create paris service

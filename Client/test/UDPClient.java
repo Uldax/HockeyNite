@@ -51,7 +51,9 @@ public class UDPClient{
     				choix = -1;
     			}        
     		}while(choix == -1);
-    		if((choix > 0)&&(choix <= ListMatch.length)) detailMatch(choix-1);
+    		if((choix > 0)&&(choix <= ListMatch.length)) {
+    			detailMatch(choix-1);
+    		}
     		//  récupération des détails du match et affichage
     		
     	}while(choix != 0);

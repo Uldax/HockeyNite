@@ -2,6 +2,7 @@ package dataManagement;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
@@ -9,6 +10,7 @@ import org.apache.log4j.Logger;
 
 import dataObject.Match;
 import dataObject.Team;
+
 public class ListeDesMatchs {
 	private static final Logger logger = Logger.getLogger(ListeDesMatchs.class);
 	public final static int MAX_MATCH = 10;
@@ -16,14 +18,30 @@ public class ListeDesMatchs {
 	
 	private Match ListMatch[] = new Match[MAX_MATCH];
 	public static int MODIF_TIME = 5000;
+	public Semaphore sem = null;
 	
 	// update play time every INTERVAL_TIME sec
 	private ScheduledExecutorService scheduler =  null;
 	private ScheduledFuture<?> timerHandle = null;
 	
 	
+	/** Technique du Holder */
+	private static class SingletonHolder
+	{		
+		/** Instance unique non préinitialisée */
+		private final static ListeDesMatchs instance = new ListeDesMatchs();
+	}
+ 
+	/** Point d'accès pour l'instance unique du singleton */
+	public static ListeDesMatchs getInstance()
+	{
+		return SingletonHolder.instance;
+	}
+		
 	//Initialisation with some ramdom value	
-	public ListeDesMatchs(){
+	private ListeDesMatchs(){
+		sem = new Semaphore( 1);
+		logger.info("Semaphore init");	
 		Team t1 =  new Team("A");
 		Team t2 =  new Team("B");
 		Team t3 =  new Team("C");
@@ -32,20 +50,33 @@ public class ListeDesMatchs {
 		Match M2 = new Match(t3,t4);
 		ListMatch[0] = M1;
 		ListMatch[1]  = M2;
-		logger.info("Dao ini");		
+		logger.info("ListDesMatch init");			
+	}
+	
+	public void startThreadUpdate(){
 		scheduler = Executors.newScheduledThreadPool(1);
 		startTimer();
-		this.startEventManager();		
+		startEventManager();	
 	}
 	
 	//Get on match detail 
-	public synchronized Match getMatch(int index){
-		if(ListMatch[index] != null){
-			return ListMatch[index];
-		} else {
-			logger.error("Undefined index");
-			return null;
+	public Match getMatch(int index){
+		Match match = null;
+		try {
+			sem.acquire();
+			if(ListMatch[index] != null){
+				match = ListMatch[index];
+			} else {
+				logger.error("Undefined index");
+			}
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		finally {
+			   sem.release();
+		}
+		return match;
 	}
 	
 	//Get all match information
@@ -57,13 +88,13 @@ public class ListeDesMatchs {
 	}
 	
 	private void startEventManager(){
-		new Thread(new EventManager(this)).start();
+		new Thread(new EventManager()).start();
 	}
 	
 	//Create a task that run every INTERVAL_TIME second
 	//Manage the time of every Match
 	private void startTimer() {
-	   Runnable timer = new TimeManager(this,INTERVAL_TIME);
+	   Runnable timer = new TimeManager(INTERVAL_TIME);
 	   // start the timer task
 	   timerHandle = scheduler.scheduleAtFixedRate(timer, INTERVAL_TIME, INTERVAL_TIME, TimeUnit.SECONDS);
 	   logger.info("Timer scheduler started");
@@ -73,5 +104,13 @@ public class ListeDesMatchs {
 		if(timerHandle != null ){
 			timerHandle.cancel(true);
 		}
+	}
+	
+	public Semaphore getSem() {
+		return sem;
+	}
+
+	public void setSem(Semaphore sem) {
+		this.sem = sem;
 	}
 }

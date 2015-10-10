@@ -1,6 +1,8 @@
 package dataManagement;
 
 import java.util.Random;
+import java.util.concurrent.Semaphore;
+
 import org.apache.log4j.Logger;
 import dataObject.Event;
 import dataObject.Match;
@@ -13,8 +15,9 @@ public class EventManager implements Runnable {
 	private int timerEvent = 0;
 	private Random r = new Random();
 	
-	public EventManager(ListeDesMatchs data) {
-		this.data = data;
+	public EventManager() {
+		this.data = ListeDesMatchs.getInstance();
+		logger.info(data.toString());
 		this.timerEvent = ListeDesMatchs.MODIF_TIME * 5;
 		logger.info("Event manager created");
 	}
@@ -25,17 +28,19 @@ public class EventManager implements Runnable {
 	}
 	
 	private void randomValue(){
-		while(true) {		
-			synchronized (data) {
+		while (true) {	
+			Semaphore dataSem = data.getSem();
+			try {
+				dataSem.acquire();
 				Match[] listMatch = data.getAllMatch();
 	        	int eventOnMatch = r.nextInt(2);        	
-	        	if(listMatch[eventOnMatch] != null){
-	        		if(!listMatch[eventOnMatch].isPause()){
+	        	if (listMatch[eventOnMatch] != null){
+	        		if (!listMatch[eventOnMatch].isPause()){
 	        			Team teamEvent;
 	        			if(r.nextInt(1) == 0){
 	        				teamEvent = listMatch[eventOnMatch].getDomicile();
 	        				listMatch[eventOnMatch].goalDomicile();
-	        			}else{
+	        			} else{
 	        				teamEvent = listMatch[eventOnMatch].getExterieur();
 	        				listMatch[eventOnMatch].goalExterieur();
 	        			}
@@ -43,13 +48,15 @@ public class EventManager implements Runnable {
 	        			logger.info("Event manager - Goal " + teamEvent.toString());
 	        		}
 	        	}
-	        	
-	            try {
-	            	int nextPossibleEvent = r.nextInt(timerEvent)+(timerEvent/2);
-	                Thread.sleep(nextPossibleEvent);
-	            } catch (InterruptedException e) {}
-			}
-        
+	        	dataSem.release();   
+	            int nextPossibleEvent = r.nextInt(timerEvent)+(timerEvent/2);
+	            Thread.sleep(nextPossibleEvent);
+			} catch (InterruptedException e) {
+	            	
+	        }
+            finally {
+            	dataSem.release();
+         	}
         }
 	}
 
