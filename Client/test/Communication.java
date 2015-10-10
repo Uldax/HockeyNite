@@ -75,10 +75,6 @@ public class Communication {
 		return (Match[]) this.reponse.getValue();
 	}
 	
-<<<<<<< HEAD
-	public Match GetMatchDetail(int idMatch){
-		tentative = 0;
-=======
 	//New methode
 	public ListMatchName getListMatchName(){
 		do{
@@ -108,7 +104,7 @@ public class Communication {
 	}
 	
 	public Match getMatchDetail(int idMatch){
->>>>>>> origin/dataUpdate
+		tentative = 0;
 		do{
 			error = false;
 			try {
