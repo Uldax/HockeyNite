@@ -5,6 +5,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 
 import affichage.Menu;
 import dataObject.Match;
@@ -26,6 +27,10 @@ public class Communication {
 	private Reply reponse = null;
 	
 	private Object MutexLock = new Object();
+	
+	private int TIMEOUT = 5000;
+	
+	private boolean error = false;
 
 	private Communication(){
 	}
@@ -37,49 +42,57 @@ public class Communication {
 	}
 	
 	public Match[] getListMatch(){
-		try {
-			aSocket = new DatagramSocket(this.clientPort);
-		
-			Message ask = Request.craftGetMatchList(this.adress,this.serveurPort);		
-			Protocole.send(ask,aSocket);
+		do{
+			error = false;
+			try {
+				aSocket = new DatagramSocket(this.clientPort);
 			
-			System.out.println("message send");
-			
-			WaitingMessage = new Thread(new Menu.WaitMessage(1000));
-			WaitingMessage.start();
-			
-			synchronized (MutexLock) {
-				new Thread(new WaitReponse()).start();
-				MutexLock.wait();
-			}			
-		}
-		catch (SocketException e){System.out.println("Socket: " + e.getMessage());} 
-		catch (InterruptedException e) {e.printStackTrace();} 
-		finally {aSocket.close(); aSocket = null; WaitingMessage.interrupt();}		
+				Message ask = Request.craftGetMatchList(this.adress,this.serveurPort);		
+				Protocole.send(ask,aSocket);
+				
+				System.out.println("message send");
+				
+				WaitingMessage = new Thread(new Menu.WaitMessage(1000));
+				WaitingMessage.start();
+				
+				synchronized (MutexLock) {
+					new Thread(new WaitReponse()).start();
+					MutexLock.wait();
+				}			
+			}
+			catch (SocketException e){System.out.println("Socket: " + e.getMessage());} 
+			catch (InterruptedException e) {e.printStackTrace();} 
+			finally {aSocket.close(); aSocket = null; WaitingMessage.interrupt();}			
+		}while(error);
+				
 		
 		return (Match[]) this.reponse.getValue();
 	}
 	
 	public Match GetMatchDetail(int idMatch){
-		try {
-			aSocket = new DatagramSocket(this.clientPort);
-		
-			Message ask = Request.craftGetMatchDetail(this.adress,this.serveurPort, idMatch);		
-			Protocole.send(ask,aSocket);
+		do{
+			error = false;
+			try {
+				aSocket = new DatagramSocket(this.clientPort);
 			
-			System.out.println("message send");
-			
-			WaitingMessage = new Thread(new Menu.WaitMessage(1000));
-			WaitingMessage.start();
-			
-			synchronized (MutexLock) {
-				new Thread(new WaitReponse()).start();
-				MutexLock.wait();
-			}			
-		}
-		catch (SocketException e){System.out.println("Socket: " + e.getMessage());} 
-		catch (InterruptedException e) {e.printStackTrace();} 
-		finally {aSocket.close(); aSocket = null; WaitingMessage.interrupt();}		
+				Message ask = Request.craftGetMatchDetail(this.adress,this.serveurPort, idMatch);		
+				Protocole.send(ask,aSocket);
+				
+				System.out.println("message send");
+				
+				WaitingMessage = new Thread(new Menu.WaitMessage(1000));
+				WaitingMessage.start();
+				
+				synchronized (MutexLock) {
+					new Thread(new WaitReponse()).start();
+					MutexLock.wait();
+				}			
+			}
+			catch (SocketException e){System.out.println("Socket: " + e.getMessage());} 
+			catch (InterruptedException e) {e.printStackTrace();} 
+			finally {aSocket.close(); aSocket = null; WaitingMessage.interrupt();}			
+		}while(error);
+				
 		
 		return (Match) this.reponse.getValue();
 	}
@@ -97,15 +110,16 @@ public class Communication {
 			synchronized (MutexLock) {
 				try { 		                        
 					byte[] buffer = new byte[1000];
-					DatagramPacket reply = new DatagramPacket(buffer, buffer.length);	
+					DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
+					aSocket.setSoTimeout(TIMEOUT);
 					aSocket.receive(reply);
 					reponse = (Reply) Marshallizer.unmarshall(reply);
 			
-				} catch (IOException e) {
-					e.printStackTrace();
-				} finally {
-					MutexLock.notify();
 				}
+				catch (SocketTimeoutException  e) { error = true; }
+				catch (IOException e) { e.printStackTrace(); error = true;}
+				
+				finally { MutexLock.notify(); }
 			}
 				         
 		}
