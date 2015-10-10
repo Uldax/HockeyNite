@@ -59,6 +59,7 @@ public class MessageHandler implements Runnable {
 			case detail:
 				Object[] arguments = request.getArgument();
 				int matchID = (int) arguments[0];
+				logger.info("detail received with param : "+ String.valueOf(matchID));
 				Match matchDetail = data.getMatch(matchID);
 				reply.setValue(matchDetail);			
 				break;

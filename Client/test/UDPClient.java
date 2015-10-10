@@ -23,7 +23,6 @@ public class UDPClient{
  		try {
  			aHost = InetAddress.getByName("localhost");
  		} catch (UnknownHostException e) {
- 			// TODO Auto-generated catch block
  			e.printStackTrace();
  		}
     	Communication.getInstance().setServeur(aHost, serveurPort, clientPort);
@@ -58,17 +57,30 @@ public class UDPClient{
     		
     	}while(choix != 0);
     	// choix == 0 -> exit
-    	// other choix -> refresh list 	
+    	// other choix -> refresh list
+    	
+    	System.out.println("Bye :3");
     }
     
     public static void detailMatch(int idMatch){
     	Object Match = null;
-			Match = Communication.getInstance().GetMatchDetail(idMatch);
-		
-    	// Affichage des infomations
-		Match.toString();
-    	
-    	// Réponse utilisateur
+    	int choix = 0;
+    	do{
+    		Match = Communication.getInstance().GetMatchDetail(idMatch);
+        	// Affichage des infomations
+    		Menu.affDetailsMatch(Match);
+    		
+    		// Réponse utilisateur
+    		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	    	try{
+	            choix = Integer.parseInt(br.readLine());
+	        }
+	    	catch(NumberFormatException nfe){} 
+	    	catch (IOException e) {}        
+    		
+    	}while(choix != 0);
+    	// choix = 0 -> back
+    	// else refresh
     }
     
  

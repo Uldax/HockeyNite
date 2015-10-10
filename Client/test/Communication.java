@@ -38,7 +38,7 @@ public class Communication {
 	
 	public Match[] getListMatch(){
 		try {
-			aSocket = new DatagramSocket();
+			aSocket = new DatagramSocket(this.clientPort);
 		
 			Message ask = Request.craftGetMatchList(this.adress,this.serveurPort);		
 			Protocole.send(ask,aSocket);
@@ -52,21 +52,36 @@ public class Communication {
 				new Thread(new WaitReponse()).start();
 				MutexLock.wait();
 			}			
-			System.out.println(reponse.toString());
 		}
 		catch (SocketException e){System.out.println("Socket: " + e.getMessage());} 
 		catch (InterruptedException e) {e.printStackTrace();} 
-		catch (IOException e) {e.printStackTrace();}
-		finally {aSocket.close(); aSocket = null; WaitingMessage.interrupt();}
+		finally {aSocket.close(); aSocket = null; WaitingMessage.interrupt();}		
 		
 		return (Match[]) this.reponse.getValue();
 	}
 	
 	public Match GetMatchDetail(int idMatch){
-		WaitingMessage = new Thread(new Menu.WaitMessage(1000));
-		WaitingMessage.start();
-		WaitingMessage.interrupt();
-		return null;
+		try {
+			aSocket = new DatagramSocket(this.clientPort);
+		
+			Message ask = Request.craftGetMatchDetail(this.adress,this.serveurPort, idMatch);		
+			Protocole.send(ask,aSocket);
+			
+			System.out.println("message send");
+			
+			WaitingMessage = new Thread(new Menu.WaitMessage(1000));
+			WaitingMessage.start();
+			
+			synchronized (MutexLock) {
+				new Thread(new WaitReponse()).start();
+				MutexLock.wait();
+			}			
+		}
+		catch (SocketException e){System.out.println("Socket: " + e.getMessage());} 
+		catch (InterruptedException e) {e.printStackTrace();} 
+		finally {aSocket.close(); aSocket = null; WaitingMessage.interrupt();}		
+		
+		return (Match) this.reponse.getValue();
 	}
 	
 	

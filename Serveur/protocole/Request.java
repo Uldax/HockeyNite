@@ -35,7 +35,7 @@ public class Request extends Message {
 		Request request = new Request();
 		request.setMethode(methodes.detail);
 		Object[] arg = new Object[1];
-		arg[1] = idMatch;
+		arg[0] = idMatch;
 		request.setArgument(arg);
 		request.setDestinationPort(port);
 		request.setDestination(adress);
