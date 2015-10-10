@@ -8,6 +8,7 @@ import java.net.SocketException;
 
 import org.apache.log4j.Logger;
 
+import dataManagement.ListeDesMatchs;
 import dataObject.Match;
 import protocole.Message;
 import protocole.MessageError;
@@ -20,7 +21,7 @@ import utils.Marshallizer;
 public class MessageHandler implements Runnable {
 
 	private UDPServer myServer;
-	private DAO data = null;
+	private ListeDesMatchs data = null;
 	private static final Logger logger = Logger.getLogger(MessageHandler.class);
 	private DatagramPacket packetReceive;
 
@@ -34,7 +35,7 @@ public class MessageHandler implements Runnable {
 	@Override
 	public void run() {
 		//extract data from packet
-		data = myServer.getData();
+		data = myServer.getListMatch();
 		Message message = (Message) Marshallizer.unmarshall(packetReceive);
 		logger.info("message receive " + String.valueOf(message.getType()));	
 		if (message.isRequest()) {
