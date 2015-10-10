@@ -9,6 +9,7 @@ import java.net.SocketException;
 import org.apache.log4j.Logger;
 
 import dataManagement.ListeDesMatchs;
+import dataObject.ListMatchName;
 import dataObject.Match;
 import protocole.Message;
 import protocole.MessageError;
@@ -20,22 +21,22 @@ import utils.Marshallizer;
 //send respons
 public class MessageHandler implements Runnable {
 
-	private UDPServer myServer;
+	private DatagramSocket serverSocket;
 	private ListeDesMatchs data = null;
 	private static final Logger logger = Logger.getLogger(MessageHandler.class);
 	private DatagramPacket packetReceive;
 
-	public MessageHandler(DatagramPacket packetReceive, UDPServer udpServer) {
+	public MessageHandler(DatagramPacket packetReceive, DatagramSocket serverSocket) {
 		super();
 		this.packetReceive = packetReceive;
-		this.myServer = udpServer;
+		this.serverSocket = serverSocket;
 		logger.info("new runnable");
 	}
 	
 	@Override
 	public void run() {
 		//extract data from packet
-		data = myServer.getListMatch();
+		data = ListeDesMatchs.getInstance();
 		Message message = (Message) Marshallizer.unmarshall(packetReceive);
 		logger.info("message receive " + String.valueOf(message.getType()));	
 		if (message.isRequest()) {
@@ -52,8 +53,14 @@ public class MessageHandler implements Runnable {
 			Reply reply = new Reply(packetReceive.getAddress(),packetReceive.getPort(),request.getNumero());
 			switch(request.getMethode()) {
 			case list :
-				Match[] listMatch = data.getAllMatch();
+				//old version with every detail
+				//Match[] listMatch = data.getAllMatch();
+				//reply.setValue(listMatch);	
+				
+				//new version
+				ListMatchName listMatch = data.getAllMatchName();
 				reply.setValue(listMatch);	
+				
 				break;
 				
 			case detail:
@@ -73,9 +80,7 @@ public class MessageHandler implements Runnable {
 		}
 
 	protected void respond(Reply message) {
-		DatagramSocket aSocket = null;
 		try {
-			aSocket = myServer.getMySocket();
 			//Message.getData()
 			logger.debug(message.toString());
 			byte[] reply = Marshallizer.marshallize(message);
@@ -83,7 +88,7 @@ public class MessageHandler implements Runnable {
 					reply.length, 
 					message.getDestination(),
 					message.getDestinationPort());
-			aSocket.send(datagram); // émission non-bloquante
+			serverSocket.send(datagram); // émission non-bloquante
 		} catch (SocketException e) {
 			System.out.println("Socket: " + e.getMessage());
 		} catch (IOException e) {
