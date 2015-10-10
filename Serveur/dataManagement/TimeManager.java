@@ -10,8 +10,8 @@ public class TimeManager implements Runnable {
 	private ListeDesMatchs data;
 	private int interval =0;
 	
-	public TimeManager(ListeDesMatchs data,int interval) {
-		this.data = data;
+	public TimeManager(int interval) {
+		this.data = ListeDesMatchs.getInstance();
 		this.interval = interval;
 		logger.info("Time manager with "+ String.valueOf(interval) + " interval created");
 	}

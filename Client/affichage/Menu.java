@@ -13,6 +13,14 @@ public class Menu {
 		System.out.println(" -- ");
 	}
 	
+	//Update a little more
+	public static void affDetailsMatch(Object Match){
+		System.out.println(" -- ");
+		System.out.println(Match.toString());
+		System.out.println(" 0 - back");
+		System.out.println(" -- ");
+	}
+	
 	public static class WaitMessage implements Runnable {
 		private int timer = 0;
 
