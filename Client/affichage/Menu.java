@@ -15,7 +15,7 @@ public class Menu {
 	
 	public static void affDetailsMatch(Object Match){
 		System.out.println(" -- ");
-		Match.toString();
+		System.out.println(Match.toString());
 		System.out.println(" 0 - back");
 		System.out.println(" -- ");
 	}
@@ -44,3 +44,4 @@ public class Menu {
 	}
 	
 }
+ 
