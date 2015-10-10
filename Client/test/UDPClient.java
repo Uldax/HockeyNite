@@ -1,11 +1,5 @@
 package test;
 import java.net.*;
-
-
-
-import utils.Marshallizer;
-import protocole.Message;
-import protocole.Request;
 import affichage.Menu;
 
 import java.io.*; 
@@ -29,8 +23,7 @@ public class UDPClient{
     	do{
     		
 			System.out.println("Récupération de la liste des matchs, veuillez patienter");
-			ListMatch = Communication.getInstance().getListMatch();    			 
-    		
+			ListMatch = Communication.getInstance().getListMatch();    		
     		if(ListMatch == null) return;
     		
     		
@@ -69,6 +62,7 @@ public class UDPClient{
     	int choix = 0;
     	do{
     		Match = Communication.getInstance().GetMatchDetail(idMatch);
+    		if(Match == null) return;
         	// Affichage des infomations
     		Menu.affDetailsMatch(Match);
     		
