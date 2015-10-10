@@ -23,17 +23,13 @@ public class UDPServer implements Runnable{
 
 	//request thread pool
 	private ExecutorService pool;
-
 	private int serverPort = 0;
-	private ListeDesMatchs listMatch = null;
 	private static final Logger logger = Logger.getLogger(UDPServer.class);
 
-	public UDPServer(int port,int poolSize,ListeDesMatchs list){ 
+	public UDPServer(int port,int poolSize){ 
 		serverPort = port;
-		listMatch = list;
 		pool = Executors.newFixedThreadPool(poolSize);
 	}	
-	
 	
 	public void start() {
 		mySocket = null;
@@ -46,7 +42,7 @@ public class UDPServer implements Runnable{
 				mySocket.receive(datagram); // réception bloquante
 				logger.info("datafram receive");						
 				//What append if pool full ?
-	            pool.execute(new MessageHandler(datagram,this));					
+	            pool.execute(new MessageHandler(datagram,getMySocket()));					
 			}
 		} catch (SocketException e) {
 			System.out.println("Socket: " + e.getMessage());
@@ -95,14 +91,6 @@ public class UDPServer implements Runnable{
 	public void setMySocket(DatagramSocket mySocket) {
 		this.mySocket = mySocket;
 	}
-	public ListeDesMatchs getListMatch() {
-		return listMatch;
-	}
-
-	public void setData(ListeDesMatchs listMatch) {
-		this.listMatch = listMatch;
-	}
-
 
 	@Override
 	public void run() {
