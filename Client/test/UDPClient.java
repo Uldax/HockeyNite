@@ -1,26 +1,25 @@
 package test;
+
 import java.net.*;
-
 import org.apache.log4j.Logger;
-
-import utils.Marshallizer;
-import protocole.Message;
-import protocole.Request;
 import affichage.Menu;
-
 import dataObject.ListMatchName;
-
 import java.io.*; 
-//UDP client sends a message to the server and gets a reply
 
+
+//UDP client sends a message to the server and gets a reply
 
 public class UDPClient{
     
 	private static final Logger logger = Logger.getLogger(UDPClient.class);
 	
+	/**
+	 * Menu principal
+	 * @param args
+	 * @author CharlyBong & Uldax
+	 */
     public static void main(String args[]){
     	int choix = -1;
-    	Object[] ListMatch = null;
     	ListMatchName matchList = null;
     	InetAddress aHost = null;
     	int serveurPort = 6780;
@@ -79,6 +78,11 @@ public class UDPClient{
     	System.out.println("Bye :3");
     }
     
+    /**
+     * Sous menu pour le détail d'un match
+     * @param idMatch ID du match choisit
+     * @author CharlyBong
+     */
     public static void detailMatch(int idMatch){
     	Object Match = null;
     	int choix = 0;

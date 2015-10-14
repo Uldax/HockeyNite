@@ -4,18 +4,27 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
 
+import org.apache.log4j.Logger;
+
 import utils.Marshallizer;
 import protocole.Message;
 
 public class Protocole {
-
-
-	public static void send(Message message,DatagramSocket aSocket ) {
+	
+	private static final Logger logger = Logger.getLogger(Protocole.class);
+	
+	/**
+	 * Protocole de communication avec le serveur
+	 * @param message
+	 * @param aSocket
+	 * @author Uldax
+	 */
+	public static void send(Message message, DatagramSocket aSocket) {
 		try {
 				//Message.getData()
-				System.out.println(message.toString());
+				logger.info(message.toString());
 				byte[] stream = Marshallizer.marshallize(message);
-				System.out.println("Stream length " + stream.length);
+				logger.info("Stream length " + stream.length);
 				DatagramPacket datagram = new DatagramPacket(stream,
 						stream.length, 
 						message.getDestination(),

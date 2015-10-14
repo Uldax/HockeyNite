@@ -9,6 +9,12 @@ import dataObject.ListMatchName;
 
 public class Menu {
 
+	/**
+	 * Affichage du tableau des match
+	 * @param ListMatch Liste des matchs à afficher
+	 * @author CharlyBong
+	 * @deprecated use affListMatchName(ListMatchName ListMatch)
+	 */
 	public static void affListMatch(Object[] ListMatch){
 		System.out.println(" -- ");
 		for(int i=0; i<ListMatch.length;i++){
@@ -19,14 +25,19 @@ public class Menu {
 		System.out.println(" -- ");
 	}
 	
-	//Display all match with juste Domicile vs Exterieur and current time
+
+	/**
+	 * Affichage de la liste des matchs (Domicile vs Exterieur - timer)
+	 * @param ListMatch Liste des matchs à afficher
+	 * @author Uldax
+	 */
+	@SuppressWarnings("rawtypes")
 	public static void affListMatchName(ListMatchName ListMatch){
-		System.out.println(" -- ");
-		
+		System.out.println(" -- ");		
 		HashMap<Integer, String> map = ListMatch.getMatchName();
 		Iterator<Entry<Integer, String>> it = map.entrySet().iterator();
 	    while (it.hasNext()) {
-	        Map.Entry pair = (Map.Entry)it.next();
+			Map.Entry pair = (Map.Entry)it.next();
 	        System.out.println("(id match :" +pair.getKey()+ " Press "+ ((int)pair.getKey()+1) + " for detail) = " + pair.getValue());
 	        //it.remove(); // avoids a ConcurrentModificationException
 	    }	
@@ -34,7 +45,11 @@ public class Menu {
 		System.out.println(" -- ");
 	}
 	
-	//Update a little more
+	/**
+	 * Affichage des détails d'un match
+	 * @param Match objet à afficher
+	 * @author CharlyBong
+	 */
 	public static void affDetailsMatch(Object Match){
 		System.out.println(" -- ");
 		System.out.println(Match.toString());
@@ -42,6 +57,10 @@ public class Menu {
 		System.out.println(" -- ");
 	}
 	
+	/**
+	 * Thread pour l'affichage de point d'indiquand à l'utilisateur d'attendre
+	 * @author CharlyBong
+	 */
 	public static class WaitMessage implements Runnable {
 		private int timer = 0;
 

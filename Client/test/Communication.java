@@ -43,7 +43,14 @@ public class Communication {
 		this.clientPort = clientPort;
 	}
 	
-	//old version
+	
+	/**
+	 * Demande au serveur les détails d'un match avec son ID
+	 * @param idMatch Id du match à récupérer
+	 * @author CharlyBong
+	 * @return Array de Matchs
+	 * @deprecated Old version -> use getListMatchName()
+	 */
 	public Match[] getListMatch(){
 		tentative = 0;
 		do{
@@ -75,8 +82,13 @@ public class Communication {
 		return (Match[]) this.reponse.getValue();
 	}
 	
-	//New methode
+	/**
+	 * Demande au serveur la liste des matchs
+	 * @author Uldax
+	 * @return Objet ListMatchName contenant la liste des matchs
+	 */
 	public ListMatchName getListMatchName(){
+		tentative = 0;
 		do{
 			error = false;
 			try {
@@ -97,12 +109,23 @@ public class Communication {
 			}
 			catch (SocketException e){System.out.println("Socket: " + e.getMessage());} 
 			catch (InterruptedException e) {e.printStackTrace();} 
-			finally {aSocket.close(); aSocket = null; WaitingMessage.interrupt();}			
-		}while(error);
+			finally {aSocket.close(); aSocket = null; WaitingMessage.interrupt();tentative++;}			
+		}while((error)&&(tentative < MAX_TENTATIVE));
+				
+		if (error){
+			System.out.println("-- Erreur Serveur TimeOut --");
+			return null;
+		}
 			
 		return (ListMatchName) this.reponse.getValue();
 	}
 	
+	/**
+	 * Demande au serveur les détails d'un match avec son ID
+	 * @param idMatch Id du match à récupérer
+	 * @author CharlyBong
+	 * @return Objet Match contenant les détails du match
+	 */
 	public Match GetMatchDetail(int idMatch){
 		tentative = 0;
 		do{
@@ -136,7 +159,10 @@ public class Communication {
 	
 	
 	
-	
+	/**
+	 * Thread pour l'affichage de point d'indiquand à l'utilisateur d'attendre
+	 * @author CharlyBong
+	 */
 	private class WaitReponse implements Runnable {
 		
 		public WaitReponse() {}
