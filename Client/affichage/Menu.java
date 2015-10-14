@@ -24,7 +24,6 @@ public class Menu {
 		System.out.println(" 0 - exit");
 		System.out.println(" -- ");
 	}
-	
 
 	/**
 	 * Affichage de la liste des matchs (Domicile vs Exterieur - timer)

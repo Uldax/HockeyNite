@@ -119,14 +119,14 @@ public class Communication {
 			
 		return (ListMatchName) this.reponse.getValue();
 	}
-	
+
 	/**
 	 * Demande au serveur les détails d'un match avec son ID
 	 * @param idMatch Id du match à récupérer
 	 * @author CharlyBong
 	 * @return Objet Match contenant les détails du match
 	 */
-	public Match GetMatchDetail(int idMatch){
+	public Match getMatchDetail(int idMatch){
 		tentative = 0;
 		do{
 			error = false;

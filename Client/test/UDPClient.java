@@ -60,8 +60,8 @@ public class UDPClient{
     				e.printStackTrace();
     				choix = -1;
     			}        
+    	    	
     		}while(choix == -1);
-    		
     		//if((choix > 0)&&(choix <= ListMatch.length)) {
     		logger.info("Choix = " + choix + " and contain = " + matchList.getMatchName().containsKey( (choix-1 ) ));
     		
@@ -87,7 +87,7 @@ public class UDPClient{
     	Object Match = null;
     	int choix = 0;
     	do{
-    		Match = Communication.getInstance().GetMatchDetail(idMatch);
+    		Match = Communication.getInstance().getMatchDetail(idMatch);
     		if(Match == null) return;
         	// Affichage des infomations
     		Menu.affDetailsMatch(Match);
