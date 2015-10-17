@@ -7,21 +7,21 @@ public class Bet implements Serializable {
     private static final long serialVersionUID = 1337133713371337L;
     private String betID = null; 
     private int matchID = 0;
-    private int teamID = 0;
+    private String teamName = null;
     private String clientFirstName = null;
     private String clientLastName = null;
     private String clientAddress = null;
     private byte[] clientIPAddress = new byte[4];
     private float betAmount = 0;
 
-    public Bet(int matchID, int teamID, float betAmount) {
+    public Bet(int matchID, String teamName, float betAmount) {
        this.matchID = matchID;
-       this.teamID = teamID;
+       this.teamName = teamName;
        this.betAmount = betAmount;        
     }
 
-    public void setTeamID(int teamID) {
-        this.teamID = teamID;
+    public void setTeamName(String teamID) {
+        this.teamName = teamName;
     }
  
     public void setBetID(String betID) {
@@ -60,8 +60,8 @@ public class Bet implements Serializable {
         return matchID;
     }
 
-    public int getTeamID() {
-        return teamID;
+    public String getTeamName() {
+        return teamName;
     }
 
     public String getClientFirstName() {
