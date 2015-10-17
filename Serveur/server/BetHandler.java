@@ -27,6 +27,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import org.apache.log4j.Logger;
@@ -166,8 +167,8 @@ public class BetHandler implements Runnable {
         return totalBetting;
     };
     
-    static public synchronized Map<String, Bet> getWinnerMap(Match matchDetail){
-        Map<String, Bet> winnerMap = new HashMap<String, Bet>();
+    static public synchronized Hashtable<String, Bet> getWinnerTable(Match matchDetail){
+        Hashtable<String, Bet> winnerTable = new Hashtable<String, Bet>();
         int matchID = matchDetail.getId();
         boolean loopCondition = true;
         String winnerTeamName = matchDetail.getWinner();        
@@ -186,7 +187,7 @@ public class BetHandler implements Runnable {
                         // up or handled here.
                         Bet currentBet = (Bet) ois.readObject();
                         if( currentBet.getTeamName() == winnerTeamName ){
-                            winnerMap.put(currentBet.getBetID(),currentBet);
+                            winnerTable.put(currentBet.getBetID(),currentBet);
                         }            
                     } catch (EOFException e) {
                         // If there are no more objects to read, we break the while with what we have.
@@ -201,7 +202,7 @@ public class BetHandler implements Runnable {
             ex.printStackTrace();
 	}
         logger.info("getWinnerMap: a Winner map was returned for the matchID: #" + String.valueOf(matchID));
-        return winnerMap;
+        return winnerTable;
     };
     
     public Socket getConnectionSocket() {

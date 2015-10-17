@@ -9,8 +9,12 @@ import java.net.SocketException;
 import org.apache.log4j.Logger;
 
 import dataManagement.ListeDesMatchs;
+import dataObject.Bet;
 import dataObject.ListMatchName;
 import dataObject.Match;
+import java.util.Hashtable;
+import java.util.Map;
+import java.util.logging.Level;
 import protocole.Message;
 import protocole.MessageError;
 import protocole.Reply;
@@ -70,6 +74,27 @@ public class MessageHandler implements Runnable {
 				Match matchDetail = data.getMatch(matchID);
 				reply.setValue(matchDetail);			
 				break;
+                        case betInfo:
+                                Object[] args = request.getArgument();
+                                int betMatchID = (int) args [0];
+                                String betID = (String) args[1];
+                                logger.info("detail received with params : "+ String.valueOf(betMatchID + " and the betID: " + betID.toString() ));                                
+                                try {
+                                    float totalBettingAmount = BetHandler.getTotalBettingAmount(betMatchID);
+                                    Match betMatchDetail = data.getMatch(betMatchID);
+                                    Hashtable<String, Bet> winnerTable = BetHandler.getWinnerTable(betMatchDetail);
+                                    if(winnerTable.containsKey(betID)){
+                                        winnerTable.get(betID);                                        
+                                        reply.setValue("Congratulation you win: " + betID + "did not win!");
+                                    }
+                                    else{
+                                        reply.setValue("The bet: " + betID + "did not win!");
+                                    }
+                                } catch (IOException ex) {
+                                        java.util.logging.Logger.getLogger(MessageHandler.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                                
+                                
 				
 			default:
 				reply.setValue(new MessageError(MessageError.METHODEERROR)); 
