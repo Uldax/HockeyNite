@@ -115,6 +115,12 @@ public class Match implements Serializable {
         public int getPeriode() {
             return periode;
         }
+
+    public int getId() {
+        return id;
+    }
+        
+        
 	
 	public int[] splitToTimes()
 	{

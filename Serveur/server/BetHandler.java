@@ -14,6 +14,7 @@ import dataObject.Match;
 import dataObject.Bet;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -24,6 +25,10 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.apache.log4j.Logger;
 import protocole.Message;
 import protocole.MessageError;
@@ -73,7 +78,7 @@ public class BetHandler implements Runnable {
                     saveBetOnDisk(currentBet);
 
                     //We update match betting amount
-                    updateBettingTotalAmount(currentBet);                
+                    updateTotalBettingAmount(currentBet);                
 
                     logger.info("The bet is saved on the disk");
                     
@@ -115,7 +120,7 @@ public class BetHandler implements Runnable {
 	}
        
     };
-    private synchronized void updateBettingTotalAmount(Bet currentBet) throws IOException{ 
+    private synchronized void updateTotalBettingAmount(Bet currentBet) throws IOException{ 
         try{
         
             String filename = "totalBettingAmountForMatch#" + String.valueOf( currentBet.getMatchID() );
@@ -137,8 +142,64 @@ public class BetHandler implements Runnable {
            dos.close();
 	}catch(Exception ex){
 		   ex.printStackTrace();
+	}       
+    };
+    
+    public synchronized float getTotalBettingAmount(int matchID) throws IOException{ 
+       float totalBetting = 0;
+       String filename = "totalBettingAmountForMatch#" + String.valueOf( matchID );
+        try{  
+            //On valide que le fichier existe déja
+            File f = new File(filename);
+            if(f.exists() && !f.isDirectory()) { 
+                //Le fichier existe déja alors on va chercher la valeur
+                FileInputStream fis = new FileInputStream(f);
+                DataInputStream dis = new DataInputStream(fis);            
+                totalBetting = dis.readFloat();            
+                dis.close();
+            }            
+           
+	}catch(Exception ex){
+		   ex.printStackTrace();
+	}  
+        return totalBetting;
+    };
+    
+    public synchronized Map<String, Bet> getWinnerMap(Match matchDetail){
+        Map<String, Bet> winnerMap = new HashMap<String, Bet>();
+        int matchID = matchDetail.getId();
+        boolean loopCondition = true;
+        String winnerTeamName = matchDetail.getWinner();
+        try{  
+            //On valide que le fichier existe déja
+            File f = new File("betsForMatch#" + String.valueOf( matchID ));
+            if(f.exists() && !f.isDirectory()) { 
+                //Le fichier existe déja alors on va chercher la valeur
+                FileInputStream fis = new FileInputStream(f);
+                ObjectInputStream ois = new ObjectInputStream(fis);            
+                while (loopCondition) {
+                    try {
+                        // Read the next object from the stream. If there is none, the
+                        // EOFException will be thrown.
+                        // This call might also throw a ClassNotFoundException, which can be passed
+                        // up or handled here.
+                        Bet currentBet = (Bet) ois.readObject();
+                        if( currentBet.getTeamName() == winnerTeamName ){
+                            winnerMap.put(currentBet.getBetID(),currentBet);
+                        }            
+                    } catch (EOFException e) {
+                        // If there are no more objects to read, we break the while with what we have.
+                        loopCondition = false;
+                    } finally {
+                        // Close the stream.
+                        ois.close();
+                    }
+                }    
+            }      
+        }catch(Exception ex){
+            ex.printStackTrace();
 	}
-       
+        return winnerMap;
     };
     
     public Socket getConnectionSocket() {
