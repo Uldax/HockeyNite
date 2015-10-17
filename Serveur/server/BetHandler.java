@@ -12,8 +12,14 @@ import dataManagement.ListeDesMatchs;
 import dataObject.ListMatchName;
 import dataObject.Match;
 import dataObject.Bet;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 import org.apache.log4j.Logger;
 import protocole.Message;
@@ -39,78 +45,51 @@ public class BetHandler implements Runnable {
 	
 	@Override
 	public void run() {
-        try{
-            InputStream is = getConnectionSocket().getInputStream();
-            ObjectInputStream ois = new ObjectInputStream(is);
-            Bet currentBet = (Bet) ois.readObject();
-        } catch(Exception e) {
-	        e.printStackTrace();
-	} 
-        
+            try{
+                //We retreive the currentBet 
+                InputStream is = getConnectionSocket().getInputStream();
+                ObjectInputStream ois = new ObjectInputStream(is);
+                Bet currentBet = (Bet) ois.readObject(); //We wait for the object
+                
+               logger.info("We got currentBet: " + currentBet.toString());
+               
+                //We save the bet on the disk
+                saveOnDisk(currentBet);
 
-            /*	//extract data from packet
-		data = ListeDesMatchs.getInstance();
-		Message message = (Message) Marshallizer.unmarshall(packetReceive);
-		logger.info("message receive " + String.valueOf(message.getType()));	
-		if (message.isRequest()) {
-			//build the response of the request
-			logger.info("build answer");
-			Reply reply = buildResponse((Request)message);
-			respond(reply);
-		}
-		logger.info("reply done");
-        */
+                logger.info("The bet is saved on the disk");
+                
+                //We send a confirmation to the client
+                OutputStream os = getConnectionSocket().getOutputStream();  
+                os.write(1); // The bet was save
+                
+                logger.info("The client should receive an ACK");
+
+            } catch(Exception e) {
+                    e.printStackTrace();
+                    try{
+                        //Something went wrong we tell the client
+                        OutputStream os = getConnectionSocket().getOutputStream();  
+                        os.write(0); // Something went wrong
+
+                    }catch(Exception e2) {
+                         e2.printStackTrace();
+                    }
+            } 
+         }
+	
+    private void saveOnDisk(Bet currentBet) throws IOException{ 
+        try{	
+            //New file named match#TheID and we set append @ true
+            FileOutputStream fout = new FileOutputStream("match#" + String.valueOf( currentBet.getMatchID() ),true);
+            ObjectOutputStream oos = new ObjectOutputStream(fout);   
+            oos.writeObject(currentBet);
+            oos.close();
+		   
+	}catch(Exception ex){
+		   ex.printStackTrace();
 	}
-	/*
-		//Answer to the request
-		private Reply buildResponse(Request request) {
-			Reply reply = new Reply(packetReceive.getAddress(),packetReceive.getPort(),request.getNumero());
-			switch(request.getMethode()) {
-			case list :
-				//old version with every detail
-				//Match[] listMatch = data.getAllMatch();
-				//reply.setValue(listMatch);	
-				
-				//new version
-				ListMatchName listMatch = data.getAllMatchName();
-				reply.setValue(listMatch);	
-				
-				break;
-				
-			case detail:
-				Object[] arguments = request.getArgument();
-				int matchID = (int) arguments[0];
-				logger.info("detail received with param : "+ String.valueOf(matchID));
-				Match matchDetail = data.getMatch(matchID);
-				reply.setValue(matchDetail);			
-				break;
-				
-			default:
-				reply.setValue(new MessageError(MessageError.METHODEERROR)); 
-				break;
-			}								
-			logger.info("Message reply crafted");		
-			return reply;
-		}
-
-	protected void respond(Reply message) {
-		try {
-			//Message.getData()
-			logger.debug(message.toString());
-			byte[] reply = Marshallizer.marshallize(message);
-			DatagramPacket datagram = new DatagramPacket(reply,
-					reply.length, 
-					message.getDestination(),
-					message.getDestinationPort());
-			serverSocket.send(datagram); // �mission non-bloquante
-		} catch (SocketException e) {
-			System.out.println("Socket: " + e.getMessage());
-		} catch (IOException e) {
-			System.out.println("IO: " + e.getMessage());
-		}
-	}
-*/
-
+       
+    };
     public Socket getConnectionSocket() {
         return connectionSocket;
     }
