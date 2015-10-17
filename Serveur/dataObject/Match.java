@@ -36,7 +36,7 @@ public class Match implements Serializable {
 	private final int BREAK_TIME = 15*60;
 	private final int MAX_TIME = 3 * PERIODE_TIME + 2 * BREAK_TIME;
 	
-	String getWinner(){
+	public String getWinner(){
 		if(winner != null) {
 			return winner.getName();
 		} else {
