@@ -14,7 +14,8 @@ public class Bet implements Serializable {
     private byte[] clientIPAddress = new byte[4];
     private float betAmount = 0;
 
-    public Bet(int matchID, String teamName, float betAmount) {
+    public Bet(String betID, int matchID, String teamName, float betAmount) {
+       this.betID = betID;
        this.matchID = matchID;
        this.teamName = teamName;
        this.betAmount = betAmount;        

@@ -73,7 +73,7 @@ public class BetHandler implements Runnable {
                //On s'assure que la période est est >= 2
                Match matchDetail = data.getMatch(currentBet.getMatchID());
                
-               if(matchDetail.getPeriode() >= 2){
+               if(matchDetail.getPeriode() <= 2){
                     //We save the bet on the disk
                     saveBetOnDisk(currentBet);
 
@@ -140,7 +140,7 @@ public class BetHandler implements Runnable {
            totalBetting = totalBetting + currentBet.getBetAmount();      
            dos.writeFloat(totalBetting);
            dos.close();
-           logger.info("updateTotalBettingAmount: The total betting amount was updated");
+           logger.info("updateTotalBettingAmount: The total betting amount was updated it is now: " + String.valueOf(totalBetting) + "$");
 	}catch(Exception ex){
 		   ex.printStackTrace();
 	}       
