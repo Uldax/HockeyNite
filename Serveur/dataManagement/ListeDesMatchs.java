@@ -20,7 +20,7 @@ public class ListeDesMatchs {
 	public static int MODIF_TIME = 5000;
 	public Semaphore sem = null;
 	
-	// update play time every INTERVAL_TIME sec
+	// updateplay time every INTERVAL_TIME sec
 	private ScheduledExecutorService scheduler =  null;
 	private ScheduledFuture<?> timerHandle = null;
 	
@@ -28,11 +28,11 @@ public class ListeDesMatchs {
 	/** Technique du Holder */
 	private static class SingletonHolder
 	{		
-		/** Instance unique non préinitialisée */
+		/** Instance unique non prÃ©initialise */
 		private final static ListeDesMatchs instance = new ListeDesMatchs();
 	}
  
-	/** Point d'accès pour l'instance unique du singleton */
+	/** Point d'acces pour l'instance unique du singleton */
 	public static ListeDesMatchs getInstance()
 	{
 		return SingletonHolder.instance;

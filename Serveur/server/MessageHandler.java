@@ -88,7 +88,7 @@ public class MessageHandler implements Runnable {
 					reply.length, 
 					message.getDestination(),
 					message.getDestinationPort());
-			serverSocket.send(datagram); // émission non-bloquante
+			serverSocket.send(datagram); // Ã©mission non-bloquante
 		} catch (SocketException e) {
 			System.out.println("Socket: " + e.getMessage());
 		} catch (IOException e) {
