@@ -12,7 +12,10 @@ import dataManagement.ListeDesMatchs;
 import dataObject.ListMatchName;
 import dataObject.Match;
 import dataObject.Bet;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.InputStream;
@@ -46,30 +49,52 @@ public class BetHandler implements Runnable {
 	@Override
 	public void run() {
             try{
+                //extract data from packet
+		data = ListeDesMatchs.getInstance();
+                
+                //Déclaration des streams que nous allons utiliser
                 //We retreive the currentBet 
                 InputStream is = getConnectionSocket().getInputStream();
                 ObjectInputStream ois = new ObjectInputStream(is);
+                
+                //We send a confirmation to the client
+                OutputStream os = getConnectionSocket().getOutputStream();
+                
+                //On récupère l'objet Bet
                 Bet currentBet = (Bet) ois.readObject(); //We wait for the object
                 
                logger.info("We got currentBet: " + currentBet.toString());
                
-                //We save the bet on the disk
-                saveOnDisk(currentBet);
+               //On s'assure que la période est est >= 2
+               Match matchDetail = data.getMatch(currentBet.getMatchID());
+               
+               if(matchDetail.getPeriode() >= 2){
+                    //We save the bet on the disk
+                    saveBetOnDisk(currentBet);
 
-                logger.info("The bet is saved on the disk");
+                    //We update match betting amount
+                    updateBettingTotalAmount(currentBet);                
+
+                    logger.info("The bet is saved on the disk");
+                    
+                    os.write(1); // The bet was save
+                    
+                    logger.info("The client should receive an ACK");
+               }
+               else
+               {
+                   os.write(0); // The bet wasnt save and we send an error to the client
+                   
+                   logger.info("The client should receive an error code 0");
+                }
                 
-                //We send a confirmation to the client
-                OutputStream os = getConnectionSocket().getOutputStream();  
-                os.write(1); // The bet was save
-                
-                logger.info("The client should receive an ACK");
 
             } catch(Exception e) {
                     e.printStackTrace();
                     try{
                         //Something went wrong we tell the client
                         OutputStream os = getConnectionSocket().getOutputStream();  
-                        os.write(0); // Something went wrong
+                        os.write(-1); // Something went wrong
 
                     }catch(Exception e2) {
                          e2.printStackTrace();
@@ -77,19 +102,45 @@ public class BetHandler implements Runnable {
             } 
          }
 	
-    private void saveOnDisk(Bet currentBet) throws IOException{ 
+    private synchronized void saveBetOnDisk(Bet currentBet) throws IOException{ 
         try{	
             //New file named match#TheID and we set append @ true
-            FileOutputStream fout = new FileOutputStream("match#" + String.valueOf( currentBet.getMatchID() ),true);
+            FileOutputStream fout = new FileOutputStream("betsForMatch#" + String.valueOf( currentBet.getMatchID() ),true);
             ObjectOutputStream oos = new ObjectOutputStream(fout);   
             oos.writeObject(currentBet);
-            oos.close();
+            oos.close();           
 		   
 	}catch(Exception ex){
 		   ex.printStackTrace();
 	}
        
     };
+    private synchronized void updateBettingTotalAmount(Bet currentBet) throws IOException{ 
+        try{
+        
+            String filename = "totalBettingAmountForMatch#" + String.valueOf( currentBet.getMatchID() );
+            float totalBetting = 0;
+            //On valide que le fichier existe déja
+            File f = new File(filename);
+            if(f.exists() && !f.isDirectory()) { 
+                //Le fichier existe déja alors on va chercher la valeur
+                FileInputStream fis = new FileInputStream(f);
+                DataInputStream dis = new DataInputStream(fis);            
+                totalBetting = dis.readFloat();            
+                dis.close();
+            }        
+
+           FileOutputStream fos = new FileOutputStream(filename);
+           DataOutputStream dos = new DataOutputStream(fos);     
+           totalBetting = totalBetting + currentBet.getBetAmount();      
+           dos.writeFloat(totalBetting);
+           dos.close();
+	}catch(Exception ex){
+		   ex.printStackTrace();
+	}
+       
+    };
+    
     public Socket getConnectionSocket() {
         return connectionSocket;
     }
