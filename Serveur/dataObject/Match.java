@@ -26,7 +26,8 @@ public class Match implements Serializable {
 	private final int MAX_TIME = 3 * PERIODE_TIME + 2 * BREAK_TIME;
 	
 	
-	public Match(Team domicile,Team exterieur){		
+	public Match(int id, Team domicile,Team exterieur){		
+                this.id = id;
                 this.domicile = domicile;
 		this.exterieur = exterieur;
 		this.periode = 1;
@@ -110,6 +111,10 @@ public class Match implements Serializable {
 	public Boolean isPause(){
 		return this.pause;
 	}
+
+        public int getPeriode() {
+            return periode;
+        }
 	
 	public int[] splitToTimes()
 	{
