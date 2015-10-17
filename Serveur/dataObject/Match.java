@@ -9,6 +9,7 @@ public class Match implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -8080958380151755727L;
+        private int id = 0;
 	private int time = 0;
 	private Team domicile = null;
 	private int domicileScore = 0;
@@ -25,8 +26,8 @@ public class Match implements Serializable {
 	private final int MAX_TIME = 3 * PERIODE_TIME + 2 * BREAK_TIME;
 	
 	
-	public Match(Team domicile,Team exterieur){
-		this.domicile = domicile;
+	public Match(Team domicile,Team exterieur){		
+                this.domicile = domicile;
 		this.exterieur = exterieur;
 		this.periode = 1;
 	}
