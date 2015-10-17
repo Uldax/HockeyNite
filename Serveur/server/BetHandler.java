@@ -146,7 +146,7 @@ public class BetHandler implements Runnable {
 	}       
     };
     
-    public synchronized float getTotalBettingAmount(int matchID) throws IOException{ 
+    static public synchronized float getTotalBettingAmount(int matchID) throws IOException{ 
        float totalBetting = 0;
        String filename = "totalBettingAmountForMatch#" + String.valueOf( matchID );
         try{  
@@ -166,7 +166,7 @@ public class BetHandler implements Runnable {
         return totalBetting;
     };
     
-    public synchronized Map<String, Bet> getWinnerMap(Match matchDetail){
+    static public synchronized Map<String, Bet> getWinnerMap(Match matchDetail){
         Map<String, Bet> winnerMap = new HashMap<String, Bet>();
         int matchID = matchDetail.getId();
         boolean loopCondition = true;
