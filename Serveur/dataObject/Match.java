@@ -4,17 +4,28 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
+import server.UDPServer;
+
 public class Match implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -8080958380151755727L;
-        private int id = 0;
+	private static final Logger logger = Logger.getLogger(Match.class);
+    private int id = 0;
 	private int time = 0;
 	private Team domicile = null;
 	private int domicileScore = 0;
 	private Team exterieur = null;
 	private int exterieurScore = 0;
+	private Team winner = null;
+	
+	public void setWinner(Team winner) {
+		this.winner = winner;
+	}
+
 	private List<Event> matchEvent = new ArrayList<Event>();
 	//20 minute per periode with 15min of break
 	private int periode;
@@ -25,6 +36,17 @@ public class Match implements Serializable {
 	private final int BREAK_TIME = 15*60;
 	private final int MAX_TIME = 3 * PERIODE_TIME + 2 * BREAK_TIME;
 	
+	String getWinner(){
+		if(winner != null) {
+			return winner.getName();
+		} else {
+			return null;
+		}
+	}
+	
+	Team getWinnerTeam(){
+			return winner;
+	}
 	
 	public Match(int id, Team domicile,Team exterieur){		
                 this.id = id;
@@ -73,6 +95,8 @@ public class Match implements Serializable {
 		case 3:
 			if ((time >= periodeStart + PERIODE_TIME ) && pause == false ) {
 				pause = true;
+				logger.info("Call to hadleWinner");
+				handleWinner();
 				matchEvent.add( new Event(time, "This is the end of the game"));
 			}	
 			break;
@@ -80,6 +104,17 @@ public class Match implements Serializable {
 			break;
 		}
 	}
+	
+	//Set the winer
+	private void handleWinner(){
+		if( exterieurScore > domicileScore){
+			setWinner(exterieur);
+		} 
+		else if( domicileScore > exterieurScore) {
+			setWinner(domicile);
+		}
+	}
+	
 	public Team getDomicile() {
 		return domicile;
 	}
