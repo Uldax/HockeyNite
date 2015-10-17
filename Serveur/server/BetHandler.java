@@ -114,7 +114,7 @@ public class BetHandler implements Runnable {
             ObjectOutputStream oos = new ObjectOutputStream(fout);   
             oos.writeObject(currentBet);
             oos.close();           
-		   
+            logger.info("saveBetOnDisk: Object was saved on the disk");
 	}catch(Exception ex){
 		   ex.printStackTrace();
 	}
@@ -140,6 +140,7 @@ public class BetHandler implements Runnable {
            totalBetting = totalBetting + currentBet.getBetAmount();      
            dos.writeFloat(totalBetting);
            dos.close();
+           logger.info("updateTotalBettingAmount: The total betting amount was updated");
 	}catch(Exception ex){
 		   ex.printStackTrace();
 	}       
@@ -169,7 +170,7 @@ public class BetHandler implements Runnable {
         Map<String, Bet> winnerMap = new HashMap<String, Bet>();
         int matchID = matchDetail.getId();
         boolean loopCondition = true;
-        String winnerTeamName = matchDetail.getWinner();
+        String winnerTeamName = matchDetail.getWinner();        
         try{  
             //On valide que le fichier existe déja
             File f = new File("betsForMatch#" + String.valueOf( matchID ));
@@ -199,6 +200,7 @@ public class BetHandler implements Runnable {
         }catch(Exception ex){
             ex.printStackTrace();
 	}
+        logger.info("getWinnerMap: a Winner map was returned for the matchID: #" + String.valueOf(matchID));
         return winnerMap;
     };
     
