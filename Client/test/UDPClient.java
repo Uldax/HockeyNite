@@ -36,7 +36,7 @@ public class UDPClient{
     	commObject.setServeur(aHost, serveurPort, clientPort);
     	do{
     		
-			System.out.println("Récupération de la liste des matchs, veuillez patienter");
+			System.out.println("Recuperation de la liste des matchs, veuillez patienter");
 			//ListMatch = commObject.getListMatch(); 
 			// Affichage de la liste des matchs
     		//Menu.affListMatch(ListMatch);
@@ -69,7 +69,7 @@ public class UDPClient{
     	   		logger.info("call to detailMatch");
     			detailMatch(choix-1);
     		}
-    		//  récupération des détails du match et affichage
+    		//  recuperation des details du match et affichage
     		
     	}while(choix != 0);
     	// choix == 0 -> exit
@@ -79,7 +79,7 @@ public class UDPClient{
     }
     
     /**
-     * Sous menu pour le détail d'un match
+     * Sous menu pour le detail d'un match
      * @param idMatch ID du match choisit
      * @author CharlyBong
      */
@@ -92,7 +92,7 @@ public class UDPClient{
         	// Affichage des infomations
     		Menu.affDetailsMatch(Match);
     		
-    		// Réponse utilisateur
+    		// Rï¿½ponse utilisateur
     		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	    	try{
 	            choix = Integer.parseInt(br.readLine());

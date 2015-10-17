@@ -29,7 +29,7 @@ public class Protocole {
 						stream.length, 
 						message.getDestination(),
 						message.getDestinationPort());
-				aSocket.send(datagram); // émission non-bloquante
+				aSocket.send(datagram); // emission non-bloquante
 			
 		} catch (SocketException e) {
 			System.out.println("Socket: " + e.getMessage());

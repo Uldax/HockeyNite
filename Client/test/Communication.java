@@ -45,8 +45,8 @@ public class Communication {
 	
 	
 	/**
-	 * Demande au serveur les détails d'un match avec son ID
-	 * @param idMatch Id du match à récupérer
+	 * Demande au serveur les dï¿½tails d'un match avec son ID
+	 * @param idMatch Id du match ï¿½ rï¿½cupï¿½rer
 	 * @author CharlyBong
 	 * @return Array de Matchs
 	 * @deprecated Old version -> use getListMatchName()
@@ -121,10 +121,10 @@ public class Communication {
 	}
 
 	/**
-	 * Demande au serveur les détails d'un match avec son ID
-	 * @param idMatch Id du match à récupérer
+	 * Demande au serveur les dï¿½tails d'un match avec son ID
+	 * @param idMatch Id du match ï¿½ rï¿½cupï¿½rer
 	 * @author CharlyBong
-	 * @return Objet Match contenant les détails du match
+	 * @return Objet Match contenant les dï¿½tails du match
 	 */
 	public Match getMatchDetail(int idMatch){
 		tentative = 0;
@@ -160,7 +160,7 @@ public class Communication {
 	
 	
 	/**
-	 * Thread pour l'affichage de point d'indiquand à l'utilisateur d'attendre
+	 * Thread pour l'affichage de point d'indiquand ï¿½ l'utilisateur d'attendre
 	 * @author CharlyBong
 	 */
 	private class WaitReponse implements Runnable {
