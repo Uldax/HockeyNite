@@ -175,7 +175,7 @@ public class UDPClient{
                             {
                              //Succès alors on montre un message de succès
                              System.out.println(" -- L'objet Bet suivant -- ");
-                             System.out.println(b.toString());
+                             System.out.println(b.toString() + " au montant de: " + String.valueOf(b.getBetAmount()) + "$" );
                              System.out.println(" -- à été enregistré avec succès! --");
                              
                              //On ajoute le bet courant à notre liste de Bet
