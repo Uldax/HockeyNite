@@ -134,15 +134,22 @@ public class MessageHandler implements Runnable {
 
                                             betRespond = new BetRespond(betID, betMatchID, 1, currentBetAmount, wonAmount ); // won the bet
                                             reply.setValue(betRespond);
+                                            
+                                            logger.info("The bet was a winning bet, and we reply.setValue contains a betRespond Object" );
+
                                         }
                                         else{
                                             betRespond = new BetRespond(betID, betMatchID, 0 ); // Did not win the bet
                                             reply.setValue(betRespond);
+                                            
+                                            logger.info("The bet was not a winning bet, and we reply.setValue contains a betRespond Object" );
                                         }
                                     }
                                     else{
                                         betRespond = new BetRespond(betID, betMatchID, 2 ); // Match isn't finish yet
                                         reply.setValue(betRespond);
+                                        
+                                        logger.info("The match isn't finish yet for that match" );
                                     }
                                 } catch (IOException ex) {
                                         java.util.logging.Logger.getLogger(MessageHandler.class.getName()).log(Level.SEVERE, null, ex);
