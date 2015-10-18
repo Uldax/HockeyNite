@@ -11,6 +11,7 @@ import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Level;
 
@@ -20,7 +21,7 @@ import java.util.logging.Level;
 public class UDPClient{
     
 	private static final Logger logger = Logger.getLogger(UDPClient.class);
-        private Bet[] betHistory = null;
+        private static List<Bet> betHistory = null;
         private static final int betServerPort = 1248;
         private static AtomicLong betCounter = new AtomicLong();
 	
@@ -143,18 +144,29 @@ public class UDPClient{
     		// Réponse utilisateur
     		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	    	try{
-	            choix = Integer.parseInt(br.readLine());
-                    if (choix == 1){
+	            //On détermine le choix d'équipe pour le pari
+                    choix = Integer.parseInt(br.readLine());
+                    
+                    String teamName = null;
+                    
+                    //On assosie le nom de l'équipe selon le choix fait
+                    if (choix == 1){ teamName = domicile.getName();}
+                    if (choix == 2){ teamName = visiteur.getName();}
+                    
+                    if(teamName != null){
+                        
                         System.out.println(" -- ");
 		        System.out.println("Veuillez inscrire le montant à parier (Format attendu: 100.50 )");
 		        System.out.println(" -- ");
+                        
+                        //On récupère le montant
                         float montant = Float.parseFloat(br.readLine());
                        
                         //Construction de l'objet de bet
                         DateFormat dateFormat = new SimpleDateFormat("yyy-MM-dd-HH-mm-ss");
                         Date date = new Date();                        
                         
-                        Bet b = new Bet(dateFormat.format(date) + "-" + createID(),1, domicile.getName(), montant);
+                        Bet b = new Bet(dateFormat.format(date) + "-" + createID(),1, teamName, montant);
                         
                         try {
                             
@@ -162,7 +174,12 @@ public class UDPClient{
 
                             if(result == 1)
                             {
+                             //Succès alors on montre un message de succès
                              System.out.println("Succès pour l'objet b courant");
+                             
+                             //On ajoute le bet courant à notre liste de Bet
+                             betHistory.add(b);
+                             
                             }
                             else if(result == 0)
                             {
