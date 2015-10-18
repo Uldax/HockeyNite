@@ -10,6 +10,7 @@ import dataObject.Team;
 import java.io.*; 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
@@ -21,7 +22,7 @@ import java.util.logging.Level;
 public class UDPClient{
     
 	private static final Logger logger = Logger.getLogger(UDPClient.class);
-        private static List<Bet> betHistory = null;
+        private static List<Bet> betHistory = new ArrayList<Bet>();
         private static final int betServerPort = 1248;
         private static AtomicLong betCounter = new AtomicLong();
 	
@@ -176,7 +177,7 @@ public class UDPClient{
                              System.out.println("Succès pour l'objet b courant");
                              
                              //On ajoute le bet courant à notre liste de Bet
-                             //betHistory.add(b);
+                             betHistory.add(b);
                              
                             }
                             else if(result == 0)
