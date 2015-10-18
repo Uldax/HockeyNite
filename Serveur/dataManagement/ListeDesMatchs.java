@@ -48,8 +48,10 @@ public class ListeDesMatchs {
 		Team t4 =  new Team("D");
 		Match M1 = new Match(1,t1,t2);
 		Match M2 = new Match(2,t3,t4);
+                Match M3 = new Match(3,t1,t4);
 		ListMatch[0] = M1;
 		ListMatch[1]  = M2;
+                ListMatch[2]  = M3;
 		logger.info("ListDesMatch init");			
 	}
 	
