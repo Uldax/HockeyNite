@@ -53,3 +53,11 @@ local.properties
 # TeXlipse plugin
 .texlipse
 Serveur/HockeyNite/all.log
+
+# Android
+**/build/
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+*.idea*
