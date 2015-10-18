@@ -134,9 +134,7 @@ public class UDPClient{
                 
                 //Récupération des informations relatives aux équipes
                 Team domicile = oMatch.getDomicile();
-                Team visiteur = oMatch.getExterieur();
-    		
-                if(oMatch == null) return;
+                Team visiteur = oMatch.getExterieur();                
                 
         	// Affichage des infomations
     		Menu.affDetailsMatchPourPari(oMatch);
@@ -166,7 +164,7 @@ public class UDPClient{
                         DateFormat dateFormat = new SimpleDateFormat("yyy-MM-dd-HH-mm-ss");
                         Date date = new Date();                        
                         
-                        Bet b = new Bet(dateFormat.format(date) + "-" + createID(),1, teamName, montant);
+                        Bet b = new Bet(dateFormat.format(date) + "-" + createID(),idMatch, teamName, montant);
                         
                         try {
                             
@@ -178,7 +176,7 @@ public class UDPClient{
                              System.out.println("Succès pour l'objet b courant");
                              
                              //On ajoute le bet courant à notre liste de Bet
-                             betHistory.add(b);
+                             //betHistory.add(b);
                              
                             }
                             else if(result == 0)
