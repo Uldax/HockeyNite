@@ -174,7 +174,9 @@ public class UDPClient{
                             if(result == 1)
                             {
                              //Succès alors on montre un message de succès
-                             System.out.println("Succès pour l'objet b courant");
+                             System.out.println(" -- L'objet Bet suivant -- ");
+                             System.out.println(b.toString());
+                             System.out.println(" -- à été enregistré avec succès! --");
                              
                              //On ajoute le bet courant à notre liste de Bet
                              betHistory.add(b);
