@@ -3,8 +3,6 @@ package ca.sils.hockeynitelive.Communication;
 
 
 // Importations
-import android.widget.Toast;
-
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -12,12 +10,12 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 
-import ca.sils.hockeynitelive.Protocole.Message;
-import ca.sils.hockeynitelive.Protocole.Reply;
-import ca.sils.hockeynitelive.Protocole.Request;
-import ca.sils.hockeynitelive.Utils.Marshallizer;
-import ca.sils.hockeynitelive.dataObject.ListMatchName;
-import ca.sils.hockeynitelive.dataObject.Match;
+import dataObject.ListMatchName;
+import dataObject.Match;
+import protocole.Message;
+import protocole.Reply;
+import protocole.Request;
+import utils.Marshallizer;
 
 
 /**

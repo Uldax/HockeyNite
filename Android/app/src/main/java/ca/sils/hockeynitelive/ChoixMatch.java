@@ -1,25 +1,19 @@
 package ca.sils.hockeynitelive;
 
-import android.app.DownloadManager;
 import android.content.Intent;
-import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.util.HashMap;
 
 import ca.sils.hockeynitelive.Communication.Udp;
-import ca.sils.hockeynitelive.dataObject.ListMatchName;
-import ca.sils.hockeynitelive.dataObject.Match;
+import dataObject.ListMatchName;
 
 public class ChoixMatch extends AppCompatActivity implements View.OnClickListener
 {
