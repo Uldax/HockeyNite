@@ -19,7 +19,13 @@ public class BetRespond implements Serializable {
     private float betAmount = 0;
     private float winningAmount = 0; 
     
-    public BetRespond(String betID, int matchID, int status, float betAmount, float winingAmount ) {
+      public BetRespond(String betID, int matchID, int status) {
+        this.betID = betID;
+        this.matchID = matchID;
+        this.status = status;      
+    }
+    
+    public BetRespond(String betID, int matchID, int status, float betAmount, float winingAmount) {
         this.betID = betID;
         this.matchID = matchID;
         this.status = status; 
