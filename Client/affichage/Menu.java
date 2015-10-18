@@ -6,12 +6,14 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import dataObject.ListMatchName;
+import dataObject.Match;
+import dataObject.Team;
 
 public class Menu {
 
 	/**
 	 * Affichage du tableau des match
-	 * @param ListMatch Liste des matchs à afficher
+	 * @param ListMatch Liste des matchs  afficher
 	 * @author CharlyBong
 	 * @deprecated use affListMatchName(ListMatchName ListMatch)
 	 */
@@ -27,7 +29,7 @@ public class Menu {
 
 	/**
 	 * Affichage de la liste des matchs (Domicile vs Exterieur - timer)
-	 * @param ListMatch Liste des matchs à afficher
+	 * @param ListMatch Liste des matchs  afficher
 	 * @author Uldax
 	 */
 	@SuppressWarnings("rawtypes")
@@ -45,19 +47,36 @@ public class Menu {
 	}
 	
 	/**
-	 * Affichage des détails d'un match
-	 * @param Match objet à afficher
+	 * Affichage des details d'un match
+	 * @param Match objet  afficher
 	 * @author CharlyBong
 	 */
 	public static void affDetailsMatch(Object Match){
 		System.out.println(" -- ");
 		System.out.println(Match.toString());
 		System.out.println(" 0 - back");
+                System.out.println(" 1 - faire un pari sur ce match");
+		System.out.println(" -- ");
+	}
+        
+        /**
+	 * Affichage des details d'un match
+	 * @param Match objet  afficher
+	 * @author CharlyBong
+	 */
+	public static void affDetailsMatchPourPari(Match oMatch){
+                Team domicile = oMatch.getDomicile();
+                Team visiteur = oMatch.getExterieur();
+		System.out.println(" -- ");
+		System.out.println(oMatch.toString());
+		System.out.println(" 0 - back");
+                System.out.println(" 1 - Parier sur l'Ã©quipe domicile - " + domicile.getName());
+                System.out.println(" 2 - Parier sur l'Ã©quipe visiteur - " + visiteur.getName());
 		System.out.println(" -- ");
 	}
 	
 	/**
-	 * Thread pour l'affichage de point d'indiquand à l'utilisateur d'attendre
+	 * Thread pour l'affichage de point d'indiquand  l'utilisateur d'attendre
 	 * @author CharlyBong
 	 */
 	public static class WaitMessage implements Runnable {
