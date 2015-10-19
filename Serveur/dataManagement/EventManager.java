@@ -31,9 +31,11 @@ public class EventManager implements Runnable {
 		while (true) {	
 			Semaphore dataSem = data.getSem();
 			try {
+				//acquire semaphore
 				dataSem.acquire();
 				Match[] listMatch = data.getAllMatch();
-	        	int eventOnMatch = r.nextInt(2);        	
+				//get ramdom match to update
+	        	int eventOnMatch = r.nextInt(2);   
 	        	if (listMatch[eventOnMatch] != null){
 	        		if (!listMatch[eventOnMatch].isPause()){
 	        			Team teamEvent;
@@ -46,6 +48,20 @@ public class EventManager implements Runnable {
 	        			}
 	        			listMatch[eventOnMatch].addEvent(new Event("Goal " + teamEvent.toString()));
 	        			logger.info("Event manager - Goal " + teamEvent.toString());
+	        			//Penality probability 
+	        			if(r.nextInt(30) < 5){
+	        				//if there is no actual penality
+	        				if( ! listMatch[eventOnMatch].getDomicile().hasPenality() && (r.nextInt(1) == 0) ){
+	        					listMatch[eventOnMatch].getDomicile().setPenalite(1);
+	        					listMatch[eventOnMatch].addEvent(new Event("Penality for " + teamEvent.toString()));
+	        					logger.info("Penality for domicile " + listMatch[eventOnMatch].getDomicile().toString());
+	        				}
+	        				else if( ! listMatch[eventOnMatch].getExterieur().hasPenality() && (r.nextInt(1) == 0)){
+	        					listMatch[eventOnMatch].getExterieur().setPenalite(1);
+	        					listMatch[eventOnMatch].addEvent(new Event("Penality for " + teamEvent.toString()));
+	        					logger.info("Penality for exterior " + listMatch[eventOnMatch].getExterieur().toString());
+	        				}
+	        			}
 	        		}
 	        	}
 	        	dataSem.release();   
