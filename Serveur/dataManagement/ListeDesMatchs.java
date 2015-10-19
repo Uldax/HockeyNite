@@ -14,7 +14,15 @@ import dataObject.Team;
 public class ListeDesMatchs {
 	private static final Logger logger = Logger.getLogger(ListeDesMatchs.class);
 	public final static int MAX_MATCH = 10;
-	private static final int INTERVAL_TIME = 10;
+	//10 sec
+	private static final int INTERVAL_TIME = 10000;
+	
+	
+	public void setMultiplicateur(int multiplicateur) {
+		this.multiplicateur = multiplicateur;
+	}
+
+	private int multiplicateur = 1;
 	
 	private Match ListMatch[] = new Match[MAX_MATCH];
 	public static int MODIF_TIME = 5000;
@@ -111,8 +119,10 @@ public class ListeDesMatchs {
 	//Manage the time of every Match
 	private void startTimer() {
 	   Runnable timer = new TimeManager(INTERVAL_TIME);
+	   int repetition =  (int)INTERVAL_TIME / multiplicateur;
+	   logger.info(repetition);
 	   // start the timer task
-	   timerHandle = scheduler.scheduleAtFixedRate(timer, INTERVAL_TIME, INTERVAL_TIME, TimeUnit.SECONDS);
+	   timerHandle = scheduler.scheduleAtFixedRate(timer, repetition, repetition, TimeUnit.MILLISECONDS);
 	   logger.info("Timer scheduler started");
 	}
 	

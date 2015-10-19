@@ -13,6 +13,7 @@ public class StartPoint {
 		//Contain all data
 		ListeDesMatchs matchList = ListeDesMatchs.getInstance();
 		//Need to wait for instance of matchList before started the 2 thread that update value
+		//matchList.setMultiplicateur(100);
 		matchList.startThreadUpdate();
 		
 		//Create match service
