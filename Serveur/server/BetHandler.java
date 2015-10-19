@@ -112,7 +112,8 @@ public class BetHandler implements Runnable {
         try{	
             //New file named match#TheID and we set append @ true
             FileOutputStream fout = new FileOutputStream("betsForMatch#" + String.valueOf( currentBet.getMatchID() ),true);
-            ObjectOutputStream oos = new ObjectOutputStream(fout);   
+            ObjectOutputStream oos = new ObjectOutputStream(fout);
+            logger.info("saveBetOnDisk: currentBet: " + currentBet.getBetID());
             oos.writeObject(currentBet);
             oos.close();           
             logger.info("saveBetOnDisk: Object was saved on the disk");

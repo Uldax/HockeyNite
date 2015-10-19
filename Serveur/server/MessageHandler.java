@@ -154,7 +154,7 @@ public class MessageHandler implements Runnable {
                                 } catch (IOException ex) {
                                         java.util.logging.Logger.getLogger(MessageHandler.class.getName()).log(Level.SEVERE, null, ex);
                                 }
-                                
+                                break;
                                 
 				
 			default:
