@@ -4,6 +4,7 @@ import java.net.*;
 import org.apache.log4j.Logger;
 import affichage.Menu;
 import dataObject.Bet;
+import dataObject.BetRespond;
 import dataObject.ListMatchName;
 import dataObject.Match;
 import dataObject.Team;
@@ -33,7 +34,49 @@ public class UDPClient{
 	 */
     public static void main(String args[]){
     	int choix = -1;
-    	ListMatchName matchList = null;
+    	
+        do{
+            System.out.println("Veuillez selectionner l'option souhaité:");
+            System.out.println(" -- ");            
+            System.out.println(" 0 - back");
+            System.out.println(" 1 - Affichage de la liste de matchs");            
+            if(betHistory.size() > 0){
+                System.out.println(" 2 - Afficher les statuts de mes paris!");
+             }
+            System.out.println(" -- ");
+            System.out.println("Faites votre choix ?");
+            
+            do{
+    		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    	    	
+                try{
+    	            choix = Integer.parseInt(br.readLine());
+    	        }catch(NumberFormatException nfe){
+    	            System.err.println("Invalid Format!");
+    	            choix = -1;
+    	        } catch (IOException e) {
+    				e.printStackTrace();
+    				choix = -1;
+    		} 
+            }while(choix == -1);
+            if (choix == 1){
+    	   		logger.info("call to displayMatchsList");
+    			displayMatchsList();
+            }
+             if (choix == 2){
+    	   		logger.info("call to displayBetsUpdates");
+    			displayBetsUpdates();
+            }
+            
+        } while(choix != 0);
+    	
+    	
+    	System.out.println("Bye :3");
+    }
+    
+    private static void displayMatchsList(){
+        int choix = -1;
+        ListMatchName matchList = null;
     	InetAddress aHost = null;
     	int serveurPort = 6780;
     	int clientPort = 6779;
@@ -47,18 +90,19 @@ public class UDPClient{
  		
  		//Set server port and host
     	commObject.setServeur(aHost, serveurPort, clientPort);
-    	do{
+        do{
     		
-			System.out.println("Recuperation de la liste des matchs, veuillez patienter");
-			//ListMatch = commObject.getListMatch(); 
-			// Affichage de la liste des matchs
-    		//Menu.affListMatch(ListMatch);
+            System.out.println("Recuperation de la liste des matchs, veuillez patienter");
+            //ListMatch = commObject.getListMatch(); 
+            // Affichage de la liste des matchs
+            //Menu.affListMatch(ListMatch);
 			
-			//Send datagrame in new thread and wait for answer
-			matchList = commObject.getListMatchName();   
+            //Send datagrame in new thread and wait for answer
+            matchList = commObject.getListMatchName();   
     		if(matchList == null) return;
     		//Display the available match
-    		Menu.affListMatchName(matchList);
+    		Menu.affListMatchName(matchList);         
+                
        	 		
         	// Choix dans le menu
     		System.out.println("Faites votre choix ?");
@@ -87,8 +131,6 @@ public class UDPClient{
     	}while(choix != 0);
     	// choix == 0 -> exit
     	// other choix -> refresh list
-    	
-    	System.out.println("Bye :3");
     }
     
     /**
@@ -112,6 +154,36 @@ public class UDPClient{
                     if (choix == 1){
                        makeABet(idMatch);
                     }
+	        }
+	    	catch(NumberFormatException nfe){} 
+	    	catch (IOException e) {}        
+    		
+    	}while(choix != 0);
+    	// choix = 0 -> back
+    	// else refresh
+    }
+    
+    /**
+     * Sous menu pour le detail d'un match
+     * @param idMatch ID du match choisit
+     * @author CharlyBong
+     */
+    public static void displayBetsUpdates(){
+    	BetRespond respond = null;
+    	int choix = 0;        
+    	do{
+    		for (int i = 0; i < betHistory.size(); i++) {
+			Bet b = betHistory.get(i);
+                        respond = Communication.getInstance().getBetDetail(b.getMatchID(), b.getBetID());
+                        if(respond != null) Menu.affBetsUpdates(respond); 
+		}
+                System.out.println(" 0 - back");
+                System.out.println(" -- ");
+    		
+    		// R�ponse utilisateur
+    		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	    	try{
+	            choix = Integer.parseInt(br.readLine());                   
 	        }
 	    	catch(NumberFormatException nfe){} 
 	    	catch (IOException e) {}        

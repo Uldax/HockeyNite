@@ -1,5 +1,7 @@
 package affichage;
 
+import dataObject.Bet;
+import dataObject.BetRespond;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -8,6 +10,7 @@ import java.util.Map.Entry;
 import dataObject.ListMatchName;
 import dataObject.Match;
 import dataObject.Team;
+import java.util.List;
 
 public class Menu {
 
@@ -56,6 +59,26 @@ public class Menu {
 		System.out.println(Match.toString());
 		System.out.println(" 0 - back");
                 System.out.println(" 1 - faire un pari sur ce match");
+		System.out.println(" -- ");
+	}
+        
+        	/**
+	 * Affichage des details d'un match
+	 * @param Match objet  afficher
+	 * @author CharlyBong
+	 */
+	public static void affBetsUpdates(BetRespond betRespond){
+            String resultText = null;
+                switch(betRespond.getStatus()){
+                    case 0: resultText = "perdant"; break;
+                    case 1: resultText = "gagnant"; break;
+                    case 2: resultText = "non déterminé (Match non terminé)"; break;
+                    default: resultText = "non déterminé (Match non terminé)"; break;
+                }
+		System.out.println(" -- ");
+                System.out.println(" Le Bet: " + betRespond.getBetID() + " est:" + resultText );
+                System.out.println(" Mise initiale: " + String.valueOf(betRespond.getBetAmount()));
+                System.out.println(" Mise remporter: " + String.valueOf(betRespond.getWinningAmount()));             
 		System.out.println(" -- ");
 	}
         
