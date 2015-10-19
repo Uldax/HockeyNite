@@ -147,6 +147,10 @@ public class Match implements Serializable {
 		return this.pause;
 	}
 
+    public void setPeriode(int periode) {
+        this.periode = periode;
+    }
+
         public int getPeriode() {
             return periode;
         }
