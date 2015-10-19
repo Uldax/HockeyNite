@@ -64,7 +64,7 @@ public class Menu {
         
         	/**
 	 * Affichage des details d'un match
-	 * @param Match objet  afficher
+	 * @param betRespond objet  afficher
 	 * @author CharlyBong
 	 */
 	public static void affBetsUpdates(BetRespond betRespond){
@@ -77,8 +77,10 @@ public class Menu {
                 }
 		System.out.println(" -- ");
                 System.out.println(" Le Bet: " + betRespond.getBetID() + " est:" + resultText );
-                System.out.println(" Mise initiale: " + String.valueOf(betRespond.getBetAmount()));
-                System.out.println(" Mise remporter: " + String.valueOf(betRespond.getWinningAmount()));             
+                if(betRespond.getStatus() == 1){
+                    System.out.println(" Mise initiale: " + String.valueOf(betRespond.getBetAmount()));
+                    System.out.println(" Mise remporter: " + String.valueOf(betRespond.getWinningAmount()));  
+                }
 		System.out.println(" -- ");
 	}
         
