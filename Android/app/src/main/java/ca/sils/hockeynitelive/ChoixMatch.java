@@ -43,7 +43,7 @@ public class ChoixMatch extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), PartieDetails.class);
-                intent.putExtra("idMatch", ((TinyMatch)adapter.getItem(position)).getId());
+                intent.putExtra("idMatch", adapter.getItemId(position));
                 startActivity(intent);
 
             }

@@ -6,42 +6,46 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.HashMap;
+import java.util.List;
 
 import ca.sils.hockeynitelive.R;
-import dataObject.TinyMatch;
+import dataObject.Event;
+import dataObject.Match;
 
 /**
  * Created by cbongiorno on 19/10/2015.
  */
-public class MatchAdapter extends BaseAdapter{
+public class EventAdapter  extends BaseAdapter {
     private Context mContext;
     int layoutResourceId;
 
-    public HashMap<Integer, TinyMatch> listMatch = null;
+    public Match match = null;
+    private List<Event> eventList = null;
 
     // Constructor
-    public MatchAdapter(Context c, int layoutResourceId, HashMap<Integer, TinyMatch> listMatch){
+    public EventAdapter(Context c, int layoutResourceId, Match match){
         mContext = c;
         this.layoutResourceId = layoutResourceId;
-        this.listMatch = listMatch;
+        this.match = match;
+        this.eventList = match.getMatchEvent();
     }
 
     @Override
     public int getCount() {
-        return listMatch.size();
+        return eventList.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return listMatch.get(i);
+        return eventList.get(i);
     }
 
     @Override
     public long getItemId(int i) {
-        return listMatch.get(i).getId();
+        return 0;
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -49,13 +53,17 @@ public class MatchAdapter extends BaseAdapter{
 
         LayoutInflater inflater = ((Activity)mContext).getLayoutInflater();
         row = inflater.inflate(layoutResourceId, parent, false);
-        TextView name_teamA = (TextView) row.findViewById(R.id.name_teamA);
-        TextView name_teamB = (TextView) row.findViewById(R.id.name_teamB);
         TextView timer = (TextView) row.findViewById(R.id.timer);
+        TextView message = (TextView) row.findViewById(R.id.message);
+        ImageView icone = (ImageView) row.findViewById(R.id.icone);
 
-        name_teamA.setText(listMatch.get(position).getTeamA());
-        name_teamB.setText(listMatch.get(position).getTeamB());
-        timer.setText(listMatch.get(position).getStringTime());
+        timer.setText(eventList.get(position).getTime());
+        message.setText(eventList.get(position).getMessage());
+        if(eventList.get(position).getType() == Event.GOAL)
+            icone.setImageDrawable(mContext.getResources().getDrawable(R.drawable.fleche)); //Img Goal
+        else
+            icone.setImageDrawable(mContext.getResources().getDrawable(R.drawable.fleche)); //Img penality
+
 
 
         return row;

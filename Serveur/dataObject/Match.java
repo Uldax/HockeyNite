@@ -6,8 +6,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import server.UDPServer;
-
 public class Match implements Serializable {
 	/**
 	 * 

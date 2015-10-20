@@ -3,8 +3,8 @@
 import org.apache.log4j.Logger;
 
 import dataManagement.ListeDesMatchs;
-import server.UDPServer;
 import server.TCPServer;
+import server.UDPServer;
 
 public class StartPoint {
 	private static final Logger logger = Logger.getLogger(StartPoint.class);

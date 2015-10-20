@@ -1,14 +1,10 @@
 package test;
 
-import java.net.*;
-import org.apache.log4j.Logger;
-import affichage.Menu;
-import dataObject.Bet;
-import dataObject.BetRespond;
-import dataObject.ListMatchName;
-import dataObject.Match;
-import dataObject.Team;
-import java.io.*; 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,6 +12,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Level;
+
+import org.apache.log4j.Logger;
+
+import affichage.Menu;
+import dataObject.Bet;
+import dataObject.BetRespond;
+import dataObject.ListMatchName;
+import dataObject.Match;
+import dataObject.Team;
 
 
 //UDP client sends a message to the server and gets a reply
