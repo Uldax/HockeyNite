@@ -7,6 +7,7 @@ public class TinyMatch implements Serializable{
 	private String teamA;
 	private String teamB;
 	private int time = 0;
+	private int id = 0;
 	
 	
 	public String getTeamA() {
@@ -53,6 +54,12 @@ public class TinyMatch implements Serializable{
 	public String toString(){
 		String matchSentence = getTeamA() + " VS " +getTeamB() + " Timer :  "+getStringTime(); 
 		return matchSentence;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	

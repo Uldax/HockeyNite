@@ -17,6 +17,8 @@ public class PartieDetails extends AppCompatActivity implements View.OnClickList
 
     boolean avantPlan = false;
 
+    int idMatch = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -29,8 +31,8 @@ public class PartieDetails extends AppCompatActivity implements View.OnClickList
         // Placer le nom de la partie
         TextView tvPartie = (TextView) findViewById(R.id.tvPdPartieNom);
         Intent intent = getIntent();
-        String partie = intent.getStringExtra(ChoixMatch.EXTRA_PARTIE);
-        tvPartie.setText(partie);
+        idMatch = intent.getExtras().getInt("idMatch");
+        tvPartie.setText(String.valueOf(idMatch));
     }
 
     @Override

@@ -18,11 +18,10 @@ import java.util.HashMap;
 import ca.sils.hockeynitelive.Communication.Udp;
 import ca.sils.hockeynitelive.adapter.MatchAdapter;
 import dataObject.ListMatchName;
+import dataObject.TinyMatch;
 
 public class ChoixMatch extends AppCompatActivity
 {
-    // Variables
-    public final static String EXTRA_PARTIE = "ca.sils.hockeynitelive.partie";
 
     private String adresseIP = null;
     private MatchAdapter adapter;
@@ -44,7 +43,7 @@ public class ChoixMatch extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), PartieDetails.class);
-                intent.putExtra(EXTRA_PARTIE, position);
+                intent.putExtra("idMatch", ((TinyMatch)adapter.getItem(position)).getId());
                 startActivity(intent);
 
             }
