@@ -51,6 +51,8 @@ public class TCPClient{
                 
                 oos.writeObject(b);
                 
+                oos.flush();
+                
                 int result = is.read();
                 
                 if(result == 1)
