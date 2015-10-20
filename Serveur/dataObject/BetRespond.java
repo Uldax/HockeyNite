@@ -25,7 +25,7 @@ public class BetRespond implements Serializable {
         this.status = status;      
     }
     
-    public BetRespond(String betID, int matchID, int status, float betAmount, float winingAmount) {
+    public BetRespond(String betID, int matchID, int status, float betAmount, float winningAmount) {
         this.betID = betID;
         this.matchID = matchID;
         this.status = status; 
