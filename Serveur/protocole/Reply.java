@@ -12,8 +12,8 @@ public class Reply extends Message {
 	 * 
 	 */
 	private static final long serialVersionUID = 2622663736791338175L;
-	private Serializable value;				// dans le cas d'une requéte, les paramètres
-	// dans le cas d'une réponse, les donnée associé
+	private Serializable value;				// dans le cas d'une requete, les parametres
+	// dans le cas d'une reponse, les donnee associe
 	
 	public Serializable getValue() {
 		return value;
