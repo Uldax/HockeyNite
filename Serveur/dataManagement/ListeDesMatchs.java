@@ -15,14 +15,12 @@ public class ListeDesMatchs {
 	private static final Logger logger = Logger.getLogger(ListeDesMatchs.class);
 	public final static int MAX_MATCH = 10;
 	//10 sec
-	private static final int INTERVAL_TIME = 10000;
+	private static final int INTERVAL_TIME = 10;
 	
 	
-	public void setMultiplicateur(int multiplicateur) {
-		this.multiplicateur = multiplicateur;
-	}
+	
 
-	private int multiplicateur = 1;
+	private boolean multiplicateur = false;
 	
 	private Match ListMatch[] = new Match[MAX_MATCH];
 	public static int MODIF_TIME = 5000;
@@ -118,12 +116,16 @@ public class ListeDesMatchs {
 	//Create a task that run every INTERVAL_TIME second
 	//Manage the time of every Match
 	private void startTimer() {
-	   Runnable timer = new TimeManager(INTERVAL_TIME);
-	   int repetition =  (int)INTERVAL_TIME / multiplicateur;
-	   logger.info(repetition);
+	   Runnable timer = new TimeManager(INTERVAL_TIME);   
 	   // start the timer task
-	   timerHandle = scheduler.scheduleAtFixedRate(timer, repetition, repetition, TimeUnit.MILLISECONDS);
-	   logger.info("Timer scheduler started");
+           if(multiplicateur){
+                logger.info("startTimer: avec mutiplicateur activer");
+                timerHandle = scheduler.scheduleAtFixedRate(timer, 1000, 100, TimeUnit.MILLISECONDS);
+           }
+           else{
+                timerHandle = scheduler.scheduleAtFixedRate(timer, INTERVAL_TIME, INTERVAL_TIME, TimeUnit.SECONDS);
+           }  
+           logger.info("Timer scheduler started");
 	}
 	
 	private void stopTimer(){
@@ -138,5 +140,8 @@ public class ListeDesMatchs {
 
 	public void setSem(Semaphore sem) {
 		this.sem = sem;
+	}
+        public void setMultiplicateur(boolean multiplicateur) {
+		this.multiplicateur = multiplicateur;
 	}
 }
