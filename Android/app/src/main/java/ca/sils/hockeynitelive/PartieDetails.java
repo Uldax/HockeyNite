@@ -74,8 +74,8 @@ public class PartieDetails extends AppCompatActivity
 
             teamNameLocal.setText(currentMatch.getDomicile().getName());
             teamNameVisitor.setText(currentMatch.getExterieur().getName());
-            scoreLocal.setText(currentMatch.getDomicileScore()); // <---------------- FUCK !
-            scoreVisitor.setText(currentMatch.getExterieurScore());
+            scoreLocal.setText(String.valueOf(currentMatch.getDomicileScore()));
+            scoreVisitor.setText(String.valueOf(currentMatch.getExterieurScore()));
             periode.setText(String.valueOf(currentMatch.getPeriode()));
             timer.setText(getResources().getString(R.string.PdPeriode) + " : " +currentMatch.getStringTime());
 
