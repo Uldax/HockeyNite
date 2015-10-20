@@ -66,22 +66,18 @@ public class PartieDetails extends AppCompatActivity
             progressBar.setVisibility(View.INVISIBLE);
 
             TextView teamNameLocal = (TextView) findViewById(R.id.tvPdEquipeLocaleNom);
-            teamNameLocal.setText(currentMatch.getDomicile().getName());
-
             TextView teamNameVisitor = (TextView) findViewById(R.id.tvPdEquipeVisiteurNom);
-            teamNameVisitor.setText(currentMatch.getExterieur().getName());
-
-            TextView scoreLocal = (TextView) findViewById(R.id.tvPdEquipeLocalePoints);
-            scoreLocal.setText(currentMatch.getDomicileScore());
-
-            TextView scoreVisitor = (TextView) findViewById(R.id.tvPdEquipeVisiteurPoints);
-            scoreVisitor.setText(currentMatch.getExterieurScore());
-
+            TextView scoreLocal = (TextView) findViewById(R.id.scoreA);
+            TextView scoreVisitor = (TextView) findViewById(R.id.scoreB);
             TextView periode = (TextView) findViewById(R.id.tvPdPeriode);
-            periode.setText(String.valueOf(currentMatch.getPeriode()));
-
             TextView timer = (TextView) findViewById(R.id.tvPdTempsRestant);
-            timer.setText(currentMatch.getStringTime());
+
+            teamNameLocal.setText(currentMatch.getDomicile().getName());
+            teamNameVisitor.setText(currentMatch.getExterieur().getName());
+            scoreLocal.setText(currentMatch.getDomicileScore()); // <---------------- FUCK !
+            scoreVisitor.setText(currentMatch.getExterieurScore());
+            periode.setText(String.valueOf(currentMatch.getPeriode()));
+            timer.setText(getResources().getString(R.string.PdPeriode) + " : " +currentMatch.getStringTime());
 
             listEvent = (ListView) findViewById(R.id.listEvent);
             adapter = new EventAdapter(this, R.layout.adapter_match_event, currentMatch);
@@ -119,8 +115,7 @@ public class PartieDetails extends AppCompatActivity
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         // Appel parent
         super.onResume();
 
