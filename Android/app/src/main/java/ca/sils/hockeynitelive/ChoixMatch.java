@@ -25,7 +25,6 @@ public class ChoixMatch extends AppCompatActivity
     public final static String EXTRA_PARTIE = "ca.sils.hockeynitelive.partie";
 
     private String adresseIP = null;
-    private DatagramSocket dsClientPartie = null;
     private MatchAdapter adapter;
     private GridView gridView;
     private ProgressBar progressBar;
@@ -76,7 +75,7 @@ public class ChoixMatch extends AppCompatActivity
     private void getList(String adresseIP){
         // Lecture des parties
         Udp commUdp = new Udp();
-        InetAddress adr = null;
+        InetAddress adr;
 
         try
         {
