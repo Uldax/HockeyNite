@@ -4,16 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
-import server.UDPServer;
-
 public class Match implements Serializable {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -8080958380151755727L;
-	private static final Logger logger = Logger.getLogger(Match.class);
     private int id = 0;
 	private int time = 0;
 	private Team domicile = null;
@@ -97,7 +90,6 @@ public class Match implements Serializable {
 		case 3:
 			if ((time >= MAX_TIME ) && pause == false ) {
 				pause = true;
-				logger.error("Call to hadleWinner");
 				handleWinner();
 				matchEvent.add( new Event(time, "This is the end of the game"));
 			}	
@@ -160,8 +152,24 @@ public class Match implements Serializable {
     public int getId() {
         return id;
     }
+    public int getDomicileScore(){
+    	return domicileScore;
+    }
+    public int getExterieurScore(){
+    	return exterieurScore;
+    }    
         
-        
+	public String getStringTime(){
+		String matchSentence = "";
+		int[] currentTime = splitToTimes();
+		for( int j = 0; j < 3 ; j++)	{	
+			matchSentence +=currentTime[j];
+			if(j<2) {
+				matchSentence+= " : ";
+			}
+		}
+		return matchSentence;
+	}
 	
 	public int[] splitToTimes()
 	{

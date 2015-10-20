@@ -1,15 +1,18 @@
 package test;
 
-import java.net.*;
-import org.apache.log4j.Logger;
-import affichage.Menu;
-import dataObject.Bet;
-import dataObject.ListMatchName;
-import java.io.*; 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.net.Socket;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
+
+import org.apache.log4j.Logger;
+
+import dataObject.Bet;
 
 
 //UDP client sends a message to the server and gets a reply

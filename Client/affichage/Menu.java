@@ -1,16 +1,14 @@
 package affichage;
 
-import dataObject.Bet;
-import dataObject.BetRespond;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import dataObject.BetRespond;
 import dataObject.ListMatchName;
 import dataObject.Match;
 import dataObject.Team;
-import java.util.List;
 
 public class Menu {
 

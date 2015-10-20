@@ -25,4 +25,7 @@
     <string name="BoutonPari">Make a Bet</string>
     <string name="PariLocal">Local team</string>
     <string name="PariVisiteur">Visiting team</string>
+
+    <string name="FileShared">FileShared</string>
+    <string name="Serveur_adresse">Serveur_adresse</string>
 </resources>

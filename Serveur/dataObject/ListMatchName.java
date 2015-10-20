@@ -19,10 +19,11 @@ public class ListMatchName implements Serializable {
 			if(allMatch[i] != null){
 				Match currentMatch = allMatch[i];
 				TinyMatch matchSentence = new TinyMatch();
+				matchSentence.setId(currentMatch.getId());
 				matchSentence.setTeamA(currentMatch.getDomicile().getName());
 				matchSentence.setTeamB(currentMatch.getExterieur().getName());
 				matchSentence.setTime(currentMatch.getTime());
-				tinyMatchList.put( i,matchSentence  );
+				tinyMatchList.put(currentMatch.getId(),matchSentence  );
 			}
 		}
 	}

@@ -1,10 +1,13 @@
 package server;
 
 import java.io.IOException;
-
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.logging.Level;
 
 import org.apache.log4j.Logger;
 
@@ -13,10 +16,6 @@ import dataObject.Bet;
 import dataObject.BetRespond;
 import dataObject.ListMatchName;
 import dataObject.Match;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.logging.Level;
 import protocole.Message;
 import protocole.MessageError;
 import protocole.Reply;

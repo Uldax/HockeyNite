@@ -1,5 +1,4 @@
 package test;
-import dataObject.Bet;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
@@ -12,8 +11,9 @@ import java.util.logging.Level;
 
 import org.apache.log4j.Logger;
 
-import utils.Marshallizer;
+import dataObject.Bet;
 import protocole.Message;
+import utils.Marshallizer;
 
 public class Protocole {
 	
