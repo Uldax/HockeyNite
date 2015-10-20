@@ -17,12 +17,14 @@ public class Match implements Serializable {
 	private List<Event> matchEvent = new ArrayList<Event>();
 	//20 minute per periode with 15min of break
 	private int periode;
+
 	//for easy the time gestion
 	private int periodeStart = 0;
 	private boolean pause = false;
-	private final int PERIODE_TIME = 20*60;
-	private final int BREAK_TIME = 15*60;
-	private final int MAX_TIME = 3 * PERIODE_TIME + 2 * BREAK_TIME;
+	private static final int PERIODE_TIME = 20*60;
+	private static final int BREAK_TIME = 15*60;
+	private static final int MAX_TIME = 3 * PERIODE_TIME + 2 * BREAK_TIME;
+
 	
 	
 	public Match(Team domicile,Team exterieur){
@@ -121,11 +123,11 @@ public class Match implements Serializable {
 	    int[] ints = {hours , mins , secs};
 	    return ints;
 	}
-	
+			
 	@Override
 	public String toString() {
 		String echo =  "Match [time=" + time + ", domicile=" + domicile + ", domicileScore=" + domicileScore + ", exterieur="
-				+ exterieur + ", exterieurScore=" + exterieurScore + ", matchEvent=" ; 
+				+ exterieur + ", exterieurScore=" + exterieurScore +", matchEvent=" ; 
 				for (Event e : matchEvent)
 				{
 				    echo += e.toString() + "\t";
