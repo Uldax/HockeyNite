@@ -31,7 +31,9 @@ public class TimeManager implements Runnable {
 		for(int i=0; i< listMatch.length; i++) {
 			if(listMatch[i] != null){
 				Match match = listMatch[i];
+                                logger.info("UpdateMatchTime: Match: " + String.valueOf(i) + " Old time: " + String.valueOf(match.getTime()) );
 				match.setTime(match.getTime() + interval);
+                                logger.info("UpdateMatchTime: Match: " + String.valueOf(i) + " New Time: " + String.valueOf(match.getTime() ));        
 			}
 			
 		}
