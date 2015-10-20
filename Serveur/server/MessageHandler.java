@@ -83,7 +83,7 @@ public class MessageHandler implements Runnable {
                                 int betMatchID = (int) args [0]; // The matchID of the request                            
                                 String betID = (String) args[1]; // The betID of the request
                                 
-                                logger.info("detail received with params : "+ String.valueOf(betMatchID + " and the betID: " + betID.toString() ));  
+                                logger.info("detail received with params : MatchID: "+ String.valueOf(betMatchID + " and the betID: " + betID.toString() ));  
                                 
                                 //Respond object
                                 BetRespond betRespond = null;
@@ -98,17 +98,20 @@ public class MessageHandler implements Runnable {
                                     Match betMatchDetail = data.getMatch(betMatchID);
                                     
                                     if(betMatchDetail.getWinner() != null){
-
+                                        
+                                        logger.info("l'équipe gagnant est : " + betMatchDetail.getWinner() );
                                         //We get the winnerTable that contains all the Bet object that won for that match.
                                         Hashtable<String, Bet> winnerTable = BetHandler.getWinnerTable(betMatchDetail);
-
+                                        logger.info("winnerTable correspond à : " + String.valueOf(winnerTable.size()) );
                                         //If the current betID (from the request) is inside the winnerTable we proceed
+                                        logger.info("Validation si winnerTable contient le betID courant : " + betID );
                                         if(winnerTable.containsKey(betID)){
-
+                                            
+                                            logger.info("winnerTable contient le bet : " + betID );
                                             //We set currentBet to the resquested bet with the betID 
                                             Bet currentBet = winnerTable.get(betID);
 
-                                            logger.info("The current bet amount for the match #"+ String.valueOf(betMatchID + " is : " + String.valueOf(currentBet) + "$" ));
+                                            logger.info("The current bet amount for the match #"+ String.valueOf(betMatchID + " is : " + String.valueOf(currentBet.getBetAmount()) + "$" ));
 
                                             float currentBetAmount = currentBet.getBetAmount(); //contains the resquested bet dollar amount 
 
@@ -128,10 +131,13 @@ public class MessageHandler implements Runnable {
                                               totalWinningBetAmount += b.getBetAmount();
                                             }
 
-                                            logger.info("The total of the winning bet made for the match #"+ String.valueOf(betMatchID + " is : " + String.valueOf(totalWinningBetAmount) + "$" ));
+                                            logger.info("The total of the winning bet made for the match #"+ String.valueOf(betMatchID) + " is : " + String.valueOf(totalWinningBetAmount) + "$" );
 
                                             float wonAmount = (float)( (currentBetAmount / totalWinningBetAmount) * (matchTotalBettingAmount * 0.75) );
+                                            
+                                            logger.info("wonAmount is: "+ String.valueOf(wonAmount)  + "$" );
 
+                                            
                                             betRespond = new BetRespond(betID, betMatchID, 1, currentBetAmount, wonAmount ); // won the bet
                                             reply.setValue(betRespond);
                                             

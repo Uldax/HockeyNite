@@ -31,16 +31,9 @@ public class TimeManager implements Runnable {
 		for(int i=0; i< listMatch.length; i++) {
 			if(listMatch[i] != null){
 				Match match = listMatch[i];
+                                logger.info("UpdateMatchTime: Match: " + String.valueOf(i) + " Old time: " + String.valueOf(match.getTime()) );
 				match.setTime(match.getTime() + interval);
-				//Update penality time
-				if(match.getDomicile().hasPenality()){
-					match.getDomicile().setPenalite(match.getDomicile().getPenalite() + interval);
-					logger.info("update penality time for domicile");
-				} 
-				else if (match.getExterieur().hasPenality()){
-					match.getExterieur().setPenalite(match.getExterieur().getPenalite() + interval);
-					logger.info("update penality time for exterieur");
-				}
+                                logger.info("UpdateMatchTime: Match: " + String.valueOf(i) + " New Time: " + String.valueOf(match.getTime() ));        
 			}
 			
 		}

@@ -12,6 +12,8 @@ import dataManagement.ListeDesMatchs;
 import dataObject.ListMatchName;
 import dataObject.Match;
 import dataObject.Bet;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.EOFException;
@@ -40,6 +42,8 @@ import protocole.Request;
 //Extact data from datagram
 //send respons
 public class BetHandler implements Runnable {
+    
+  
         
        private Socket connectionSocket = null;
        private ListeDesMatchs data = null;
@@ -61,7 +65,8 @@ public class BetHandler implements Runnable {
                 //Déclaration des streams que nous allons utiliser
                 //We retreive the currentBet 
                 InputStream is = getConnectionSocket().getInputStream();
-                ObjectInputStream ois = new ObjectInputStream(is);
+                BufferedInputStream bis = new BufferedInputStream(is);
+                ObjectInputStream ois = new ObjectInputStream(bis);
                 
                 //We send a confirmation to the client
                 OutputStream os = getConnectionSocket().getOutputStream();
@@ -69,7 +74,8 @@ public class BetHandler implements Runnable {
                 //On récupère l'objet Bet
                 Bet currentBet = (Bet) ois.readObject(); //We wait for the object
                 
-               logger.info("We got currentBet: " + currentBet.toString());
+                
+               logger.info("We got currentBet: " + currentBet.getBetID());
                
                //On s'assure que la période est est >= 2
                Match matchDetail = data.getMatch(currentBet.getMatchID());
@@ -94,7 +100,7 @@ public class BetHandler implements Runnable {
                    logger.info("The client should receive an error code 0");
                 }
                 
-
+            os.flush();
             } catch(Exception e) {
                     e.printStackTrace();
                     try{
@@ -111,11 +117,29 @@ public class BetHandler implements Runnable {
     private synchronized void saveBetOnDisk(Bet currentBet) throws IOException{ 
         try{	
             //New file named match#TheID and we set append @ true
-            FileOutputStream fout = new FileOutputStream("betsForMatch#" + String.valueOf( currentBet.getMatchID() ),true);
-            ObjectOutputStream oos = new ObjectOutputStream(fout);
+            List<Bet> betList = new ArrayList<>();
+            String filename = "betsForMatch#" + String.valueOf( currentBet.getMatchID() );
+            File f = new File(filename);
+            FileOutputStream fos = new FileOutputStream(filename);
+            BufferedOutputStream bos = new BufferedOutputStream(fos);
+            if(f.exists()){
+                
+                FileInputStream fis = new FileInputStream(f);
+                BufferedInputStream bis = new BufferedInputStream(fis);
+                try (ObjectInputStream ois = new ObjectInputStream(bis)) {
+                    betList = (List<Bet>) ois.readObject();
+                    ois.close();
+                }
+            }
+            betList.add(currentBet); 
+            try (ObjectOutputStream oos = new ObjectOutputStream(bos)) {
+                oos.writeObject(betList);
+                oos.flush();
+                oos.close();
+            }
+            
             logger.info("saveBetOnDisk: currentBet: " + currentBet.getBetID());
-            oos.writeObject(currentBet);
-            oos.close();           
+                       
             logger.info("saveBetOnDisk: Object was saved on the disk");
 	}catch(Exception ex){
 		   ex.printStackTrace();
@@ -180,25 +204,18 @@ public class BetHandler implements Runnable {
                 //Le fichier existe déja alors on va chercher la valeur
                 FileInputStream fis = new FileInputStream(f);
                 ObjectInputStream ois = new ObjectInputStream(fis);            
-                while (loopCondition) {
-                    try {
-                        // Read the next object from the stream. If there is none, the
-                        // EOFException will be thrown.
-                        // This call might also throw a ClassNotFoundException, which can be passed
-                        // up or handled here.
-                        Bet currentBet = (Bet) ois.readObject();
-                        if( currentBet.getTeamName() == winnerTeamName ){
-                            winnerTable.put(currentBet.getBetID(),currentBet);
-                        }            
-                    } catch (EOFException e) {
-                        // If there are no more objects to read, we break the while with what we have.
-                        loopCondition = false;
-                    } finally {
-                        // Close the stream.
-                        ois.close();
-                    }
-                }    
-            }      
+               
+                List<Bet> betList = (List<Bet>) ois.readObject();
+                ois.close();
+                for(int i = 0; i< betList.size(); i++){
+                    Bet currentBet = betList.get(i);
+                    logger.info("getWinnerMap: betID:" + currentBet.getBetID()+ " for the matchID: #" + String.valueOf(matchID));
+                    if( currentBet.getTeamName().equals(winnerTeamName) ){
+                        logger.info("getWinnerMap: betID:" + currentBet.getBetID()+ " was added to the winnerTable" );
+                        winnerTable.put(currentBet.getBetID(),currentBet);
+                    } 
+                }  
+            }    
         }catch(Exception ex){
             ex.printStackTrace();
 	}

@@ -57,9 +57,14 @@ public class Protocole {
 
                 //Envoi de l'objet
                 oos.writeObject(b);
+                
+                oos.flush();     
+                
 
-                result = is.read(); //reception bloquante                  
-
+                result = is.read(); //reception bloquante 
+                
+                
+                
                 sClient.close();   
                            
                 
