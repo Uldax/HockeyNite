@@ -28,6 +28,9 @@ local.properties
 
 # Eclipse Core
 .project
+**/nbproject
+build.xml
+manifest.mf
 
 # External tool builders
 .externalToolBuilders/
@@ -53,4 +56,11 @@ local.properties
 # TeXlipse plugin
 .texlipse
 Serveur/HockeyNite/all.log
-/nbproject/private/
+
+# Android
+**/build/
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+*.idea*

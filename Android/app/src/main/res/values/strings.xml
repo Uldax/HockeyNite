@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">HockeyNite Live</string>
+    <string name="Serveur">Serveur:</string>
+    <string name="TrouverPartie">Trouver Partie</string>
+    <string name="Partie1">Partie 1</string>
+    <string name="Partie2">Partie 2</string>
+    <string name="Partie3">Partie 3</string>
+    <string name="Partie4">Partie 4</string>
+    <string name="Partie5">Partie 5</string>
+    <string name="Partie6">Partie 6</string>
+    <string name="Partie7">Partie 7</string>
+    <string name="Partie8">Partie 8</string>
+    <string name="Partie9">Partie 9</string>
+    <string name="Partie10">Partie 10</string>
+    <string name="title_activity_partie_details">PartieDetails</string>
+    <string name="PdEquipeVisiteurNom">Visiteur</string>
+    <string name="PdEquipeVisiteurPoints">Points visiteur</string>
+    <string name="PdEquipeLocaleNom">Local</string>
+    <string name="PdEquipeLocalePoints">Points locale</string>
+    <string name="PdPeriode">Période</string>
+    <string name="PdTempsRestant">Temps restant</string>
+    <string name="PdResulatPari">Résultat du pari</string>
+    <string name="PdButsPenalites">Buts et pénalités</string>
+    <string name="PdRafraichir">Rafraîchir</string>
+    <string name="PariEnvoi">Envoi Pari</string>
+    <string name="BoutonPari">Faire un pari</string>
+    <string name="PariLocal">Équipe locale</string>
+    <string name="PariVisiteur">Équipe visiteur</string>
+</resources>
