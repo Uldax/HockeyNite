@@ -23,10 +23,10 @@ public class StartPoint {
 		matchServer.start();
 	
 		//Create paris service
-                int portTCP = 1248;
-                int threadPoolSizeTCP = 10;
-                Thread betServer = new Thread(new TCPServer(portTCP,threadPoolSizeTCP));
-                betServer.start();
+        int portTCP = 1248;
+        int threadPoolSizeTCP = 10;
+        Thread betServer = new Thread(new TCPServer(portTCP,threadPoolSizeTCP));
+        betServer.start();
 	}
 
 }

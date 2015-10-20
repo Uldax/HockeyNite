@@ -37,7 +37,7 @@ public class EventManager implements Runnable {
 				//get ramdom match to update
 	        	int eventOnMatch = r.nextInt(2);   
 	        	if (listMatch[eventOnMatch] != null){
-	        		if (!listMatch[eventOnMatch].isPause()){
+	        		if (!listMatch[eventOnMatch].isPause() && listMatch[eventOnMatch].getTime() < Match.MAX_TIME ){
 	        			Team teamEvent;
 	        			if(r.nextInt(1) == 0){
 	        				teamEvent = listMatch[eventOnMatch].getDomicile();

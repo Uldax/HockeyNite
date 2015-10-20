@@ -35,7 +35,7 @@ public class Match implements Serializable {
 	private boolean pause = false;
 	private static final int PERIODE_TIME = 20*60;
 	private static final int BREAK_TIME = 15*60;
-	private static final int MAX_TIME = 3 * PERIODE_TIME + 2 * BREAK_TIME;
+	public static final int MAX_TIME = 3 * PERIODE_TIME + 2 * BREAK_TIME;
 
 	
 	public String getWinner(){
@@ -61,7 +61,7 @@ public class Match implements Serializable {
 	}
 	
 	//Set time 
-	public void setTime(int time) {
+	public synchronized void setTime(int time) {
 		if( time <= MAX_TIME) {
 			this.time = time;
 			handlePeriode();
@@ -95,9 +95,9 @@ public class Match implements Serializable {
 			}
 			break;
 		case 3:
-			if ((time >= periodeStart + PERIODE_TIME ) && pause == false ) {
+			if ((time >= MAX_TIME ) && pause == false ) {
 				pause = true;
-				logger.info("Call to hadleWinner");
+				logger.error("Call to hadleWinner");
 				handleWinner();
 				matchEvent.add( new Event(time, "This is the end of the game"));
 			}	

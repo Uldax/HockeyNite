@@ -101,7 +101,7 @@ public class ListeDesMatchs {
 	}
 	
 	//Get list of match name with associate id 
-	public ListMatchName getAllMatchName(){
+	public synchronized ListMatchName getAllMatchName(){
 		if (ListMatch.length < 1) {
 		    return null;
 		}
