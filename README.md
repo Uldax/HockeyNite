@@ -10,7 +10,7 @@ Si vous utilisez Eclipse (https://eclipse.org/downloads/)
 # Implementation
 - [x] Protocole	de communication : UDP et TCP
 - [x] Définition du format des messages => commun.jar
-- 
+
 ## Serveur
 Creer un nouveau projet java dans votre workspace (l'emplacement par défaut ou celui de votre choix)
 Aller ensuite dans les propriétés du projet > Java Build Path > Source
@@ -29,18 +29,18 @@ Onglet "Libraries" > "Add External JARs" et ajouter les fichiers de l'archive de
 - [x] Sérialisation	-	envoi	des	réponses
 - [ ] Mise-à-jour	aux	deux minutes cf client pour ne pas tuer la batterie
 - [x] Mise-à-jour sur	demande	(update)
-- [ ] Informations	disponibles	:	équipes,chronomètre,pointage,compteurs,pénalités
+- [x] Informations	disponibles	:	équipes,chronomètre,pointage,compteurs,pénalités
 
 ### Serveur paris
 - [x] Service de pari avec TCP
-- [ ] Implémentation de l'approche Thread-per-object
-- [ ] Un	tampon	des	requêtes	par	objet	distant	-	ListeDesMatchs, Match, Paris
+- [x] Implémentation de l'approche Thread-per-object
+- [x] Un	tampon	des	requêtes	par	objet	distant	-	ListeDesMatchs, Match, Paris
 - [x] Les	paris	sont	acceptés en	1ère et	2e période
 - [x] Les	paris	ne sont	pas	acceptés 3e	période
 - [ ] Informer	les	parieurs	de	leur	gain	à	la	fin	du	match
 
 ### Objets distant
-- [ ] ListeDesMatchs,temps,buts et pénalités	-	accès	thread-safe (syncronized + mutex) 
+- [x] ListeDesMatchs,temps,buts et pénalités	-	accès	thread-safe (syncronized + mutex) 
 - [x] Thread de mise a jour des données de match (plus de données différentes nécessaire)
 - [x] Thread de mise a jour du temps de match
 - [x] Résolution du problème lecteur/ecrivain sur le DAO (en partie fait via semaphore / syncronized)
