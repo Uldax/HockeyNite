@@ -85,6 +85,7 @@ public class ChoixMatch extends AppCompatActivity
         catch (Exception e)
         {
             Toast.makeText(ChoixMatch.this, "Adresse invalide", Toast.LENGTH_SHORT).show();
+            progressBar.setVisibility(View.INVISIBLE);
             return;
         }
 
@@ -96,6 +97,7 @@ public class ChoixMatch extends AppCompatActivity
         if (listeParties == null)
         {
             Toast.makeText(ChoixMatch.this, "Liste non-disponible", Toast.LENGTH_SHORT).show();
+            progressBar.setVisibility(View.INVISIBLE);
             return;
         }
 
