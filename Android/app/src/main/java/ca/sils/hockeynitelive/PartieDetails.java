@@ -1,18 +1,22 @@
 package ca.sils.hockeynitelive;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import ca.sils.hockeynitelive.Communication.Communication;
+import ca.sils.hockeynitelive.Communication.detailsService;
 import ca.sils.hockeynitelive.adapter.EventAdapter;
 import dataObject.Event;
+import dataObject.ListMatchName;
 import dataObject.Match;
 import dataObject.Team;
 
@@ -31,6 +35,9 @@ public class PartieDetails extends AppCompatActivity
     private EventAdapter adapter;
     private ProgressBar progressBar;
 
+    private BroadcastReceiver receiver;
+    private Intent detService = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -41,48 +48,19 @@ public class PartieDetails extends AppCompatActivity
         setContentView(R.layout.activity_partie_details);
 
         Intent intent = getIntent();
-        idMatch = intent.getExtras().getInt("idMatch");
+        idMatch =(int) intent.getExtras().getLong("idMatch");
+
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Match currentMatch = (Match) intent.getSerializableExtra(detailsService.DET_MESSAGE);
+                updateData(currentMatch);
+            }
+        };
 
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
-        //TODO Get match detail with ID
-
-        /** Fausse données **/
-        currentMatch = new Match(25,new Team("tha"),new Team("BBBBBb"));
-        currentMatch.goalDomicile();
-        currentMatch.addEvent(new Event(Event.GOAL, "Pas but de A !!!"));
-        currentMatch.addEvent(new Event(Event.PENALITY,"B pas content"));
-        currentMatch.goalExterieur();
-        currentMatch.addEvent(new Event(Event.GOAL,"La revenche de B"));
-        currentMatch.setTime(120);
-
-
-
-        if(currentMatch != null){
-            /** Set Data **/
-
-            //When match id done :
-            progressBar.setVisibility(View.INVISIBLE);
-
-            TextView teamNameLocal = (TextView) findViewById(R.id.tvPdEquipeLocaleNom);
-            TextView teamNameVisitor = (TextView) findViewById(R.id.tvPdEquipeVisiteurNom);
-            TextView scoreLocal = (TextView) findViewById(R.id.scoreA);
-            TextView scoreVisitor = (TextView) findViewById(R.id.scoreB);
-            TextView periode = (TextView) findViewById(R.id.tvPdPeriode);
-            TextView timer = (TextView) findViewById(R.id.tvPdTempsRestant);
-
-            teamNameLocal.setText(currentMatch.getDomicile().getName());
-            teamNameVisitor.setText(currentMatch.getExterieur().getName());
-            scoreLocal.setText(String.valueOf(currentMatch.getDomicileScore()));
-            scoreVisitor.setText(String.valueOf(currentMatch.getExterieurScore()));
-            periode.setText(String.valueOf(currentMatch.getPeriode()));
-            timer.setText(getResources().getString(R.string.PdPeriode) + " : " +currentMatch.getStringTime());
-
-            listEvent = (ListView) findViewById(R.id.listEvent);
-            adapter = new EventAdapter(this, R.layout.adapter_match_event, currentMatch);
-            listEvent.setAdapter(adapter);
-        }
 
 
         Button buPdPari = (Button) findViewById(R.id.buPdPari);
@@ -106,12 +84,9 @@ public class PartieDetails extends AppCompatActivity
             }
         });
 
-
-
-
-
-
-
+        detService = new Intent(getApplicationContext(), detailsService.class);
+        detService.putExtra(detailsService.ID_MATCH,idMatch);
+        startService(detService);
     }
 
     @Override
@@ -135,8 +110,39 @@ public class PartieDetails extends AppCompatActivity
         // Activité en arrière-plan
         avantPlan = false;
 
+        stopService(detService);
+
         // Affichage du statut d'avant-plan par Toast
         Toast.makeText(PartieDetails.this, "HockeyNiteLive - onPause", Toast.LENGTH_SHORT).show();
+    }
+
+    private void updateData(Match currentMatch){
+        progressBar.setVisibility(View.INVISIBLE);
+        if(currentMatch != null){
+
+            this.currentMatch = currentMatch;
+
+            TextView teamNameLocal = (TextView) findViewById(R.id.tvPdEquipeLocaleNom);
+            TextView teamNameVisitor = (TextView) findViewById(R.id.tvPdEquipeVisiteurNom);
+            TextView scoreLocal = (TextView) findViewById(R.id.scoreA);
+            TextView scoreVisitor = (TextView) findViewById(R.id.scoreB);
+            TextView periode = (TextView) findViewById(R.id.tvPdPeriode);
+            TextView timer = (TextView) findViewById(R.id.tvPdTempsRestant);
+
+            teamNameLocal.setText(currentMatch.getDomicile().getName());
+            teamNameVisitor.setText(currentMatch.getExterieur().getName());
+            scoreLocal.setText(String.valueOf(currentMatch.getDomicileScore()));
+            scoreVisitor.setText(String.valueOf(currentMatch.getExterieurScore()));
+            periode.setText(String.valueOf(currentMatch.getPeriode()));
+            timer.setText(getResources().getString(R.string.PdPeriode) + " : " +currentMatch.getStringTime());
+
+            listEvent = (ListView) findViewById(R.id.listEvent);
+            adapter = new EventAdapter(this, R.layout.adapter_match_event, currentMatch);
+            listEvent.setAdapter(adapter);
+        }else{
+            Toast.makeText(this,"Erreur réseau",Toast.LENGTH_LONG).show();
+            this.onStop();
+        }
     }
 
 }
