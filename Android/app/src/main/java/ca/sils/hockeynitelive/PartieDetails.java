@@ -12,7 +12,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import ca.sils.hockeynitelive.adapter.EventAdapter;
+import dataObject.Event;
 import dataObject.Match;
+import dataObject.Team;
 
 public class PartieDetails extends AppCompatActivity
 {
@@ -46,11 +48,43 @@ public class PartieDetails extends AppCompatActivity
         progressBar.setVisibility(View.VISIBLE);
         //TODO Get match detail with ID
 
+        /** Fausse données **/
+        currentMatch = new Match(25,new Team("tha"),new Team("BBBBBb"));
+        currentMatch.goalDomicile();
+        currentMatch.addEvent(new Event(Event.GOAL, "Pas but de A !!!"));
+        currentMatch.addEvent(new Event(Event.PENALITY,"B pas content"));
+        currentMatch.goalExterieur();
+        currentMatch.addEvent(new Event(Event.GOAL,"La revenche de B"));
+        currentMatch.setTime(120);
+
+
+
         if(currentMatch != null){
+            /** Set Data **/
+
             //When match id done :
             progressBar.setVisibility(View.INVISIBLE);
+
+            TextView teamNameLocal = (TextView) findViewById(R.id.tvPdEquipeLocaleNom);
+            teamNameLocal.setText(currentMatch.getDomicile().getName());
+
+            TextView teamNameVisitor = (TextView) findViewById(R.id.tvPdEquipeVisiteurNom);
+            teamNameVisitor.setText(currentMatch.getExterieur().getName());
+
+            TextView scoreLocal = (TextView) findViewById(R.id.tvPdEquipeLocalePoints);
+            scoreLocal.setText(currentMatch.getDomicileScore());
+
+            TextView scoreVisitor = (TextView) findViewById(R.id.tvPdEquipeVisiteurPoints);
+            scoreVisitor.setText(currentMatch.getExterieurScore());
+
+            TextView periode = (TextView) findViewById(R.id.tvPdPeriode);
+            periode.setText(String.valueOf(currentMatch.getPeriode()));
+
+            TextView timer = (TextView) findViewById(R.id.tvPdTempsRestant);
+            timer.setText(currentMatch.getStringTime());
+
             listEvent = (ListView) findViewById(R.id.listEvent);
-            adapter = new EventAdapter(this, R.layout.adapter_match, currentMatch);
+            adapter = new EventAdapter(this, R.layout.adapter_match_event, currentMatch);
             listEvent.setAdapter(adapter);
         }
 
@@ -77,13 +111,7 @@ public class PartieDetails extends AppCompatActivity
         });
 
 
-        /** Set Data **/
-        TextView teamNameLocal = (TextView) findViewById(R.id.tvPdEquipeLocaleNom);
-        TextView teamNameVisitor = (TextView) findViewById(R.id.tvPdEquipeVisiteurNom);
-        TextView scoreLocal = (TextView) findViewById(R.id.tvPdEquipeLocalePoints);
-        TextView scoreVisitor = (TextView) findViewById(R.id.tvPdEquipeVisiteurPoints);
-        TextView Periode = (TextView) findViewById(R.id.tvPdPeriode);
-        TextView Timer = (TextView) findViewById(R.id.tvPdTempsRestant);
+
 
 
 

@@ -34,6 +34,7 @@
         android:layout_toEndOf="@+id/timer"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:layout_centerVertical="true" />
+        android:layout_centerVertical="true"
+        android:scaleType="centerInside" />
 
 </RelativeLayout>

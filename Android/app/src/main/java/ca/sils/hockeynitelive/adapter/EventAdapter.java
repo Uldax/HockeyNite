@@ -57,12 +57,12 @@ public class EventAdapter  extends BaseAdapter {
         TextView message = (TextView) row.findViewById(R.id.message);
         ImageView icone = (ImageView) row.findViewById(R.id.icone);
 
-        timer.setText(eventList.get(position).getTime());
+        timer.setText(String.valueOf(eventList.get(position).getTime()));
         message.setText(eventList.get(position).getMessage());
         if(eventList.get(position).getType() == Event.GOAL)
-            icone.setImageDrawable(mContext.getResources().getDrawable(R.drawable.fleche)); //Img Goal
+            icone.setImageDrawable(mContext.getResources().getDrawable(R.drawable.goal));
         else
-            icone.setImageDrawable(mContext.getResources().getDrawable(R.drawable.fleche)); //Img penality
+            icone.setImageDrawable(mContext.getResources().getDrawable(R.drawable.penalite));
 
 
 
