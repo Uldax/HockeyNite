@@ -8,7 +8,7 @@ public class Request extends Message {
 	 */
 	private static final long serialVersionUID = 361933411720337979L;
 	public enum methodes {
-		list, detail
+		list, detail, betInfo
 	};
 	
 	private static final int MAX_NUM = 50000;
@@ -35,6 +35,18 @@ public class Request extends Message {
 		Request request = new Request();
 		request.setMethode(methodes.detail);
 		Object[] arg = {idMatch};
+		request.setArgument(arg);
+		request.setDestinationPort(port);
+		request.setDestination(adress);
+		request.setNumero(numRequest);
+		incrementNumRequest();
+		return request;
+	}
+        
+        static synchronized public Request craftGetBetInfo(InetAddress adress, int port,int idMatch, String idBet) {
+		Request request = new Request();
+		request.setMethode(methodes.betInfo);
+		Object[] arg = {idMatch,idBet};
 		request.setArgument(arg);
 		request.setDestinationPort(port);
 		request.setDestination(adress);
