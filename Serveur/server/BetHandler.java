@@ -115,28 +115,45 @@ public class BetHandler implements Runnable {
          }
 	
     private synchronized void saveBetOnDisk(Bet currentBet) throws IOException{ 
+        logger.info("saveBetOnDisk: started for:" + currentBet.getBetID());
         try{	
             //New file named match#TheID and we set append @ true
             List<Bet> betList = new ArrayList<>();
             String filename = "betsForMatch#" + String.valueOf( currentBet.getMatchID() );
+            logger.info("saveBetOnDisk: valide si le fichier existe ou non");
             File f = new File(filename);
-            FileOutputStream fos = new FileOutputStream(filename);
-            BufferedOutputStream bos = new BufferedOutputStream(fos);
+            
             if(f.exists()){
                 
+                logger.info("saveBetOnDisk:Le fichier existe déja");
+               
+                
+               
                 FileInputStream fis = new FileInputStream(f);
-                BufferedInputStream bis = new BufferedInputStream(fis);
-                try (ObjectInputStream ois = new ObjectInputStream(bis)) {
-                    betList = (List<Bet>) ois.readObject();
-                    ois.close();
-                }
+                ObjectInputStream ois = new ObjectInputStream(fis);                
+                logger.info("saveBetOnDisk: Ouverture des streams de lecture");
+                
+                betList = (List<Bet>) ois.readObject();                
+                logger.info("saveBetOnDisk: on récupère le l'objet dans le fichier");
+                
+                ois.close();
+                
+                logger.info("saveBetOnDisk: fermeture des streams de lectures");
+                
             }
-            betList.add(currentBet); 
-            try (ObjectOutputStream oos = new ObjectOutputStream(bos)) {
-                oos.writeObject(betList);
-                oos.flush();
-                oos.close();
-            }
+            betList.add(currentBet);
+            FileOutputStream fos = new FileOutputStream(filename);            
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            logger.info("saveBetOnDisk: Ouverture des streams de sortie");
+            
+            oos.writeObject(betList);
+            logger.info("saveBetOnDisk: écriture de l'objet dans le fichier");
+            
+            oos.flush();
+            logger.info("saveBetOnDisk: flush()");
+            
+            oos.close();
+            logger.info("saveBetOnDisk: fermeture des streams de sortie");            
             
             logger.info("saveBetOnDisk: currentBet: " + currentBet.getBetID());
                        
@@ -144,7 +161,7 @@ public class BetHandler implements Runnable {
 	}catch(Exception ex){
 		   ex.printStackTrace();
 	}
-       
+       logger.info("saveBetOnDisk: ended for:" + currentBet.getBetID());
     };
     private synchronized void updateTotalBettingAmount(Bet currentBet) throws IOException{ 
         try{
