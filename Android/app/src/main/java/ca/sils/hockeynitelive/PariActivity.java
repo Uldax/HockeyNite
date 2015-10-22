@@ -20,6 +20,7 @@ import java.util.Date;
 import ca.sils.hockeynitelive.Communication.TCPHelper;
 import ca.sils.hockeynitelive.Communication.UDPHelper;
 import dataObject.Bet;
+import dataObject.BetRespond;
 import dataObject.Match;
 
 public class PariActivity extends AppCompatActivity implements View.OnClickListener
@@ -132,4 +133,31 @@ public class PariActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
     }
+
+    /*public  void displayBetsUpdates() {
+        BetRespond respond = null;
+        int choix = 0;
+        do {
+            for (int i = 0; i < betHistory.size(); i++) {
+                Bet b = betHistory.get(i);
+                respond = Communication.getInstance().getBetDetail(b.getMatchID(), b.getBetID());
+                if (respond != null)
+                    Menu.affBetsUpdates(respond);
+            }
+            System.out.println(" 0 - back");
+            System.out.println(" -- ");
+
+            // Rï¿½ponse utilisateur
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            try {
+                choix = Integer.parseInt(br.readLine());
+            } catch (NumberFormatException nfe) {
+            } catch (IOException e) {
+            }
+
+        } while (choix != 0);
+        // choix = 0 -> back
+        // else refresh
+    }*/
+
 }
