@@ -48,21 +48,27 @@ public class ListeDesMatchs {
 	private ListeDesMatchs(){
 		sem = new Semaphore( 1);
 		logger.info("Semaphore init");	
-		Team t1 =  new Team("A");
-		Team t2 =  new Team("B");
-		Team t3 =  new Team("C");
-		Team t4 =  new Team("D");
+		Team t1 =  new Team("Alert");
+		Team t2 =  new Team("Before");
+		Team t3 =  new Team("Cafe");
+		Team t4 =  new Team("D'acc");
+		Team t5 =  new Team("Extra");
+		Team t6 =  new Team("FUSION");
+		Team t7 =  new Team("G�nie");
+		Team t8 =  new Team("Hype");
 		Match M1 = new Match(0,t1,t2);
 		Match M2 = new Match(1,t3,t4);
-                Match M3 = new Match(2,t1,t4);
-                
-                //Cas pour un match en période 2 qui serait incrémenté a la période 3 par le systeme
-                M3.setPeriode(2);
-                M3.setTime(2100);
+        Match M3 = new Match(2,t5,t6);
+        Match M4 = new Match(3,t7,t8);
+        
+        //Cas pour un match en période 2 qui serait incrémenté a la période 3 par le systeme
+        M3.setPeriode(2);
+        M3.setTime(2100);
                 
 		ListMatch[0] = M1;
 		ListMatch[1]  = M2;
-                ListMatch[2]  = M3;
+        ListMatch[2]  = M3;
+        ListMatch[3]  = M4;
 		logger.info("ListDesMatch init");			
 	}
 	
