@@ -3,6 +3,8 @@ package ca.sils.hockeynitelive.Communication;
 
 
 // Importations
+import android.util.Log;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -27,7 +29,7 @@ public class UDPHelper
     // Constantes
     private final int TIMEOUT = 5000;
     private final int MAX_TENTATIVE = 5;
-
+    public static final String TAG = "UDPHELPER";
 
     // Variables
     private InetAddress adresse;
@@ -132,7 +134,7 @@ public class UDPHelper
                 tSendMessage = new Thread(new SendMessageDetails(dsClient, adresse, portServeur, p_matchId));
                 tSendMessage.start();
 
-                System.out.println("Message envoyé");
+                Log.i(TAG, "Message envoyé");
 
                 WaitingMessage = new Thread(new WaitMessage(1000));
                 WaitingMessage.start();
@@ -170,7 +172,7 @@ public class UDPHelper
         return (Match) reponse.getValue();
     }
 
-    //Not working now
+
     public BetRespond getBetDetail(int idMatch, String betID){
         tentative = 0;
         do{
@@ -179,8 +181,7 @@ public class UDPHelper
                 dsClient = new DatagramSocket(this.portClient);
                 tSendMessage = new Thread(new SendBetDetails(dsClient, adresse, portServeur, idMatch,betID));
                 tSendMessage.start();
-
-
+                Log.i(TAG, "Message for bet envoyé");
                 synchronized (MutexLock) {
                     new Thread(new WaitReponse()).start();
                     MutexLock.wait();
