@@ -1,7 +1,6 @@
 package ca.sils.hockeynitelive.Communication;
 
 
-import android.nfc.Tag;
 import android.util.Log;
 
 import java.io.IOException;
@@ -10,9 +9,6 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import dataObject.Bet;
 

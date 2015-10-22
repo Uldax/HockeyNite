@@ -17,10 +17,7 @@ import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import java.net.InetAddress;
-
 import ca.sils.hockeynitelive.Communication.AutoUpdateService;
-import ca.sils.hockeynitelive.Communication.UDPHelper;
 import ca.sils.hockeynitelive.adapter.MatchAdapter;
 import dataObject.ListMatchName;
 

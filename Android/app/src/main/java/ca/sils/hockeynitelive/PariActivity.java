@@ -6,11 +6,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import java.net.InetAddress;
 import java.text.DateFormat;
@@ -18,10 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import ca.sils.hockeynitelive.Communication.TCPHelper;
-import ca.sils.hockeynitelive.Communication.UDPHelper;
 import dataObject.Bet;
-import dataObject.BetRespond;
-import dataObject.Match;
 
 public class PariActivity extends AppCompatActivity implements View.OnClickListener
 {

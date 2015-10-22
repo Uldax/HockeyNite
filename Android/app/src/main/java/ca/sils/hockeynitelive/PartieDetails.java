@@ -15,7 +15,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import ca.sils.hockeynitelive.Communication.AutoUpdateService;
 import ca.sils.hockeynitelive.Communication.detailsUpdateService;
 import ca.sils.hockeynitelive.adapter.EventAdapter;
 import dataObject.Match;
