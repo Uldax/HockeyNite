@@ -9,7 +9,7 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:id="@+id/linearLayout"
@@ -17,7 +17,7 @@
         android:layout_alignParentEnd="false">
 
         <TextView
-            android:layout_width="75dp"
+            android:layout_width="70dp"
             android:layout_height="match_parent"
             android:text="@string/Serveur"
             android:id="@+id/tvServeur"
