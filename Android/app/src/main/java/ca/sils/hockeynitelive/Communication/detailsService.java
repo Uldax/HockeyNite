@@ -73,11 +73,14 @@ public class detailsService extends Service {
         this.idMatch = intent.getExtras().getInt(ID_MATCH);
         Log.i("onStartCommand", "getExtra : " + String.valueOf(idMatch));
 
-        //if(this.updater.isAlive()) this.updater.stop(); //TODO don't work
-        this.runFlag = true;
-        this.updater.start();
-
-        Log.d(TAG, "onStarted");
+        if(this.updater.isAlive()) {
+            new OneUpdate().start(); //TODO don't work
+        }
+        else {
+            this.runFlag = true;
+            this.updater.start();
+            Log.d(TAG, "onStarted");
+        }
         return START_STICKY;
     }
 
@@ -144,4 +147,40 @@ public class detailsService extends Service {
             }
         }
     } // Updater
+
+    /**
+     * Thread that performs force update from the online service
+     */
+    private class OneUpdate extends Thread {  // note : AsynchTask pour les threads UI
+
+        public OneUpdate() {
+            super("UpdaterService-OneUpdater");  // donner un nom au thread à des fins de debug
+        }
+
+        @Override
+        public void run() {
+                Log.d(TAG, "UpdaterOne running");
+                try {
+                    /* Get DATA */
+                    Udp commUdp = new Udp();
+                    InetAddress adr;
+                    adr = InetAddress.getByName(getApplication().getSharedPreferences(getResources().getString(R.string.FileShared), Context.MODE_PRIVATE).getString(getResources().getString(R.string.Serveur_adresse), "192.168.1.1"));
+
+                    // Placer les paramètres de communications
+                    commUdp.setServeur(adr, 6780,6779);
+
+                    Log.i("onStartCommand", "UpdaterService-Updater " + String.valueOf(idMatch));
+
+                    // Lecture de la liste des parties
+                    Match currentMatch = commUdp.getMatchDetail(idMatch);
+
+                    sendResult(currentMatch);
+                    Log.d(TAG, "Updaterone ran");
+                }
+                catch (Exception e) {
+                    sendResult(null);
+                    return;
+                }
+        }
+    }
 }
