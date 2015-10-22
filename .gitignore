@@ -28,6 +28,9 @@ local.properties
 
 # Eclipse Core
 .project
+**/nbproject
+build.xml
+manifest.mf
 
 # External tool builders
 .externalToolBuilders/

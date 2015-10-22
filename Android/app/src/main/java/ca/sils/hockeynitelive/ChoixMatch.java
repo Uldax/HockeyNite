@@ -1,122 +1,136 @@
 package ca.sils.hockeynitelive;
 
+import android.app.IntentService;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.util.HashMap;
 
+import ca.sils.hockeynitelive.Communication.Communication;
 import ca.sils.hockeynitelive.Communication.Udp;
+import ca.sils.hockeynitelive.adapter.MatchAdapter;
 import dataObject.ListMatchName;
 
-public class ChoixMatch extends AppCompatActivity implements View.OnClickListener
-{
-    // Variables
-    public final static String EXTRA_PARTIE = "ca.sils.hockeynitelive.partie";
+public class ChoixMatch extends AppCompatActivity {
 
     private String adresseIP = null;
-    private DatagramSocket dsClientPartie = null;
+    private MatchAdapter adapter;
+    private GridView gridView;
+    private ProgressBar progressBar;
+    private BroadcastReceiver receiver;
+    private Intent comService = null;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         // Appel parent
         super.onCreate(savedInstanceState);
-
         // Placer contenu
         setContentView(R.layout.activity_choix_match);
+
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                ListMatchName listeParties = (ListMatchName) intent.getSerializableExtra(Communication.COM_MESSAGE);
+                updateData(listeParties);
+            }
+        };
+
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.INVISIBLE);
+        gridView = (GridView) findViewById(R.id.grid_view);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                Intent intent = new Intent(getApplicationContext(), PartieDetails.class);
+                intent.putExtra("idMatch", adapter.getItemId(position));
+                startActivity(intent);
+
+            }
+        });
+
+        Button button = (Button) findViewById(R.id.buTrouverPartie);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                progressBar.setVisibility(View.VISIBLE);
+                EditText etAdresseIP = (EditText) findViewById(R.id.etAdresseIP);
+                adresseIP = etAdresseIP.getText().toString();
+
+                if (adresseIP.isEmpty()) {
+                    // Initialisation à vide
+                    adresseIP = null;
+
+                    // Message Toast
+                    Toast.makeText(ChoixMatch.this, "HokeyNiteLive - Adresse vide", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                SharedPreferences.Editor editor = getApplication().getSharedPreferences(getResources().getString(R.string.FileShared), Context.MODE_PRIVATE).edit();
+                editor.putString(getResources().getString(R.string.Serveur_adresse),adresseIP);
+                editor.commit();
+                comService = new Intent(getApplicationContext(), Communication.class);
+                startService(comService);
+            }
+        });
+
     }
 
     @Override
-    public void onClick(View v)
-    {
-        // Affichage pour tests
-        Button button = (Button) findViewById(v.getId());
+    protected void onStart() {
+        super.onStart();
+        LocalBroadcastManager.getInstance(this).registerReceiver((receiver),
+                new IntentFilter(Communication.COM_RESULT)
+        );
+    }
 
-        // Sortir si bouton pour trouver les parties
-        if (button.getId() == R.id.buTrouverPartie)
-        {
-            // Placer l'adresse en mémoire
-            EditText etAdresseIP = (EditText) findViewById(R.id.etAdresseIP);
-            adresseIP = etAdresseIP.getText().toString();
+    @Override
+    protected void onStop() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
+        super.onStop();
+    }
 
-            if (adresseIP.isEmpty())
-            {
-                // Initialisation à vide
-                adresseIP = null;
+    private void getList() {
+        // Lecture des parties
+        Udp commUdp = new Udp();
+        InetAddress adr;
 
-                // Message Toast
-                Toast.makeText(ChoixMatch.this, "HokeyNiteLive - Adresse vide", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            // Lecture des parties
-            Udp commUdp = new Udp();
-            InetAddress adr = null;
-            ;
-            try
-            {
-                adr = InetAddress.getByName(adresseIP);
-            }
-            catch (Exception e)
-            {
-                Toast.makeText(ChoixMatch.this, "Adresse invalide", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            // Placer les paramètres de communications
-            commUdp.setServeur(adr, 6780, 6779);
-
-            // Lecture de la liste des parties
-            ListMatchName listeParties = commUdp.getListMatchName();
-            if (listeParties == null)
-            {
-                Toast.makeText(ChoixMatch.this, "Liste non-disponible", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            HashMap<Integer, String> liste = listeParties.getMatchName();
-
-
-            // Disponibilité des parties - Simulation
-            Button button1 = (Button) findViewById(R.id.buPartie1);
-            Button button2 = (Button) findViewById(R.id.buPartie2);
-            Button button3 = (Button) findViewById(R.id.buPartie3);
-            Button button4 = (Button) findViewById(R.id.buPartie4);
-            Button button5 = (Button) findViewById(R.id.buPartie5);
-            Button button6 = (Button) findViewById(R.id.buPartie6);
-            Button button7 = (Button) findViewById(R.id.buPartie7);
-            Button button8 = (Button) findViewById(R.id.buPartie8);
-            Button button9 = (Button) findViewById(R.id.buPartie9);
-            Button button10 = (Button) findViewById(R.id.buPartie10);
-
-            button1.setEnabled(true);
-            button2.setEnabled(true);
-            button3.setEnabled(true);
-            button4.setEnabled(true);
-            button5.setEnabled(true);
-            button6.setEnabled(true);
-            button7.setEnabled(true);
-            button8.setEnabled(true);
-            button9.setEnabled(true);
-            button10.setEnabled(true);
-
-            // Affichage Toast
-            Toast.makeText(ChoixMatch.this, "HockeyNite Live - " + button.getText() + " - " + adresseIP, Toast.LENGTH_SHORT).show();
-
-            // Fin
+        try {
+            adr = InetAddress.getByName(getApplication().getSharedPreferences(getResources().getString(R.string.FileShared),Context.MODE_PRIVATE).getString(getResources().getString(R.string.Serveur_adresse),"192.168.1.1"));
+        } catch (Exception e) {
+            Toast.makeText(ChoixMatch.this, "Adresse invalide", Toast.LENGTH_SHORT).show();
+            progressBar.setVisibility(View.INVISIBLE);
             return;
         }
 
-        // Appel de la deuxième activité
-        Intent intent = new Intent(this, PartieDetails.class);
-        intent.putExtra(EXTRA_PARTIE, button.getText());
-        startActivity(intent);
+        // Placer les paramètres de communications
+        commUdp.setServeur(adr, 6780, 6779);
+
+        // Lecture de la liste des parties
+        ListMatchName listeParties = commUdp.getListMatchName();
+
+        this.updateData(listeParties);
     }
+
+
+    public void updateData(ListMatchName listeParties){
+        progressBar.setVisibility(View.INVISIBLE);
+        if (listeParties == null) {
+            Toast.makeText(ChoixMatch.this, "Liste non-disponible", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        adapter = new MatchAdapter(this, R.layout.adapter_match, listeParties.getList());
+        gridView.setAdapter(adapter);
+    }
+
 }

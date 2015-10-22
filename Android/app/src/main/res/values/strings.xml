@@ -26,4 +26,7 @@
     <string name="BoutonPari">Faire un pari</string>
     <string name="PariLocal">Équipe locale</string>
     <string name="PariVisiteur">Équipe visiteur</string>
+
+    <string name="FileShared">FileShared</string>
+    <string name="Serveur_adresse">Serveur_adresse</string>
 </resources>

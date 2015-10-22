@@ -37,7 +37,7 @@ public class Udp
     private Thread tSendMessage = null;
     private Thread WaitingMessage = null;
     private Reply reponse = null;
-    private Object MutexLock = new Object();
+    private final Object MutexLock = new Object();
     private DatagramSocket dsClient = null;
 
 
@@ -126,8 +126,10 @@ public class Udp
                 dsClient = new DatagramSocket(portClient);
 
                 // Doit être implanté avec SendMessageDetails
-                Message ask = Request.craftGetMatchDetail(adresse, portServeur, p_matchId);
-                send(ask, dsClient);
+                // Message ask = Request.craftGetMatchDetail(adresse, portServeur, p_matchId);
+                // send(ask, dsClient);
+                tSendMessage = new Thread(new SendMessageDetails(dsClient, adresse, portServeur, p_matchId));
+                tSendMessage.start();
 
                 System.out.println("Message envoyé");
 

@@ -6,6 +6,7 @@ import java.net.SocketException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+
 import org.apache.log4j.Logger;
 
 public class UDPServer implements Runnable{
@@ -30,7 +31,7 @@ public class UDPServer implements Runnable{
 			byte[] buffer = new byte[1000];
 			while (true) {
 				DatagramPacket datagram = new DatagramPacket(buffer, buffer.length);
-				mySocket.receive(datagram); // réception bloquante
+				mySocket.receive(datagram); // rï¿½ception bloquante
 				logger.info("datafram receive");						
 				//What append if pool full ?
 	            pool.execute(new MessageHandler(datagram,getMySocket()));					

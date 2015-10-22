@@ -4,6 +4,7 @@ import java.util.Random;
 import java.util.concurrent.Semaphore;
 
 import org.apache.log4j.Logger;
+
 import dataObject.Event;
 import dataObject.Match;
 import dataObject.Team;
@@ -31,11 +32,13 @@ public class EventManager implements Runnable {
 		while (true) {	
 			Semaphore dataSem = data.getSem();
 			try {
+				//acquire semaphore
 				dataSem.acquire();
 				Match[] listMatch = data.getAllMatch();
-	        	int eventOnMatch = r.nextInt(2);        	
+				//get ramdom match to update
+	        	int eventOnMatch = r.nextInt(2);   
 	        	if (listMatch[eventOnMatch] != null){
-	        		if (!listMatch[eventOnMatch].isPause()){
+	        		if (!listMatch[eventOnMatch].isPause() && listMatch[eventOnMatch].getTime() < Match.MAX_TIME ){
 	        			Team teamEvent;
 	        			if(r.nextInt(1) == 0){
 	        				teamEvent = listMatch[eventOnMatch].getDomicile();
@@ -44,8 +47,22 @@ public class EventManager implements Runnable {
 	        				teamEvent = listMatch[eventOnMatch].getExterieur();
 	        				listMatch[eventOnMatch].goalExterieur();
 	        			}
-	        			listMatch[eventOnMatch].addEvent(new Event("Goal " + teamEvent.toString()));
+	        			listMatch[eventOnMatch].addEvent(new Event(Event.GOAL,"Goal " + teamEvent.toString()));
 	        			logger.info("Event manager - Goal " + teamEvent.toString());
+	        			//Penality probability 
+	        			if(r.nextInt(30) < 5){
+	        				//if there is no actual penality
+	        				if( ! listMatch[eventOnMatch].getDomicile().hasPenality() && (r.nextInt(1) == 0) ){
+	        					listMatch[eventOnMatch].getDomicile().setPenalite(1);
+	        					listMatch[eventOnMatch].addEvent(new Event(Event.PENALITY,"Penality for " + teamEvent.toString()));
+	        					logger.info("Penality for domicile " + listMatch[eventOnMatch].getDomicile().toString());
+	        				}
+	        				else if( ! listMatch[eventOnMatch].getExterieur().hasPenality() && (r.nextInt(1) == 0)){
+	        					listMatch[eventOnMatch].getExterieur().setPenalite(1);
+	        					listMatch[eventOnMatch].addEvent(new Event(Event.PENALITY,"Penality for " + teamEvent.toString()));
+	        					logger.info("Penality for exterior " + listMatch[eventOnMatch].getExterieur().toString());
+	        				}
+	        			}
 	        		}
 	        	}
 	        	dataSem.release();   

@@ -1,10 +1,26 @@
 package test;
 
-import java.net.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.logging.Level;
+
 import org.apache.log4j.Logger;
+
 import affichage.Menu;
+import dataObject.Bet;
+import dataObject.BetRespond;
 import dataObject.ListMatchName;
-import java.io.*; 
+import dataObject.Match;
+import dataObject.Team;
 
 
 //UDP client sends a message to the server and gets a reply
@@ -12,6 +28,9 @@ import java.io.*;
 public class UDPClient{
     
 	private static final Logger logger = Logger.getLogger(UDPClient.class);
+        private static List<Bet> betHistory = new ArrayList<Bet>();
+        private static final int betServerPort = 1248;
+        private static AtomicLong betCounter = new AtomicLong();
 	
 	/**
 	 * Menu principal
@@ -20,7 +39,49 @@ public class UDPClient{
 	 */
     public static void main(String args[]){
     	int choix = -1;
-    	ListMatchName matchList = null;
+    	
+        do{
+            System.out.println("Veuillez selectionner l'option souhaité:");
+            System.out.println(" -- ");            
+            System.out.println(" 0 - back");
+            System.out.println(" 1 - Affichage de la liste de matchs");            
+            if(betHistory.size() > 0){
+                System.out.println(" 2 - Afficher les statuts de mes paris!");
+             }
+            System.out.println(" -- ");
+            System.out.println("Faites votre choix ?");
+            
+            do{
+    		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    	    	
+                try{
+    	            choix = Integer.parseInt(br.readLine());
+    	        }catch(NumberFormatException nfe){
+    	            System.err.println("Invalid Format!");
+    	            choix = -1;
+    	        } catch (IOException e) {
+    				e.printStackTrace();
+    				choix = -1;
+    		} 
+            }while(choix == -1);
+            if (choix == 1){
+    	   		logger.info("call to displayMatchsList");
+    			displayMatchsList();
+            }
+             if (choix == 2){
+    	   		logger.info("call to displayBetsUpdates");
+    			displayBetsUpdates();
+            }
+            
+        } while(choix != 0);
+    	
+    	
+    	System.out.println("Bye :3");
+    }
+    
+    private static void displayMatchsList(){
+        int choix = -1;
+        ListMatchName matchList = null;
     	InetAddress aHost = null;
     	int serveurPort = 6780;
     	int clientPort = 6779;
@@ -34,18 +95,19 @@ public class UDPClient{
  		
  		//Set server port and host
     	commObject.setServeur(aHost, serveurPort, clientPort);
-    	do{
+        do{
     		
-			System.out.println("R�cup�ration de la liste des matchs, veuillez patienter");
-			//ListMatch = commObject.getListMatch(); 
-			// Affichage de la liste des matchs
-    		//Menu.affListMatch(ListMatch);
+            System.out.println("Recuperation de la liste des matchs, veuillez patienter");
+            //ListMatch = commObject.getListMatch(); 
+            // Affichage de la liste des matchs
+            //Menu.affListMatch(ListMatch);
 			
-			//Send datagrame in new thread and wait for answer
-			matchList = commObject.getListMatchName();   
+            //Send datagrame in new thread and wait for answer
+            matchList = commObject.getListMatchName();   
     		if(matchList == null) return;
     		//Display the available match
-    		Menu.affListMatchName(matchList);
+    		Menu.affListMatchName(matchList);         
+                
        	 		
         	// Choix dans le menu
     		System.out.println("Faites votre choix ?");
@@ -69,17 +131,15 @@ public class UDPClient{
     	   		logger.info("call to detailMatch");
     			detailMatch(choix-1);
     		}
-    		//  r�cup�ration des d�tails du match et affichage
+    		//  recuperation des details du match et affichage
     		
     	}while(choix != 0);
     	// choix == 0 -> exit
     	// other choix -> refresh list
-    	
-    	System.out.println("Bye :3");
     }
     
     /**
-     * Sous menu pour le d�tail d'un match
+     * Sous menu pour le detail d'un match
      * @param idMatch ID du match choisit
      * @author CharlyBong
      */
@@ -92,10 +152,13 @@ public class UDPClient{
         	// Affichage des infomations
     		Menu.affDetailsMatch(Match);
     		
-    		// R�ponse utilisateur
+    		// R�ponse utilisateur
     		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	    	try{
 	            choix = Integer.parseInt(br.readLine());
+                    if (choix == 1){
+                       makeABet(idMatch);
+                    }
 	        }
 	    	catch(NumberFormatException nfe){} 
 	    	catch (IOException e) {}        
@@ -105,6 +168,125 @@ public class UDPClient{
     	// else refresh
     }
     
+    /**
+     * Sous menu pour le detail d'un match
+     * @param idMatch ID du match choisit
+     * @author CharlyBong
+     */
+    public static void displayBetsUpdates(){
+    	BetRespond respond = null;
+    	int choix = 0;        
+    	do{
+    		for (int i = 0; i < betHistory.size(); i++) {
+			Bet b = betHistory.get(i);
+                        respond = Communication.getInstance().getBetDetail(b.getMatchID(), b.getBetID());
+                        if(respond != null) Menu.affBetsUpdates(respond); 
+		}
+                System.out.println(" 0 - back");
+                System.out.println(" -- ");
+    		
+    		// R�ponse utilisateur
+    		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	    	try{
+	            choix = Integer.parseInt(br.readLine());                   
+	        }
+	    	catch(NumberFormatException nfe){} 
+	    	catch (IOException e) {}        
+    		
+    	}while(choix != 0);
+    	// choix = 0 -> back
+    	// else refresh
+    }
+    
+       /**
+     * Sous menu pour le detail d'un match
+     * @param idMatch ID du match choisit
+     * @author CharlyBong
+     */
+    public static void makeABet(int idMatch){
+    	Match oMatch = null;
+    	int choix = 0;
+    	do{
+    		//Récupère l'objet match
+                oMatch = Communication.getInstance().getMatchDetail(idMatch);
+                
+                //Récupération des informations relatives aux équipes
+                Team domicile = oMatch.getDomicile();
+                Team visiteur = oMatch.getExterieur();                
+                
+        	// Affichage des infomations
+    		Menu.affDetailsMatchPourPari(oMatch);
+    		
+    		// Réponse utilisateur
+    		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	    	try{
+	            //On détermine le choix d'équipe pour le pari
+                    choix = Integer.parseInt(br.readLine());
+                    
+                    String teamName = null;
+                    
+                    //On assosie le nom de l'équipe selon le choix fait
+                    if (choix == 1){ teamName = domicile.getName();}
+                    if (choix == 2){ teamName = visiteur.getName();}
+                    
+                    if(teamName != null){
+                        
+                        System.out.println(" -- ");
+		        System.out.println("Veuillez inscrire le montant à parier (Format attendu: 100.50 )");
+		        System.out.println(" -- ");
+                        
+                        //On récupère le montant
+                        float montant = Float.parseFloat(br.readLine());
+                       
+                        //Construction de l'objet de bet
+                        DateFormat dateFormat = new SimpleDateFormat("yyy-MM-dd-HH-mm-ss");
+                        Date date = new Date();                        
+                        
+                        Bet b = new Bet(dateFormat.format(date) + "-" + createID(),idMatch, teamName, montant);
+                        
+                        try {
+                            
+                            int result = Protocole.sendTCP(b, betServerPort);                   
+
+                            if(result == 1)
+                            {
+                             //Succès alors on montre un message de succès
+                             System.out.println(" -- L'objet Bet suivant -- ");
+                             System.out.println(b.toString() + " au montant de: " + String.valueOf(b.getBetAmount()) + "$ en faveur de l'équipe:" + teamName );
+                             System.out.println(" -- à été enregistré avec succès! --");
+                             
+                             //On ajoute le bet courant à notre liste de Bet
+                             betHistory.add(b);
+                             
+                            }
+                            else if(result == 0)
+                            {
+                             System.out.println("l'ajout à echoué, car la période est plus grande que 2");
+                            }
+                            else
+                            {
+                                System.out.println("l'ajout à echoué, error de stream"); 
+                            }
+                
+                        } catch (Exception e) {
+                            java.util.logging.Logger.getLogger(TCPClient.class.getName()).log(Level.SEVERE, null, e);
+                        }
+                        
+                    }
+	        }catch (Exception ex) { 
+                    java.util.logging.Logger.getLogger(TCPClient.class.getName()).log(Level.SEVERE, null, ex);
+                }        
+    		
+    	}while(choix != 0);
+    	// choix = 0 -> back
+    	// else refresh
+    }
+    
  
+    //Generate an unique ID. thanks to atomiclong class
+    public static String createID()
+    {
+        return String.valueOf(betCounter.getAndIncrement());
+    }
    
 }

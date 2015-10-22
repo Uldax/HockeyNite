@@ -3,6 +3,7 @@
 import org.apache.log4j.Logger;
 
 import dataManagement.ListeDesMatchs;
+import server.TCPServer;
 import server.UDPServer;
 
 public class StartPoint {
@@ -12,6 +13,7 @@ public class StartPoint {
 		//Contain all data
 		ListeDesMatchs matchList = ListeDesMatchs.getInstance();
 		//Need to wait for instance of matchList before started the 2 thread that update value
+		//matchList.setMultiplicateur(true);
 		matchList.startThreadUpdate();
 		
 		//Create match service
@@ -21,7 +23,10 @@ public class StartPoint {
 		matchServer.start();
 	
 		//Create paris service
-
+        int portTCP = 1248;
+        int threadPoolSizeTCP = 10;
+        Thread betServer = new Thread(new TCPServer(portTCP,threadPoolSizeTCP));
+        betServer.start();
 	}
 
 }

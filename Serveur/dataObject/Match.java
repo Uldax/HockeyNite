@@ -5,28 +5,47 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Match implements Serializable {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -8080958380151755727L;
+    private int id = 0;
 	private int time = 0;
 	private Team domicile = null;
 	private int domicileScore = 0;
 	private Team exterieur = null;
 	private int exterieurScore = 0;
+	private Team winner = null;
+	
+	public void setWinner(Team winner) {
+		this.winner = winner;
+	}
+
 	private List<Event> matchEvent = new ArrayList<Event>();
 	//20 minute per periode with 15min of break
 	private int periode;
+
 	//for easy the time gestion
 	private int periodeStart = 0;
 	private boolean pause = false;
-	private final int PERIODE_TIME = 20*60;
-	private final int BREAK_TIME = 15*60;
-	private final int MAX_TIME = 3 * PERIODE_TIME + 2 * BREAK_TIME;
+	private static final int PERIODE_TIME = 20*60;
+	private static final int BREAK_TIME = 15*60;
+	public static final int MAX_TIME = 3 * PERIODE_TIME + 2 * BREAK_TIME;
+
 	
+	public String getWinner(){
+		if(winner != null) {
+			return winner.getName();
+		} else {
+			return null;
+		}
+	}
 	
-	public Match(Team domicile,Team exterieur){
-		this.domicile = domicile;
+	Team getWinnerTeam(){
+			return winner;
+	}
+	
+	public Match(int id, Team domicile,Team exterieur){		
+                this.id = id;
+                this.domicile = domicile;
 		this.exterieur = exterieur;
 		this.periode = 1;
 	}
@@ -35,7 +54,7 @@ public class Match implements Serializable {
 	}
 	
 	//Set time 
-	public void setTime(int time) {
+	public synchronized void setTime(int time) {
 		if( time <= MAX_TIME) {
 			this.time = time;
 			handlePeriode();
@@ -69,8 +88,9 @@ public class Match implements Serializable {
 			}
 			break;
 		case 3:
-			if ((time >= periodeStart + PERIODE_TIME ) && pause == false ) {
+			if ((time >= MAX_TIME ) && pause == false ) {
 				pause = true;
+				handleWinner();
 				matchEvent.add( new Event(time, "This is the end of the game"));
 			}	
 			break;
@@ -78,6 +98,17 @@ public class Match implements Serializable {
 			break;
 		}
 	}
+	
+	//Set the winer
+	private void handleWinner(){
+		if( exterieurScore > domicileScore){
+			setWinner(exterieur);
+		} 
+		else if( domicileScore > exterieurScore) {
+			setWinner(domicile);
+		}
+	}
+	
 	public Team getDomicile() {
 		return domicile;
 	}
@@ -109,6 +140,36 @@ public class Match implements Serializable {
 	public Boolean isPause(){
 		return this.pause;
 	}
+
+    public void setPeriode(int periode) {
+        this.periode = periode;
+    }
+
+        public int getPeriode() {
+            return periode;
+        }
+
+    public int getId() {
+        return id;
+    }
+    public int getDomicileScore(){
+    	return domicileScore;
+    }
+    public int getExterieurScore(){
+    	return exterieurScore;
+    }    
+        
+	public String getStringTime(){
+		String matchSentence = "";
+		int[] currentTime = splitToTimes();
+		for( int j = 0; j < 3 ; j++)	{	
+			matchSentence +=currentTime[j];
+			if(j<2) {
+				matchSentence+= " : ";
+			}
+		}
+		return matchSentence;
+	}
 	
 	public int[] splitToTimes()
 	{
@@ -121,11 +182,11 @@ public class Match implements Serializable {
 	    int[] ints = {hours , mins , secs};
 	    return ints;
 	}
-	
+			
 	@Override
 	public String toString() {
 		String echo =  "Match [time=" + time + ", domicile=" + domicile + ", domicileScore=" + domicileScore + ", exterieur="
-				+ exterieur + ", exterieurScore=" + exterieurScore + ", matchEvent=" ; 
+				+ exterieur + ", exterieurScore=" + exterieurScore +", matchEvent=" ; 
 				for (Event e : matchEvent)
 				{
 				    echo += e.toString() + "\t";

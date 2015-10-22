@@ -14,13 +14,19 @@ import dataObject.Team;
 public class ListeDesMatchs {
 	private static final Logger logger = Logger.getLogger(ListeDesMatchs.class);
 	public final static int MAX_MATCH = 10;
+	//10 sec
 	private static final int INTERVAL_TIME = 10;
+	
+	
+	
+
+	private boolean multiplicateur = false;
 	
 	private Match ListMatch[] = new Match[MAX_MATCH];
 	public static int MODIF_TIME = 5000;
 	public Semaphore sem = null;
 	
-	// update†play time every INTERVAL_TIME sec
+	// updateplay time every INTERVAL_TIME sec
 	private ScheduledExecutorService scheduler =  null;
 	private ScheduledFuture<?> timerHandle = null;
 	
@@ -28,11 +34,11 @@ public class ListeDesMatchs {
 	/** Technique du Holder */
 	private static class SingletonHolder
 	{		
-		/** Instance unique non prÈinitialisÈe */
+		/** Instance unique non pr√©initialise */
 		private final static ListeDesMatchs instance = new ListeDesMatchs();
 	}
  
-	/** Point d'accËs pour l'instance unique du singleton */
+	/** Point d'acces pour l'instance unique du singleton */
 	public static ListeDesMatchs getInstance()
 	{
 		return SingletonHolder.instance;
@@ -46,10 +52,17 @@ public class ListeDesMatchs {
 		Team t2 =  new Team("B");
 		Team t3 =  new Team("C");
 		Team t4 =  new Team("D");
-		Match M1 = new Match(t1,t2);
-		Match M2 = new Match(t3,t4);
+		Match M1 = new Match(0,t1,t2);
+		Match M2 = new Match(1,t3,t4);
+                Match M3 = new Match(2,t1,t4);
+                
+                //Cas pour un match en p√©riode 2 qui serait incr√©ment√© a la p√©riode 3 par le systeme
+                M3.setPeriode(2);
+                M3.setTime(2100);
+                
 		ListMatch[0] = M1;
 		ListMatch[1]  = M2;
+                ListMatch[2]  = M3;
 		logger.info("ListDesMatch init");			
 	}
 	
@@ -88,7 +101,7 @@ public class ListeDesMatchs {
 	}
 	
 	//Get list of match name with associate id 
-	public ListMatchName getAllMatchName(){
+	public synchronized ListMatchName getAllMatchName(){
 		if (ListMatch.length < 1) {
 		    return null;
 		}
@@ -103,10 +116,16 @@ public class ListeDesMatchs {
 	//Create a task that run every INTERVAL_TIME second
 	//Manage the time of every Match
 	private void startTimer() {
-	   Runnable timer = new TimeManager(INTERVAL_TIME);
+	   Runnable timer = new TimeManager(INTERVAL_TIME);   
 	   // start the timer task
-	   timerHandle = scheduler.scheduleAtFixedRate(timer, INTERVAL_TIME, INTERVAL_TIME, TimeUnit.SECONDS);
-	   logger.info("Timer scheduler started");
+           if(multiplicateur){
+                logger.info("startTimer: avec mutiplicateur activer");
+                timerHandle = scheduler.scheduleAtFixedRate(timer, 1000, 100, TimeUnit.MILLISECONDS);
+           }
+           else{
+                timerHandle = scheduler.scheduleAtFixedRate(timer, INTERVAL_TIME, INTERVAL_TIME, TimeUnit.SECONDS);
+           }  
+           logger.info("Timer scheduler started");
 	}
 	
 	private void stopTimer(){
@@ -121,5 +140,8 @@ public class ListeDesMatchs {
 
 	public void setSem(Semaphore sem) {
 		this.sem = sem;
+	}
+        public void setMultiplicateur(boolean multiplicateur) {
+		this.multiplicateur = multiplicateur;
 	}
 }

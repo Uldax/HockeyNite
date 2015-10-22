@@ -33,115 +33,29 @@
         android:layout_alignParentEnd="true"
         android:onClick="onClick" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/Partie1"
-        android:id="@+id/buPartie1"
-        android:layout_below="@+id/tvServeur"
-        android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/buTrouverPartie"
-        android:onClick="onClick"
-        android:enabled="false"
-        android:clickable="false" />
+    <GridView
+        android:id="@+id/grid_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:numColumns="auto_fit"
+        android:columnWidth="150dp"
+        android:horizontalSpacing="10dp"
+        android:listSelector="@android:color/transparent"
+        android:verticalSpacing="10dp"
+        android:clipToPadding="false"
+        android:paddingBottom="50dp"
+        android:paddingTop="5dp"
+        android:gravity="center"
+        android:stretchMode="columnWidth"
+        android:layout_below="@+id/tvServeur"></GridView>
 
-    <Button
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/Partie2"
-        android:id="@+id/buPartie2"
-        android:layout_below="@+id/buPartie1"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:onClick="onClick"
-        android:enabled="false" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/Partie3"
-        android:id="@+id/buPartie3"
-        android:layout_below="@+id/buPartie2"
-        android:layout_alignEnd="@+id/buPartie2"
-        android:layout_alignParentStart="true"
-        android:onClick="onClick"
-        android:enabled="false" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/Partie4"
-        android:id="@+id/buPartie4"
-        android:layout_below="@+id/buPartie3"
-        android:layout_alignEnd="@+id/buPartie3"
-        android:layout_alignParentStart="true"
-        android:onClick="onClick"
-        android:enabled="false" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/Partie5"
-        android:id="@+id/buPartie5"
-        android:onClick="onClick"
-        android:layout_below="@+id/buPartie4"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:enabled="false" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/Partie6"
-        android:id="@+id/buPartie6"
-        android:layout_below="@+id/buPartie5"
-        android:layout_alignEnd="@+id/buPartie5"
-        android:layout_alignParentStart="true"
-        android:onClick="onClick"
-        android:enabled="false" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/Partie7"
-        android:id="@+id/buPartie7"
-        android:layout_below="@+id/buPartie6"
-        android:layout_alignEnd="@+id/buPartie6"
-        android:layout_alignParentStart="true"
-        android:onClick="onClick"
-        android:enabled="false" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/Partie8"
-        android:id="@+id/buPartie8"
-        android:layout_below="@+id/buPartie7"
-        android:layout_alignEnd="@+id/buPartie7"
-        android:layout_alignParentStart="true"
-        android:onClick="onClick"
-        android:enabled="false" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/Partie9"
-        android:id="@+id/buPartie9"
-        android:layout_below="@+id/buPartie8"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true"
-        android:onClick="onClick"
-        android:enabled="false" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/Partie10"
-        android:id="@+id/buPartie10"
-        android:onClick="onClick"
-        android:layout_below="@+id/buPartie9"
-        android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/buPartie9"
-        android:enabled="false" />
+        android:id="@+id/progressBar"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:visibility="visible" />
 
 </RelativeLayout>

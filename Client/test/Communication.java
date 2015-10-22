@@ -8,6 +8,7 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 
 import affichage.Menu;
+import dataObject.BetRespond;
 import dataObject.ListMatchName;
 import dataObject.Match;
 import protocole.Message;
@@ -45,8 +46,8 @@ public class Communication {
 	
 	
 	/**
-	 * Demande au serveur les détails d'un match avec son ID
-	 * @param idMatch Id du match à récupérer
+	 * Demande au serveur les dï¿½tails d'un match avec son ID
+	 * @param idMatch Id du match ï¿½ rï¿½cupï¿½rer
 	 * @author CharlyBong
 	 * @return Array de Matchs
 	 * @deprecated Old version -> use getListMatchName()
@@ -121,10 +122,10 @@ public class Communication {
 	}
 
 	/**
-	 * Demande au serveur les détails d'un match avec son ID
-	 * @param idMatch Id du match à récupérer
+	 * Demande au serveur les dï¿½tails d'un match avec son ID
+	 * @param idMatch Id du match ï¿½ rï¿½cupï¿½rer
 	 * @author CharlyBong
-	 * @return Objet Match contenant les détails du match
+	 * @return Objet Match contenant les dï¿½tails du match
 	 */
 	public Match getMatchDetail(int idMatch){
 		tentative = 0;
@@ -156,11 +157,49 @@ public class Communication {
 		}
 		return (Match) this.reponse.getValue();
 	}
+        
+        /**
+	 * Demande au serveur les details d'un Bet avec son ID et le matchID
+	 * @param idMatch Id du match sur un bet 
+         * @param betID Id du bet
+	 * @author Julien Aspirot
+	 * @return Objet BetRespond qui contient les informations relatives au statut du Bet
+	 */
+	public BetRespond getBetDetail(int idMatch, String betID){
+		tentative = 0;
+		do{
+			error = false;
+			try {
+				aSocket = new DatagramSocket(this.clientPort);
+			
+				Message ask = Request.craftGetBetInfo(this.adress,this.serveurPort, idMatch, betID);		
+				Protocole.send(ask,aSocket);
+				
+				WaitingMessage = new Thread(new Menu.WaitMessage(1000));
+				WaitingMessage.start();
+				
+				synchronized (MutexLock) {
+					new Thread(new WaitReponse()).start();
+					MutexLock.wait();
+				}			
+			}
+			catch (SocketException e){System.out.println("Socket: " + e.getMessage());} 
+			catch (InterruptedException e) {e.printStackTrace();} 
+			
+			finally {aSocket.close(); aSocket = null; WaitingMessage.interrupt();tentative++;}			
+		}while((error)&&(tentative < MAX_TENTATIVE));
+				
+		if (error){
+			System.out.println("-- Erreur Serveur TimeOut --");
+			return null;
+		}
+		return (BetRespond) this.reponse.getValue();
+	}
 	
 	
 	
 	/**
-	 * Thread pour l'affichage de point d'indiquand à l'utilisateur d'attendre
+	 * Thread pour l'affichage de point d'indiquand ï¿½ l'utilisateur d'attendre
 	 * @author CharlyBong
 	 */
 	private class WaitReponse implements Runnable {

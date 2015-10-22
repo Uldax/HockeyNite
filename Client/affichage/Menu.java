@@ -5,13 +5,16 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import dataObject.BetRespond;
 import dataObject.ListMatchName;
+import dataObject.Match;
+import dataObject.Team;
 
 public class Menu {
 
 	/**
 	 * Affichage du tableau des match
-	 * @param ListMatch Liste des matchs ‡ afficher
+	 * @param ListMatch Liste des matchs  afficher
 	 * @author CharlyBong
 	 * @deprecated use affListMatchName(ListMatchName ListMatch)
 	 */
@@ -27,7 +30,7 @@ public class Menu {
 
 	/**
 	 * Affichage de la liste des matchs (Domicile vs Exterieur - timer)
-	 * @param ListMatch Liste des matchs ‡ afficher
+	 * @param ListMatch Liste des matchs  afficher
 	 * @author Uldax
 	 */
 	@SuppressWarnings("rawtypes")
@@ -45,19 +48,58 @@ public class Menu {
 	}
 	
 	/**
-	 * Affichage des dÈtails d'un match
-	 * @param Match objet ‡ afficher
+	 * Affichage des details d'un match
+	 * @param Match objet  afficher
 	 * @author CharlyBong
 	 */
 	public static void affDetailsMatch(Object Match){
 		System.out.println(" -- ");
 		System.out.println(Match.toString());
 		System.out.println(" 0 - back");
+                System.out.println(" 1 - faire un pari sur ce match");
+		System.out.println(" -- ");
+	}
+        
+        	/**
+	 * Affichage des details d'un match
+	 * @param betRespond objet  afficher
+	 * @author CharlyBong
+	 */
+	public static void affBetsUpdates(BetRespond betRespond){
+            String resultText = null;
+                switch(betRespond.getStatus()){
+                    case 0: resultText = "perdant"; break;
+                    case 1: resultText = "gagnant"; break;
+                    case 2: resultText = "non d√©termin√© (Match non termin√©)"; break;
+                    default: resultText = "non d√©termin√© (Match non termin√©)"; break;
+                }
+		System.out.println(" -- ");
+                System.out.println(" Le Bet: " + betRespond.getBetID() + " est:" + resultText );
+                if(betRespond.getStatus() == 1){
+                    System.out.println(" Mise initiale: " + String.valueOf(betRespond.getBetAmount()));
+                    System.out.println(" Mise remporter: " + String.valueOf(betRespond.getWinningAmount()));  
+                }
+		System.out.println(" -- ");
+	}
+        
+        /**
+	 * Affichage des details d'un match
+	 * @param Match objet  afficher
+	 * @author CharlyBong
+	 */
+	public static void affDetailsMatchPourPari(Match oMatch){
+                Team domicile = oMatch.getDomicile();
+                Team visiteur = oMatch.getExterieur();
+		System.out.println(" -- ");
+		System.out.println(oMatch.toString());
+		System.out.println(" 0 - back");
+                System.out.println(" 1 - Parier sur l'√©quipe domicile - " + domicile.getName());
+                System.out.println(" 2 - Parier sur l'√©quipe visiteur - " + visiteur.getName());
 		System.out.println(" -- ");
 	}
 	
 	/**
-	 * Thread pour l'affichage de point d'indiquand ‡ l'utilisateur d'attendre
+	 * Thread pour l'affichage de point d'indiquand  l'utilisateur d'attendre
 	 * @author CharlyBong
 	 */
 	public static class WaitMessage implements Runnable {
