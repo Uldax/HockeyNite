@@ -52,6 +52,11 @@ public class PariActivity extends AppCompatActivity implements View.OnClickListe
 
         RadioButton radioLocale = (RadioButton) findViewById(R.id.raPariLocale);
         radioLocale.setText(nameDomicile);
+
+        //Display all the bet
+        new DisplayBets().start();
+
+
     }
 
     @Override
@@ -104,6 +109,7 @@ public class PariActivity extends AppCompatActivity implements View.OnClickListe
                 {
                     ((MyApplication)getApplication()).addBet(betToSend);
                     Log.i(TAG,"Succés pour l'objet b courant");
+                    new DisplayBets().start();
                 }
                 else if(result == 0)
                 {
@@ -123,30 +129,39 @@ public class PariActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    /*public  void displayBetsUpdates() {
-        BetRespond respond = null;
-        int choix = 0;
-        do {
-            for (int i = 0; i < betHistory.size(); i++) {
-                Bet b = betHistory.get(i);
-                respond = Communication.getInstance().getBetDetail(b.getMatchID(), b.getBetID());
-                if (respond != null)
-                    Menu.affBetsUpdates(respond);
-            }
-            System.out.println(" 0 - back");
-            System.out.println(" -- ");
 
-            // Rï¿½ponse utilisateur
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    private class DisplayBets extends Thread {  // note : AsynchTask pour les threads UI
+
+        public DisplayBets() {
+            super("displayBet");  // donner un nom au thread à des fins de debug
+        }
+
+        @Override
+        public void run() {
+            Log.d(TAG, "MajeBet running");
             try {
-                choix = Integer.parseInt(br.readLine());
-            } catch (NumberFormatException nfe) {
-            } catch (IOException e) {
+
+                UDPHelper udp = new UDPHelper();
+                InetAddress adr;
+                adr = InetAddress.getByName(getApplication().getSharedPreferences(getResources().getString(R.string.FileShared), Context.MODE_PRIVATE).getString(getResources().getString(R.string.Serveur_adresse), "192.168.1.1"));
+
+                // Placer les paramètres de communications
+                udp.setServeur(adr, 6780,6779);
+                BetRespond respond = null;
+                MyApplication myApp= (MyApplication)getApplication();
+                for (int i = 0; i < myApp.getBet().size(); i++) {
+                    Bet b = myApp.getBet().get(i);
+                    respond = udp.getBetDetail(b.getMatchID(), b.getBetID());
+                    if (respond != null) {
+                        //Menu.affBetsUpdates(respond);
+                        //TODO display reesult
+                    }
+
+                }
             }
-
-        } while (choix != 0);
-        // choix = 0 -> back
-        // else refresh
-    }*/
-
+            catch (Exception e) {
+                return;
+            }
+        }
+    }
 }
