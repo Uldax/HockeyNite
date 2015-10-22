@@ -10,6 +10,7 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 
+import dataObject.BetRespond;
 import dataObject.ListMatchName;
 import dataObject.Match;
 import protocole.Message;
@@ -169,6 +170,35 @@ public class UDPHelper
         return (Match) reponse.getValue();
     }
 
+    //Not working now
+    public BetRespond getBetDetail(int idMatch, String betID){
+        tentative = 0;
+        do{
+            error = false;
+            try {
+                dsClient = new DatagramSocket(this.portClient);
+                tSendMessage = new Thread(new SendBetDetails(dsClient, adresse, portServeur, idMatch,betID));
+                tSendMessage.start();
+
+
+                synchronized (MutexLock) {
+                    new Thread(new WaitReponse()).start();
+                    MutexLock.wait();
+                }
+            }
+            catch (SocketException e){System.out.println("Socket: " + e.getMessage());}
+            catch (InterruptedException e) {e.printStackTrace();}
+
+            finally {dsClient.close(); dsClient = null; WaitingMessage.interrupt();tentative++;}
+        }while((error)&&(tentative < MAX_TENTATIVE));
+
+        if (error){
+            System.out.println("-- Erreur Serveur TimeOut --");
+            return null;
+        }
+        return (BetRespond) this.reponse.getValue();
+    }
+
     // Envoi
     public static void send(Message p_message, DatagramSocket p_udpSocket)
     {
@@ -230,6 +260,32 @@ public class UDPHelper
         public void run()
         {
             Message ask = Request.craftGetMatchDetail(adresse, port, matchId);
+            send(ask, datasocket);
+        }
+    }
+
+    // Rouler l'envoi de messages dans un thread
+    public static class SendBetDetails implements Runnable
+    {
+        private DatagramSocket datasocket;
+        private InetAddress adresse;
+        private int port;
+        private int matchId;
+        private String betId;
+
+        public SendBetDetails(DatagramSocket p_socket, InetAddress p_adresse, int p_port, int p_matchId,String betId)
+        {
+            datasocket = p_socket;
+            adresse = p_adresse;
+            port = p_port;
+            matchId = p_matchId;
+            this.betId = betId;
+        }
+
+        @Override
+        public void run()
+        {
+            Message ask = Request.craftGetBetInfo(adresse,port, matchId, betId);
             send(ask, datasocket);
         }
     }
