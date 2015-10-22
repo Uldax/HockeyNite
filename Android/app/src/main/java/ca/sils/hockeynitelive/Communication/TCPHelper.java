@@ -35,7 +35,7 @@ public class TCPHelper {
         this.serveurPort = portServeur;
     }
 
-    public void sendBet(Bet bet) {
+    public int sendBet(Bet bet) {
         try {
             Socket sClient = new Socket(adresse, serveurPort);
             InputStream is = sClient.getInputStream();
@@ -47,25 +47,15 @@ public class TCPHelper {
 
             int result = is.read();
 
-            if(result == 1)
-            {
-                Log.i(TAG,"SuccÃ¨s pour l'objet b courant");
-            }
-            else if(result == 0)
-            {
-                Log.i(TAG, "l'ajout Ã  echouÃ©, car la pÃ©riode est plus grande que 2");
-            }
-            else
-            {
-                Log.i(TAG, "l'ajout Ã  echouÃ©, error de stream");
-            }
-
             sClient.close();
 
+            return result;
 
         } catch (IOException ex) {
            Log.e(TAG, ex.toString());
         }
+
+        return -1;
     }
 
 }
