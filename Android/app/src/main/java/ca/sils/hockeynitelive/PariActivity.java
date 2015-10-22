@@ -58,6 +58,11 @@ public class PariActivity extends AppCompatActivity implements View.OnClickListe
 
         RadioButton radioLocale = (RadioButton) findViewById(R.id.raPariLocale);
         radioLocale.setText(nameDomicile);
+
+        //Display all the bet
+        new DisplayBets().start();
+
+
     }
 
     @Override
@@ -110,6 +115,7 @@ public class PariActivity extends AppCompatActivity implements View.OnClickListe
                 {
                     ((MyApplication)getApplication()).addBet(betToSend);
                     Log.i(TAG,"Succés pour l'objet b courant");
+                    new DisplayBets().start();
                 }
                 else if(result == 0)
                 {
@@ -130,9 +136,9 @@ public class PariActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    private class displayBets extends Thread {  // note : AsynchTask pour les threads UI
+    private class DisplayBets extends Thread {  // note : AsynchTask pour les threads UI
 
-        public displayBets() {
+        public DisplayBets() {
             super("displayBet");  // donner un nom au thread à des fins de debug
         }
 
@@ -149,16 +155,15 @@ public class PariActivity extends AppCompatActivity implements View.OnClickListe
                 udp.setServeur(adr, 6780,6779);
                 BetRespond respond = null;
                 MyApplication myApp= (MyApplication)getApplication();
-
-                /*for (int i = 0; i < getApplication().betHistory.size(); i++) {
-                    Bet b = betHistory.get(i);
-                    respond = getBetDetail(b.getMatchID(), b.getBetID());
+                for (int i = 0; i < myApp.getBet().size(); i++) {
+                    Bet b = myApp.getBet().get(i);
+                    respond = udp.getBetDetail(b.getMatchID(), b.getBetID());
                     if (respond != null) {
                         //Menu.affBetsUpdates(respond);
                         //TODO display reesult
                     }
 
-                }*/
+                }
             }
             catch (Exception e) {
                 return;
