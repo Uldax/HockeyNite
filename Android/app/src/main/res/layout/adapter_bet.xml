@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:background="#46000000">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="22/10/2015"
+        android:id="@+id/date"
+        android:layout_alignParentStart="true"
+        android:gravity="center_vertical"
+        android:layout_toLeftOf="@+id/icone"
+        android:layout_toStartOf="@+id/icone"
+        android:layout_alignParentTop="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Message ..."
+        android:id="@+id/message"
+        android:gravity="center_vertical"
+        android:maxLines="3"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/date"
+        android:layout_toLeftOf="@+id/icone"
+        android:layout_toStartOf="@+id/icone"
+        android:layout_marginLeft="5dp" />
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="fill_parent"
+        android:id="@+id/icone"
+        android:scaleType="centerInside"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="false"
+        android:layout_centerVertical="true"
+        android:src="@drawable/button_yellow" />
+
+</RelativeLayout>
