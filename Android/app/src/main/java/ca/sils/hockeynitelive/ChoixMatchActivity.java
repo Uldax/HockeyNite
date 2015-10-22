@@ -1,6 +1,5 @@
 package ca.sils.hockeynitelive;
 
-import android.app.IntentService;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -19,12 +18,12 @@ import android.widget.Toast;
 
 import java.net.InetAddress;
 
-import ca.sils.hockeynitelive.Communication.Communication;
+import ca.sils.hockeynitelive.Communication.AutoUpdateService;
 import ca.sils.hockeynitelive.Communication.Udp;
 import ca.sils.hockeynitelive.adapter.MatchAdapter;
 import dataObject.ListMatchName;
 
-public class ChoixMatch extends AppCompatActivity {
+public class ChoixMatchActivity extends AppCompatActivity {
 
     private String adresseIP = null;
     private MatchAdapter adapter;
@@ -43,7 +42,7 @@ public class ChoixMatch extends AppCompatActivity {
         receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                ListMatchName listeParties = (ListMatchName) intent.getSerializableExtra(Communication.COM_MESSAGE);
+                ListMatchName listeParties = (ListMatchName) intent.getSerializableExtra(AutoUpdateService.COM_MESSAGE);
                 updateData(listeParties);
             }
         };
@@ -73,13 +72,13 @@ public class ChoixMatch extends AppCompatActivity {
                     adresseIP = null;
 
                     // Message Toast
-                    Toast.makeText(ChoixMatch.this, "HokeyNiteLive - Adresse vide", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ChoixMatchActivity.this, "HokeyNiteLive - Adresse vide", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 SharedPreferences.Editor editor = getApplication().getSharedPreferences(getResources().getString(R.string.FileShared), Context.MODE_PRIVATE).edit();
                 editor.putString(getResources().getString(R.string.Serveur_adresse),adresseIP);
                 editor.commit();
-                comService = new Intent(getApplicationContext(), Communication.class);
+                comService = new Intent(getApplicationContext(), AutoUpdateService.class);
                 startService(comService);
             }
         });
@@ -90,7 +89,7 @@ public class ChoixMatch extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         LocalBroadcastManager.getInstance(this).registerReceiver((receiver),
-                new IntentFilter(Communication.COM_RESULT)
+                new IntentFilter(AutoUpdateService.COM_RESULT)
         );
     }
 
@@ -108,7 +107,7 @@ public class ChoixMatch extends AppCompatActivity {
         try {
             adr = InetAddress.getByName(getApplication().getSharedPreferences(getResources().getString(R.string.FileShared),Context.MODE_PRIVATE).getString(getResources().getString(R.string.Serveur_adresse),"192.168.1.1"));
         } catch (Exception e) {
-            Toast.makeText(ChoixMatch.this, "Adresse invalide", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ChoixMatchActivity.this, "Adresse invalide", Toast.LENGTH_SHORT).show();
             progressBar.setVisibility(View.INVISIBLE);
             return;
         }
@@ -123,13 +122,13 @@ public class ChoixMatch extends AppCompatActivity {
     }
 
 
-    public void updateData(ListMatchName listeParties){
+    public void updateData(ListMatchName listMatch){
         progressBar.setVisibility(View.INVISIBLE);
-        if (listeParties == null) {
-            Toast.makeText(ChoixMatch.this, "Liste non-disponible", Toast.LENGTH_SHORT).show();
+        if (listMatch == null) {
+            Toast.makeText(ChoixMatchActivity.this, "Liste non-disponible", Toast.LENGTH_SHORT).show();
             return;
         }
-        adapter = new MatchAdapter(this, R.layout.adapter_match, listeParties.getList());
+        adapter = new MatchAdapter(this, R.layout.adapter_match, listMatch.getList());
         gridView.setAdapter(adapter);
     }
 

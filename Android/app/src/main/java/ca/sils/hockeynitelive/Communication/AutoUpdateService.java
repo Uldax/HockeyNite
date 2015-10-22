@@ -15,7 +15,7 @@ import dataObject.ListMatchName;
 /**
  * Created by cbongiorno on 20/10/2015.
  */
-public class Communication extends Service {
+public class AutoUpdateService extends Service {
 
     public static final String TAG = "ComService";
 
@@ -101,7 +101,7 @@ public class Communication extends Service {
 
         @Override
         public void run() {                 // méthode invoquée pour démarrer le fil
-            Communication comService = Communication.this;  // réf. Sur le service
+            AutoUpdateService comService = AutoUpdateService.this;  // réf. Sur le service
             while (comService.runFlag) {  // MAJ via les méthode onStartCOmmand et onDestroy
                 Log.d(TAG, "Updater running");
                 try {

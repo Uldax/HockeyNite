@@ -21,7 +21,7 @@ public class Bet implements Serializable {
        this.betAmount = betAmount;        
     }
 
-    public void setTeamName(String teamID) {
+    public void setTeamName(String teamName) {
         this.teamName = teamName;
     }
  

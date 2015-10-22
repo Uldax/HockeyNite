@@ -12,13 +12,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import ca.sils.hockeynitelive.Communication.Communication;
 import ca.sils.hockeynitelive.Communication.detailsService;
 import ca.sils.hockeynitelive.adapter.EventAdapter;
-import dataObject.Event;
-import dataObject.ListMatchName;
 import dataObject.Match;
-import dataObject.Team;
 
 public class PartieDetails extends AppCompatActivity
 {
