@@ -99,6 +99,13 @@ public class PariActivity extends AppCompatActivity implements View.OnClickListe
 
         // Fin de cette activité
         //finish();
+
+    }
+
+    public void upadteData(List<BetRespond> listBet){
+        progressBar.setVisibility(View.INVISIBLE);
+        adapter = new BetAdapter(this, R.layout.adapter_bet, listBet);
+        listView.setAdapter(adapter);
     }
 
     private class MakeBet extends Thread {  // note : AsynchTask pour les threads UI
@@ -173,11 +180,10 @@ public class PariActivity extends AppCompatActivity implements View.OnClickListe
                         listRep.add(respond);
                     }
                 }
-                adapter = new BetAdapter(getApplicationContext(), R.layout.adapter_bet, listRep);
-                listView.setAdapter(adapter);
+                upadteData(listRep);
             }
             catch (Exception e) {
-                Log.e(TAG,e.getMessage());
+                Log.e(TAG,e.toString());
                 return;
             }
         }
