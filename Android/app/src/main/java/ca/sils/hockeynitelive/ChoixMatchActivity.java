@@ -32,6 +32,8 @@ public class ChoixMatchActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private BroadcastReceiver receiver;
     private Intent comService = null;
+    private ListMatchName listMatch = null;
+    private final String STATE_LISTMATCH = "listmatch";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +87,11 @@ public class ChoixMatchActivity extends AppCompatActivity {
             }
         });
 
+        if (savedInstanceState != null) {
+            this.listMatch = (ListMatchName) savedInstanceState.getSerializable(STATE_LISTMATCH);
+            this.updateData(this.listMatch);
+        }
+
     }
 
     @Override
@@ -94,6 +101,13 @@ public class ChoixMatchActivity extends AppCompatActivity {
                 new IntentFilter(AutoUpdateService.COM_RESULT)
         );
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putSerializable(STATE_LISTMATCH, this.listMatch);;
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
 
     @Override
     protected void onStop() {
@@ -130,6 +144,7 @@ public class ChoixMatchActivity extends AppCompatActivity {
             Toast.makeText(ChoixMatchActivity.this, "Liste non-disponible", Toast.LENGTH_SHORT).show();
             return;
         }
+        this.listMatch = listMatch;
         adapter = new MatchAdapter(this, R.layout.adapter_match, listMatch.getList());
         gridView.setAdapter(adapter);
     }
