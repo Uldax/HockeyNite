@@ -10,13 +10,12 @@ import android.util.Log;
 import java.net.InetAddress;
 
 import ca.sils.hockeynitelive.R;
-import dataObject.ListMatchName;
 import dataObject.Match;
 
 /**
  * Created by cbongiorno on 20/10/2015.
  */
-public class detailsService extends Service {
+public class detailsUpdateService extends Service {
 
     public static final String TAG = "detailService";
 
@@ -110,12 +109,12 @@ public class detailsService extends Service {
 
         @Override
         public void run() {                 // méthode invoquée pour démarrer le fil
-            detailsService detService = detailsService.this;  // réf. Sur le service
+            detailsUpdateService detService = detailsUpdateService.this;  // réf. Sur le service
             while (detService.runFlag) {  // MAJ via les méthode onStartCOmmand et onDestroy
                 Log.d(TAG, "Updater running");
                 try {
                     /* Get DATA */
-                    Udp commUdp = new Udp();
+                    UDPHelper commUDPHelper = new UDPHelper();
                     InetAddress adr;
 
                     try {
@@ -126,17 +125,14 @@ public class detailsService extends Service {
                     }
 
                     // Placer les paramètres de communications
-                    commUdp.setServeur(adr, 6780,6779);
+                    commUDPHelper.setServeur(adr, 6780,6779);
 
                     Log.i("onStartCommand", "UpdaterService-Updater " + String.valueOf(idMatch));
 
                     // Lecture de la liste des parties
-                    Match currentMatch = commUdp.getMatchDetail(idMatch);
+                    Match currentMatch = commUDPHelper.getMatchDetail(idMatch);
 
                     sendResult(currentMatch);
-
-
-
 
                     Log.d(TAG, "Updater ran");
                     Thread.sleep(DELAY);          // s’endormir entre chaque mise à jour
@@ -162,17 +158,17 @@ public class detailsService extends Service {
                 Log.d(TAG, "UpdaterOne running");
                 try {
                     /* Get DATA */
-                    Udp commUdp = new Udp();
+                    UDPHelper commUDPHelper = new UDPHelper();
                     InetAddress adr;
                     adr = InetAddress.getByName(getApplication().getSharedPreferences(getResources().getString(R.string.FileShared), Context.MODE_PRIVATE).getString(getResources().getString(R.string.Serveur_adresse), "192.168.1.1"));
 
                     // Placer les paramètres de communications
-                    commUdp.setServeur(adr, 6780,6779);
+                    commUDPHelper.setServeur(adr, 6780,6779);
 
                     Log.i("onStartCommand", "UpdaterService-Updater " + String.valueOf(idMatch));
 
                     // Lecture de la liste des parties
-                    Match currentMatch = commUdp.getMatchDetail(idMatch);
+                    Match currentMatch = commUDPHelper.getMatchDetail(idMatch);
 
                     sendResult(currentMatch);
                     Log.d(TAG, "Updaterone ran");

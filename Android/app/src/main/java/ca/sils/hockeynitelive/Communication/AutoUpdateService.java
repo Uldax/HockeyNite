@@ -106,7 +106,7 @@ public class AutoUpdateService extends Service {
                 Log.d(TAG, "Updater running");
                 try {
                     /* Get DATA */
-                    Udp commUdp = new Udp();
+                    UDPHelper commUDPHelper = new UDPHelper();
                     InetAddress adr;
 
                     try {
@@ -117,15 +117,12 @@ public class AutoUpdateService extends Service {
                     }
 
                     // Placer les paramètres de communications
-                    commUdp.setServeur(adr, 6780,6779);
+                    commUDPHelper.setServeur(adr, 6780,6779);
 
                     // Lecture de la liste des parties
-                    ListMatchName listeParties = commUdp.getListMatchName();
+                    ListMatchName listeParties = commUDPHelper.getListMatchName();
 
                     sendResult(listeParties);
-
-
-
 
                     Log.d(TAG, "Updater ran");
                     Thread.sleep(DELAY);          // s’endormir entre chaque mise à jour

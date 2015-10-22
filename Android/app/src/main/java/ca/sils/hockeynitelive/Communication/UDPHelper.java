@@ -21,7 +21,7 @@ import utils.Marshallizer;
 /**
  * Created by Luc Saucier on 15-10-18.
  */
-public class Udp
+public class UDPHelper
 {
     // Constantes
     private final int TIMEOUT = 5000;

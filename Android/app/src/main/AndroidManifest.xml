@@ -17,10 +17,10 @@
         </activity>
         <activity android:name=".PartieDetails" >
         </activity>
-        <activity android:name=".Pari" >
+        <activity android:name=".PariActivity" >
         </activity>
         <service android:name=".Communication.AutoUpdateService" />
-        <service android:name=".Communication.detailsService" />
+        <service android:name=".Communication.detailsUpdateService" />
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>
