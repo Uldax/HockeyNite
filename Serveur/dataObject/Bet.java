@@ -13,12 +13,18 @@ public class Bet implements Serializable {
     private String clientAddress = null;
     private byte[] clientIPAddress = new byte[4];
     private float betAmount = 0;
+    private static int betCpt = 0;
 
     public Bet(String betID, int matchID, String teamName, float betAmount) {
        this.betID = betID;
        this.matchID = matchID;
        this.teamName = teamName;
-       this.betAmount = betAmount;        
+       this.betAmount = betAmount;  
+       betCpt++;
+    }
+    
+    public static int getGeneratedId(){
+    	return betCpt;
     }
 
     public void setTeamName(String teamName) {

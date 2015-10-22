@@ -20,7 +20,7 @@ import android.widget.Toast;
 import java.net.InetAddress;
 
 import ca.sils.hockeynitelive.Communication.AutoUpdateService;
-import ca.sils.hockeynitelive.Communication.Udp;
+import ca.sils.hockeynitelive.Communication.UDPHelper;
 import ca.sils.hockeynitelive.adapter.MatchAdapter;
 import dataObject.ListMatchName;
 
@@ -117,7 +117,7 @@ public class ChoixMatchActivity extends AppCompatActivity {
 
     private void getList() {
         // Lecture des parties
-        Udp commUdp = new Udp();
+        UDPHelper commUDPHelper = new UDPHelper();
         InetAddress adr;
 
         try {
@@ -129,10 +129,10 @@ public class ChoixMatchActivity extends AppCompatActivity {
         }
 
         // Placer les paramètres de communications
-        commUdp.setServeur(adr, 6780, 6779);
+        commUDPHelper.setServeur(adr, 6780, 6779);
 
         // Lecture de la liste des parties
-        ListMatchName listeParties = commUdp.getListMatchName();
+        ListMatchName listeParties = commUDPHelper.getListMatchName();
 
         this.updateData(listeParties);
     }

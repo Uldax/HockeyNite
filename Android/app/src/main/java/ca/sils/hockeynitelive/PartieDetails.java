@@ -16,7 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import ca.sils.hockeynitelive.Communication.AutoUpdateService;
-import ca.sils.hockeynitelive.Communication.detailsService;
+import ca.sils.hockeynitelive.Communication.detailsUpdateService;
 import ca.sils.hockeynitelive.adapter.EventAdapter;
 import dataObject.Match;
 
@@ -54,41 +54,39 @@ public class PartieDetails extends AppCompatActivity
         receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Match currentMatch = (Match) intent.getSerializableExtra(detailsService.DET_MESSAGE);
+                Match currentMatch = (Match) intent.getSerializableExtra(detailsUpdateService.DET_MESSAGE);
                 updateData(currentMatch);
             }
         };
 
-
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
 
-        /*
+
+        //Bouton pari
         Button buPdPari = (Button) findViewById(R.id.buPdPari);
         buPdPari.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), Pari.class);
-                TextView tvPartie = (TextView) findViewById(R.id.tvPdPartieNom);
-                TextView tvVisiteurNom = (TextView) findViewById(R.id.tvPdEquipeVisiteurNom);
-                TextView tvLocaleNom = (TextView) findViewById(R.id.tvPdEquipeLocaleNom);
-                intent.putExtra(EXTRA_PARTIE, tvPartie.getText());
-                intent.putExtra(EXTRA_EQUIPE_VISITEUR_NOM, tvVisiteurNom.getText());
-                intent.putExtra(EXTRA_EQUIPE_LOCALE_NOM, tvLocaleNom.getText());
+                Intent intent = new Intent(getApplicationContext(), PariActivity.class);
+                intent.putExtra("idMatch", idMatch);
+                intent.putExtra("domicileName", currentMatch.getDomicile().getName());
+                intent.putExtra("exterieurName", currentMatch.getExterieur().getName());
                 startActivity(intent);
             }
-        });*/
+        });
 
+        //button for force refresh
         Button buPdRafraichir = (Button) findViewById(R.id.buPdRafraichir);
         buPdRafraichir.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                detService = new Intent(getApplicationContext(), detailsService.class);
-                detService.putExtra(detailsService.ID_MATCH,idMatch);
+                detService = new Intent(getApplicationContext(), detailsUpdateService.class);
+                detService.putExtra(detailsUpdateService.ID_MATCH,idMatch);
                 startService(detService);
             }
         });
 
-        detService = new Intent(getApplicationContext(), detailsService.class);
-        detService.putExtra(detailsService.ID_MATCH, idMatch);
+        detService = new Intent(getApplicationContext(), detailsUpdateService.class);
+        detService.putExtra(detailsUpdateService.ID_MATCH, idMatch);
         startService(detService);
     }
 
