@@ -52,18 +52,12 @@ public class PariActivity extends AppCompatActivity implements View.OnClickListe
             //Todo handle error
         }
 
-        TextView tvPartie = (TextView) findViewById(R.id.tvPariPartie);
-        String partie = intent.getStringExtra(PartieDetails.EXTRA_PARTIE);
-        tvPartie.setText(partie);
-
         // Placer le nom des équipes
         RadioButton radioVisiteur = (RadioButton) findViewById(R.id.raPariVisiteur);
-        String visiteurNom = intent.getStringExtra(PartieDetails.EXTRA_EQUIPE_VISITEUR_NOM);
-        radioVisiteur.setText(visiteurNom);
+        radioVisiteur.setText(nameExterieur);
 
         RadioButton radioLocale = (RadioButton) findViewById(R.id.raPariLocale);
-        String localeNom = intent.getStringExtra(PartieDetails.EXTRA_EQUIPE_LOCALE_NOM);
-        radioLocale.setText(localeNom);
+        radioLocale.setText(nameDomicile);
     }
 
     @Override
@@ -114,6 +108,7 @@ public class PariActivity extends AppCompatActivity implements View.OnClickListe
                 int result = tcp.sendBet(betToSend);
                 if(result == 1)
                 {
+                    ((MyApplication)getApplication()).addBet(betToSend);
                     Log.i(TAG,"Succés pour l'objet b courant");
                 }
                 else if(result == 0)
