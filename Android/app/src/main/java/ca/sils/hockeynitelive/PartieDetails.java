@@ -135,8 +135,8 @@ public class PartieDetails extends AppCompatActivity
             teamNameVisitor.setText(currentMatch.getExterieur().getName());
             scoreLocal.setText(String.valueOf(currentMatch.getDomicileScore()));
             scoreVisitor.setText(String.valueOf(currentMatch.getExterieurScore()));
-            periode.setText(String.valueOf(currentMatch.getPeriode()));
-            timer.setText(getResources().getString(R.string.PdPeriode) + " : " +currentMatch.getStringTime());
+            periode.setText(getResources().getString(R.string.PdPeriode) + " : " +String.valueOf(currentMatch.getPeriode()));
+            timer.setText(currentMatch.getStringTime());
 
             listEvent = (ListView) findViewById(R.id.listEvent);
             adapter = new EventAdapter(this, R.layout.adapter_match_event, currentMatch);
