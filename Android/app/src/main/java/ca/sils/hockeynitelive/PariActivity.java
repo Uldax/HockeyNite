@@ -47,7 +47,7 @@ public class PariActivity extends AppCompatActivity implements View.OnClickListe
         nameExterieur = intent.getExtras().getString("exterieurName");
 
         //test que les valeurs sont cohérente :
-        if( nameDomicile == "" || nameDomicile == "" || idMatch < 0){
+        if( nameDomicile.equals("") || nameDomicile.equals("") || idMatch < 0){
             //Todo handle error
         }
 
@@ -74,14 +74,19 @@ public class PariActivity extends AppCompatActivity implements View.OnClickListe
         RadioButton radio = (RadioButton) findViewById(R.id.raPariLocale);
         EditText editText = (EditText) findViewById(R.id.etMontant);
         float amount = Float.valueOf(editText.getText().toString());
-        String name = nameExterieur;
-        if( radio.isChecked() ){
-            name = nameDomicile;
+        if(amount > 0){
+            String name = nameExterieur;
+            if( radio.isChecked() ){
+                name = nameDomicile;
 
+            }
+            Bet b = new Bet(dateFormat.format(date) + "-" + Bet.getGeneratedId(),idMatch, name, amount);
+            new MakeBet(b).start();
         }
-        Bet b = null;
-        //b = new Bet(dateFormat.format(date) + "-" + createID(),idMatch, name, amount);
-        new MakeBet(b);
+        else{
+            //Todo handle error with toast
+        }
+
         // Fin de cette activité
         //finish();
     }

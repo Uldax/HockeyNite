@@ -37,7 +37,7 @@ public class TCPHelper {
 
     public void sendBet(Bet bet) {
         try {
-            Socket sClient = new Socket("localhost", serveurPort);
+            Socket sClient = new Socket(adresse, serveurPort);
             InputStream is = sClient.getInputStream();
             OutputStream os = sClient.getOutputStream();
             ObjectOutputStream oos = new ObjectOutputStream(os);
@@ -49,15 +49,15 @@ public class TCPHelper {
 
             if(result == 1)
             {
-                System.out.println("SuccÃ¨s pour l'objet b courant");
+                Log.i(TAG,"SuccÃ¨s pour l'objet b courant");
             }
             else if(result == 0)
             {
-                System.out.println("l'ajout Ã  echouÃ©, car la pÃ©riode est plus grande que 2");
+                Log.i(TAG, "l'ajout Ã  echouÃ©, car la pÃ©riode est plus grande que 2");
             }
             else
             {
-                System.out.println("l'ajout Ã  echouÃ©, error de stream");
+                Log.i(TAG, "l'ajout Ã  echouÃ©, error de stream");
             }
 
             sClient.close();
