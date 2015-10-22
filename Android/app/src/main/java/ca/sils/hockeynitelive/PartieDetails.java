@@ -3,8 +3,11 @@ package ca.sils.hockeynitelive;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -12,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import ca.sils.hockeynitelive.Communication.AutoUpdateService;
 import ca.sils.hockeynitelive.Communication.detailsService;
 import ca.sils.hockeynitelive.adapter.EventAdapter;
 import dataObject.Match;
@@ -45,6 +49,7 @@ public class PartieDetails extends AppCompatActivity
 
         Intent intent = getIntent();
         idMatch =(int) intent.getExtras().getLong("idMatch");
+        Log.i("PartieDetails onCreate", "getExtras " + String.valueOf(idMatch));
 
         receiver = new BroadcastReceiver() {
             @Override
@@ -95,6 +100,9 @@ public class PartieDetails extends AppCompatActivity
 
         // Affichage du statut d'avant-plan par Toast
         Toast.makeText(PartieDetails.this, "HockeyNiteLive - onResume", Toast.LENGTH_SHORT).show();
+        LocalBroadcastManager.getInstance(this).registerReceiver((receiver),
+                new IntentFilter(AutoUpdateService.COM_RESULT)
+        );
     }
 
     @Override
@@ -102,12 +110,10 @@ public class PartieDetails extends AppCompatActivity
     {
         // Appel parent
         super.onPause();
-
         // Activité en arrière-plan
         avantPlan = false;
-
         stopService(detService);
-
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
         // Affichage du statut d'avant-plan par Toast
         Toast.makeText(PartieDetails.this, "HockeyNiteLive - onPause", Toast.LENGTH_SHORT).show();
     }
