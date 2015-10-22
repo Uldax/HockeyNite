@@ -116,6 +116,10 @@ public class ChoixMatchActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
+        if(this.comService!= null){
+            stopService(this.comService);
+            this.comService = null;
+        }
         super.onStop();
     }
 

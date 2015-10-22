@@ -7,59 +7,84 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="ca.sils.hockeynitelive.PariActivity">
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:weightSum="1"
+        android:id="@+id/linearLayout2">
+
+        <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_weight="0.5">
+
+            <RadioButton
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/PdEquipeLocaleNom"
+                android:id="@+id/raPariLocale"
+                android:layout_alignEnd="@+id/tvPariPartie"
+                android:layout_above="@+id/raPariLocale"
+                android:layout_alignParentStart="true" />
+
+            <RadioButton
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/PdEquipeVisiteurNom"
+            android:id="@+id/raPariVisiteur"
+            android:layout_above="@+id/etMontant"
+            android:layout_alignParentStart="true"
+            android:checked="true" />
+
+        </RadioGroup>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:inputType="numberDecimal"
+            android:ems="10"
+            android:id="@+id/etMontant"
+            android:layout_above="@+id/buPariEnvoi"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_weight="0.5"
+            android:singleLine="true" />
+    </LinearLayout>
+
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/PariEnvoi"
         android:id="@+id/buPariEnvoi"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:onClick="onClick" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/TrouverPartie"
-        android:id="@+id/tvPariPartie"
-        android:layout_alignParentTop="true"
+        android:onClick="onClick"
+        android:layout_below="@+id/linearLayout2"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-    <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_above="@+id/etMontant"
-        android:layout_alignParentStart="true">
-
-    <RadioButton
+    <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/PdEquipeVisiteurNom"
-        android:id="@+id/raPariVisiteur"
-        android:layout_above="@+id/etMontant"
-        android:layout_alignParentStart="true"
-        android:checked="true" />
-    <RadioButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/PdEquipeLocaleNom"
-        android:id="@+id/raPariLocale"
-        android:layout_alignEnd="@+id/tvPariPartie"
-        android:layout_above="@+id/raPariLocale"
+        android:id="@+id/ListBet"
+        android:layout_below="@+id/buPariEnvoi"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-    </RadioGroup>
-
-    <EditText
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="numberDecimal"
-        android:ems="10"
-        android:id="@+id/etMontant"
-        android:layout_above="@+id/buPariEnvoi"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true" />
+        android:id="@+id/progressBar"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:indeterminate="false"
+        android:visibility="invisible" />
 
 </RelativeLayout>

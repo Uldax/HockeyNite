@@ -29,5 +29,8 @@ public class MyApplication extends Application {
         // On ajoute le bet courant Ã  notre liste de Bet
         betHistory.add(b);
     }
+    public List<Bet> getBet(){
+        return betHistory;
+    }
 
 }
