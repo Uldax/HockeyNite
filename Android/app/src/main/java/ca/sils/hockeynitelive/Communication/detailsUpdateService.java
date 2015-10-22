@@ -19,8 +19,8 @@ public class detailsUpdateService extends Service {
 
     public static final String TAG = "detailService";
 
-    // intervalle entre les maj = 2 minute
-    static final int DELAY = 120000;
+    // intervalle entre les maj = 10 secondes
+    static final int DELAY = 10000;
 
     // est-ce que le service
 //  est en train de s’exécuter ?
@@ -48,7 +48,7 @@ public class detailsUpdateService extends Service {
         Log.d(TAG, "onCreated");
     }
 
-    static final public String DET_RESULT = "REQUEST_PROCESSED";
+    static final public String DET_RESULT = "REQUEST_MATCH";
 
     static final public String DET_MESSAGE = "DET_MSG";
     static final public String ID_MATCH = "ID_MATCH";

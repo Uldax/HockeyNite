@@ -95,7 +95,7 @@ public class PartieDetails extends AppCompatActivity
         super.onResume();
         avantPlan = true;
         LocalBroadcastManager.getInstance(this).registerReceiver((receiver),
-                new IntentFilter(AutoUpdateService.COM_RESULT)
+                new IntentFilter(detailsUpdateService.DET_RESULT)
         );
     }
 

@@ -79,6 +79,10 @@ public class ChoixMatchActivity extends AppCompatActivity {
                     Toast.makeText(ChoixMatchActivity.this, "HokeyNiteLive - Adresse vide", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                if(comService != null){
+                    stopService(comService);
+                    comService = null;
+                }
                 SharedPreferences.Editor editor = getApplication().getSharedPreferences(getResources().getString(R.string.FileShared), Context.MODE_PRIVATE).edit();
                 editor.putString(getResources().getString(R.string.Serveur_adresse),adresseIP);
                 editor.commit();
@@ -114,29 +118,6 @@ public class ChoixMatchActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
         super.onStop();
     }
-
-    private void getList() {
-        // Lecture des parties
-        UDPHelper commUDPHelper = new UDPHelper();
-        InetAddress adr;
-
-        try {
-            adr = InetAddress.getByName(getApplication().getSharedPreferences(getResources().getString(R.string.FileShared),Context.MODE_PRIVATE).getString(getResources().getString(R.string.Serveur_adresse),"192.168.1.1"));
-        } catch (Exception e) {
-            Toast.makeText(ChoixMatchActivity.this, "Adresse invalide", Toast.LENGTH_SHORT).show();
-            progressBar.setVisibility(View.INVISIBLE);
-            return;
-        }
-
-        // Placer les paramètres de communications
-        commUDPHelper.setServeur(adr, 6780, 6779);
-
-        // Lecture de la liste des parties
-        ListMatchName listeParties = commUDPHelper.getListMatchName();
-
-        this.updateData(listeParties);
-    }
-
 
     public void updateData(ListMatchName listMatch){
         progressBar.setVisibility(View.INVISIBLE);
