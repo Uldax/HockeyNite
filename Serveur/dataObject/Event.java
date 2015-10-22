@@ -11,6 +11,9 @@ public class Event implements Serializable {
 	
 	final static public int GOAL = 0;
 	final static public int PENALITY = 1;
+	final static public int MATCH_END = 2;
+	final static public int TIMER = 3;
+	
 
 	public Event(int type, String message){
 		this.type = type;

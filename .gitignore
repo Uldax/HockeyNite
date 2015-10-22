@@ -64,3 +64,4 @@ Serveur/HockeyNite/all.log
 /.idea/libraries
 .DS_Store
 *.idea*
+Android/Android.iml

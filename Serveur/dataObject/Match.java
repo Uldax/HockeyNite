@@ -66,11 +66,11 @@ public class Match implements Serializable {
 		case 1:
 			if (time >= PERIODE_TIME && pause == false) {
 				pause = true;
-				matchEvent.add( new Event(time, "First time break"));
+				matchEvent.add( new Event(Event.TIMER,time, "First time break"));
 			}
 			else if ((time >= PERIODE_TIME + BREAK_TIME) && pause == true) {
 				pause = false;
-				matchEvent.add( new Event(time, "Here we go for the second periode"));
+				matchEvent.add( new Event(Event.TIMER,time, "Here we go for the second periode"));
 				periodeStart = time;
 				periode = 2;
 			}
@@ -78,11 +78,11 @@ public class Match implements Serializable {
 		case 2:
 			if ((time >= periodeStart + PERIODE_TIME ) && pause == false ) {
 				pause = true;
-				matchEvent.add( new Event(time, "Second time break"));
+				matchEvent.add( new Event(Event.TIMER,time, "Second time break"));
 			}
 			else if ((time >= periodeStart + PERIODE_TIME + BREAK_TIME ) && pause == true) {
 				pause = false;
-				matchEvent.add( new Event(time, "here we go for the last periode"));
+				matchEvent.add( new Event(Event.TIMER,time, "Here we go for the last periode"));
 				periodeStart = time;
 				periode = 3;
 			}
@@ -91,7 +91,7 @@ public class Match implements Serializable {
 			if ((time >= MAX_TIME ) && pause == false ) {
 				pause = true;
 				handleWinner();
-				matchEvent.add( new Event(time, "This is the end of the game"));
+				matchEvent.add( new Event(Event.MATCH_END,time, "This is the end of the game"));
 			}	
 			break;
 		default:
