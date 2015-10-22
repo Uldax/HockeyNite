@@ -63,7 +63,7 @@ public class PartieDetails extends AppCompatActivity
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
 
-
+        /*
         Button buPdPari = (Button) findViewById(R.id.buPdPari);
         buPdPari.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -76,7 +76,7 @@ public class PartieDetails extends AppCompatActivity
                 intent.putExtra(EXTRA_EQUIPE_LOCALE_NOM, tvLocaleNom.getText());
                 startActivity(intent);
             }
-        });
+        });*/
 
         Button buPdRafraichir = (Button) findViewById(R.id.buPdRafraichir);
         buPdRafraichir.setOnClickListener(new View.OnClickListener() {
