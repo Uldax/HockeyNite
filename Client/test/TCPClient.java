@@ -46,7 +46,6 @@ public class TCPClient{
          
             try {
                 Socket sClient = new Socket("localhost", serveurPort);
-                
                 InputStream is = sClient.getInputStream();               
                 
                 OutputStream os = sClient.getOutputStream();

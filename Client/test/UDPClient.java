@@ -39,7 +39,6 @@ public class UDPClient{
 	 */
     public static void main(String args[]){
     	int choix = -1;
-    	
         do{
             System.out.println("Veuillez selectionner l'option souhaité:");
             System.out.println(" -- ");            
