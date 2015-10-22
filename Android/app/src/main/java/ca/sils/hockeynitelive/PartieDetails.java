@@ -81,12 +81,14 @@ public class PartieDetails extends AppCompatActivity
         Button buPdRafraichir = (Button) findViewById(R.id.buPdRafraichir);
         buPdRafraichir.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                //TODO : refresh data
+                detService = new Intent(getApplicationContext(), detailsService.class);
+                detService.putExtra(detailsService.ID_MATCH,idMatch);
+                startService(detService);
             }
         });
 
         detService = new Intent(getApplicationContext(), detailsService.class);
-        detService.putExtra(detailsService.ID_MATCH,idMatch);
+        detService.putExtra(detailsService.ID_MATCH, idMatch);
         startService(detService);
     }
 
