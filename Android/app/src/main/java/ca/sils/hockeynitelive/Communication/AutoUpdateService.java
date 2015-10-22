@@ -20,7 +20,7 @@ public class AutoUpdateService extends Service {
     public static final String TAG = "ComService";
 
     // intervalle entre les maj = 2 minutes
-    static final int DELAY = 120000;
+    static final int DELAY = 10000;
 
     // est-ce que le service
 //  est en train de s’exécuter ?
@@ -67,7 +67,7 @@ public class AutoUpdateService extends Service {
         // au démarrage du service
 
 
-        if(this.updater.isAlive()) this.updater.stop(); //TODO don't work
+        //10if(this.updater.isAlive()) this.updater.stop(); //TODO don't work
         this.runFlag = true;
         this.updater.start();
 
