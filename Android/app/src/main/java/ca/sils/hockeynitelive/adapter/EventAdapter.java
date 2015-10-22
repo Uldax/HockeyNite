@@ -59,13 +59,20 @@ public class EventAdapter  extends BaseAdapter {
 
         timer.setText(String.valueOf(eventList.get(position).getTime()));
         message.setText(eventList.get(position).getMessage());
-        if(eventList.get(position).getType() == Event.GOAL)
-            icone.setImageDrawable(mContext.getResources().getDrawable(R.drawable.goal));
-        else
-            icone.setImageDrawable(mContext.getResources().getDrawable(R.drawable.penalite));
-
-
-
+        switch (eventList.get(position).getType()){
+            case Event.GOAL:
+                icone.setImageDrawable(mContext.getResources().getDrawable(R.drawable.goal));
+                break;
+            case Event.PENALITY:
+                icone.setImageDrawable(mContext.getResources().getDrawable(R.drawable.penalite));
+                break;
+            case Event.TIMER:
+                icone.setImageDrawable(mContext.getResources().getDrawable(R.drawable.timer));
+                break;
+            case Event.MATCH_END:
+                icone.setImageDrawable(mContext.getResources().getDrawable(R.drawable.end));
+                break;
+        }
         return row;
     }
 
