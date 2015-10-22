@@ -31,6 +31,7 @@ public class UDPClient{
         private static List<Bet> betHistory = new ArrayList<Bet>();
         private static final int betServerPort = 1248;
         private static AtomicLong betCounter = new AtomicLong();
+        private static String host = "10.238.50.81";
 	
 	/**
 	 * Menu principal
@@ -39,6 +40,7 @@ public class UDPClient{
 	 */
     public static void main(String args[]){
     	int choix = -1;
+    	
         do{
             System.out.println("Veuillez selectionner l'option souhaité:");
             System.out.println(" -- ");            
@@ -87,7 +89,7 @@ public class UDPClient{
     	Communication commObject = Communication.getInstance();
     	
  		try {
- 			aHost = InetAddress.getByName("localhost");
+ 			aHost = InetAddress.getByName(host);
  		} catch (UnknownHostException e) {
  			e.printStackTrace();
  		}
