@@ -7,15 +7,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.GridView;
+import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 
 import java.net.InetAddress;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import ca.sils.hockeynitelive.Communication.TCPHelper;
+import ca.sils.hockeynitelive.Communication.UDPHelper;
+import ca.sils.hockeynitelive.adapter.BetAdapter;
+import ca.sils.hockeynitelive.adapter.MatchAdapter;
 import dataObject.Bet;
+import dataObject.BetRespond;
 
 public class PariActivity extends AppCompatActivity implements View.OnClickListener
 {
@@ -24,6 +33,9 @@ public class PariActivity extends AppCompatActivity implements View.OnClickListe
     private int idMatch ;
     private String nameExterieur ;
     private String nameDomicile;
+    private BetAdapter adapter;
+    private ListView listView;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -52,6 +64,10 @@ public class PariActivity extends AppCompatActivity implements View.OnClickListe
 
         RadioButton radioLocale = (RadioButton) findViewById(R.id.raPariLocale);
         radioLocale.setText(nameDomicile);
+
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.INVISIBLE);
+        listView = (ListView) findViewById(R.id.ListBet);
 
         //Display all the bet
         new DisplayBets().start();
@@ -149,17 +165,19 @@ public class PariActivity extends AppCompatActivity implements View.OnClickListe
                 udp.setServeur(adr, 6780,6779);
                 BetRespond respond = null;
                 MyApplication myApp= (MyApplication)getApplication();
+                List<BetRespond> listRep = new ArrayList<BetRespond>();
                 for (int i = 0; i < myApp.getBet().size(); i++) {
                     Bet b = myApp.getBet().get(i);
                     respond = udp.getBetDetail(b.getMatchID(), b.getBetID());
                     if (respond != null) {
-                        //Menu.affBetsUpdates(respond);
-                        //TODO display reesult
+                        listRep.add(respond);
                     }
-
                 }
+                adapter = new BetAdapter(getApplicationContext(), R.layout.adapter_bet, listRep);
+                listView.setAdapter(adapter);
             }
             catch (Exception e) {
+                Log.e(TAG,e.getMessage());
                 return;
             }
         }
