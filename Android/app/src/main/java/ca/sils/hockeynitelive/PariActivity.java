@@ -110,7 +110,19 @@ public class PariActivity extends AppCompatActivity implements View.OnClickListe
 
                 // Placer les paramètres de communications
                 tcp.setServeur(adr, 1248);
-                tcp.sendBet(betToSend);
+                int result = tcp.sendBet(betToSend);
+                if(result == 1)
+                {
+                    Log.i(TAG,"Succés pour l'objet b courant");
+                }
+                else if(result == 0)
+                {
+                    Log.i(TAG, "l'ajout à  echoué, car la période est plus grande que 2");
+                }
+                else
+                {
+                    Log.i(TAG, "l'ajout à  echoué, error de stream");
+                }
                 //Todo add return
                 Log.d(TAG, "bet send");
             }

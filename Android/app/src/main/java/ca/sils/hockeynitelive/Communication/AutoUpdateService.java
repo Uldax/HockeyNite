@@ -19,7 +19,7 @@ public class AutoUpdateService extends Service {
 
     public static final String TAG = "ComService";
 
-    // intervalle entre les maj = 2 minutes
+    // intervalle entre les maj = 10 secondes
     static final int DELAY = 10000;
 
     // est-ce que le service

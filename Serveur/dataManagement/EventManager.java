@@ -36,7 +36,7 @@ public class EventManager implements Runnable {
 				dataSem.acquire();
 				Match[] listMatch = data.getAllMatch();
 				//get ramdom match to update
-	        	int eventOnMatch = r.nextInt(2);   
+	        	int eventOnMatch = r.nextInt(data.getAllMatchName().getList().size());   
 	        	if (listMatch[eventOnMatch] != null){
 	        		if (!listMatch[eventOnMatch].isPause() && listMatch[eventOnMatch].getTime() < Match.MAX_TIME ){
 	        			Team teamEvent;
