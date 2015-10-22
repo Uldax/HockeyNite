@@ -55,6 +55,7 @@ public class ChoixMatchActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), PartieDetails.class);
+                Log.i("gridView onClick",String.valueOf(adapter.getItemId(position)));
                 intent.putExtra("idMatch", adapter.getItemId(position));
                 startActivity(intent);
 

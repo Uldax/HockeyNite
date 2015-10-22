@@ -71,8 +71,9 @@ public class detailsService extends Service {
         // au démarrage du service
 
         this.idMatch = intent.getExtras().getInt(ID_MATCH);
+        Log.i("onStartCommand", "getExtra : " + String.valueOf(idMatch));
 
-        if(this.updater.isAlive()) this.updater.stop(); //TODO don't work
+        //if(this.updater.isAlive()) this.updater.stop(); //TODO don't work
         this.runFlag = true;
         this.updater.start();
 
@@ -123,6 +124,8 @@ public class detailsService extends Service {
 
                     // Placer les paramètres de communications
                     commUdp.setServeur(adr, 6780,6779);
+
+                    Log.i("onStartCommand", "UpdaterService-Updater " + String.valueOf(idMatch));
 
                     // Lecture de la liste des parties
                     Match currentMatch = commUdp.getMatchDetail(idMatch);
