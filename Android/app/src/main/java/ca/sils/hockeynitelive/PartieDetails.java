@@ -92,14 +92,8 @@ public class PartieDetails extends AppCompatActivity
 
     @Override
     protected void onResume() {
-        // Appel parent
         super.onResume();
-
-        // Activité en avant-plan
         avantPlan = true;
-
-        // Affichage du statut d'avant-plan par Toast
-        Toast.makeText(PartieDetails.this, "HockeyNiteLive - onResume", Toast.LENGTH_SHORT).show();
         LocalBroadcastManager.getInstance(this).registerReceiver((receiver),
                 new IntentFilter(AutoUpdateService.COM_RESULT)
         );
@@ -108,14 +102,10 @@ public class PartieDetails extends AppCompatActivity
     @Override
     protected void onPause()
     {
-        // Appel parent
         super.onPause();
-        // Activité en arrière-plan
         avantPlan = false;
         stopService(detService);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
-        // Affichage du statut d'avant-plan par Toast
-        Toast.makeText(PartieDetails.this, "HockeyNiteLive - onPause", Toast.LENGTH_SHORT).show();
     }
 
     private void updateData(Match currentMatch){
@@ -143,7 +133,6 @@ public class PartieDetails extends AppCompatActivity
             listEvent.setAdapter(adapter);
         }else{
             Toast.makeText(this,"Erreur réseau",Toast.LENGTH_LONG).show();
-            this.onStop();
         }
     }
 
