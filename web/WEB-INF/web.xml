@@ -4,9 +4,17 @@
         <servlet-name>testServlet</servlet-name>
         <servlet-class>testServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>matchdetails</servlet-name>
+        <servlet-class>matchdetails</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>testServlet</servlet-name>
         <url-pattern>/testServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>matchdetails</servlet-name>
+        <url-pattern>/matchdetails</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

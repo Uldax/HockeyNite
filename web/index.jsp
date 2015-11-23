@@ -107,7 +107,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-4 portfolio-item">
-                    <a href="#portfolioModal1" class="portfolio-link" data-toggle="modal">
+                    <a href="#portfolioModal1" id="0" class="portfolio-link" data-toggle="modal">
                         <div class="caption">
                             <div class="caption-content">
                                 <i class="fa fa-search-plus fa-3x"></i>
@@ -117,7 +117,7 @@
                     </a>
                 </div>
                 <div class="col-sm-4 portfolio-item">
-                    <a href="#portfolioModal2" class="portfolio-link" data-toggle="modal">
+                    <a href="#portfolioModal2" id="1" class="portfolio-link" data-toggle="modal">
                         <div class="caption">
                             <div class="caption-content">
                                 <i class="fa fa-search-plus fa-3x"></i>
@@ -127,7 +127,7 @@
                     </a>
                 </div>
                 <div class="col-sm-4 portfolio-item">
-                    <a href="#portfolioModal3" class="portfolio-link" data-toggle="modal">
+                    <a href="#portfolioModal3" id="2" class="portfolio-link" data-toggle="modal">
                         <div class="caption">
                             <div class="caption-content">
                                 <i class="fa fa-search-plus fa-3x"></i>
@@ -257,20 +257,27 @@
                             <h2>Match Team A vs Team B</h2>
                             <hr class="star-primary">
                             <img src="img/portfolio/avsb.png" class="img-responsive img-centered" alt="">
-                            <p>Use this area of the page to describe your project. The icon above is part of a free icon set by <a href="https://sellfy.com/p/8Q9P/jV3VZ/">Flat Icons</a>. On their website, you can download their free set with 16 icons, or you can purchase the entire set with 146 icons for only $12!</p>
+                            <h3>Events</h3>
+                            <p id="0_events"></p>
                             <ul class="list-inline item-details">
-                                <li>Client:
-                                    <strong><a href="http://startbootstrap.com">Start Bootstrap</a>
+                                <li>Time:
+                                    <strong><span id="0_time">Start Bootstrap</span>
                                     </strong>
                                 </li>
-                                <li>Date:
-                                    <strong><a href="http://startbootstrap.com">April 2014</a>
+                                <li>Periode:
+                                    <strong><span id="0_periode">Start Bootstrap</span>
+                                    </strong>
+                                </li>                              
+                            </ul>
+                             <ul class="list-inline item-details">
+                                <li>[A] team score:
+                                    <strong><span id="0_score_home">Start Bootstrap</span>
                                     </strong>
                                 </li>
-                                <li>Service:
-                                    <strong><a href="http://startbootstrap.com">Web Development</a>
+                                <li>[B] team score:
+                                    <strong><span id="0_score_ext">Start Bootstrap</span>
                                     </strong>
-                                </li>
+                                </li>                              
                             </ul>
                             <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
                         </div>
@@ -294,20 +301,27 @@
                             <h2>Match Team C vs Team D</h2>
                             <hr class="star-primary">
                             <img src="img/portfolio/cvsd.png" class="img-responsive img-centered" alt="">
-                            <p>Use this area of the page to describe your project. The icon above is part of a free icon set by <a href="https://sellfy.com/p/8Q9P/jV3VZ/">Flat Icons</a>. On their website, you can download their free set with 16 icons, or you can purchase the entire set with 146 icons for only $12!</p>
+                            <h3>Events</h3>
+                            <p id="1_events"></p>
                             <ul class="list-inline item-details">
-                                <li>Client:
-                                    <strong><a href="http://startbootstrap.com">Start Bootstrap</a>
+                                <li>Time:
+                                    <strong><span id="1_time">Start Bootstrap</span>
                                     </strong>
                                 </li>
-                                <li>Date:
-                                    <strong><a href="http://startbootstrap.com">April 2014</a>
+                                <li>Periode:
+                                    <strong><span id="1_periode">Start Bootstrap</span>
+                                    </strong>
+                                </li>                              
+                            </ul>
+                             <ul class="list-inline item-details">
+                                <li>[C] team score:
+                                    <strong><span id="1_score_home">Start Bootstrap</span>
                                     </strong>
                                 </li>
-                                <li>Service:
-                                    <strong><a href="http://startbootstrap.com">Web Development</a>
+                                <li>[D] team score:
+                                    <strong><span id="1_score_ext">Start Bootstrap</span>
                                     </strong>
-                                </li>
+                                </li>                              
                             </ul>
                             <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
                         </div>
@@ -331,20 +345,27 @@
                             <h2>Match Team A vs Team D</h2>
                             <hr class="star-primary">
                             <img src="img/portfolio/avsd.png" class="img-responsive img-centered" alt="">
-                            <p>Use this area of the page to describe your project. The icon above is part of a free icon set by <a href="https://sellfy.com/p/8Q9P/jV3VZ/">Flat Icons</a>. On their website, you can download their free set with 16 icons, or you can purchase the entire set with 146 icons for only $12!</p>
+                            <h3>Events</h3>
+                            <p id="2_events"></p>
                             <ul class="list-inline item-details">
-                                <li>Client:
-                                    <strong><a href="http://startbootstrap.com">Start Bootstrap</a>
+                                <li>Time:
+                                    <strong><span id="2_time">Start Bootstrap</span>
                                     </strong>
                                 </li>
-                                <li>Date:
-                                    <strong><a href="http://startbootstrap.com">April 2014</a>
+                                <li>Periode:
+                                    <strong><span id="2_periode">Start Bootstrap</span>
+                                    </strong>
+                                </li>                              
+                            </ul>
+                            <ul class="list-inline item-details">
+                                <li>[A] team score:
+                                    <strong><span id="2_score_home">Start Bootstrap</span>
                                     </strong>
                                 </li>
-                                <li>Service:
-                                    <strong><a href="http://startbootstrap.com">Web Development</a>
+                                <li>[D] team score:
+                                    <strong><span id="2_score_ext">Start Bootstrap</span>
                                     </strong>
-                                </li>
+                                </li>                              
                             </ul>
                             <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
                         </div>
@@ -405,7 +426,7 @@
 
     <!-- Contact Form JavaScript -->
     <script src="js/jqBootstrapValidation.js"></script>
-    <script src="js/contact_me.js"></script>
+  
 
     <!-- Custom Theme JavaScript -->
     <script src="js/freelancer.js"></script>
@@ -413,3 +434,32 @@
 </body>
 
 </html>
+<script>
+$( document ).ready(function() {
+    console.log( "ready!" );
+    $("a.portfolio-link").click(function(e){
+        e.preventDefault();
+        console.log($(this).attr('id'));
+        var id = $(this).attr('id');
+        $.getJSON( "/TP3/matchdetails?idMatch="+ id, function( data ) { 
+            
+          console.log(data);
+          console.log(data.time);
+          console.log(data.periode);
+          console.log(data.domicileScore);
+          console.log(data.exterieurScore);
+          var html = "";
+         for (i = 0; i < data.matchEvent.length; i++) { 
+            html += data.matchEvent[i].message + "<br>";
+        }
+          console.log(html);
+          $("#" + id + "_events").html(html);
+        
+          $("#" + id + "_time").html(data.time);
+           $("#" + id + "_periode").html(data.periode);
+           $("#" + id + "_score_home").html(data.domicileScore);
+           $("#" + id + "_score_ext").html(data.exterieurScore);
+         });
+    });
+});
+</script>
