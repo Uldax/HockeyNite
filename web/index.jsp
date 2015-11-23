@@ -115,6 +115,9 @@
                         </div>
                         <img src="img/portfolio/avsb.png" class="img-responsive" alt="">
                     </a>
+                    <div class="col-sm-offset-3 col-sm-4">
+                    <button onclick="myFunction(0,'A VS B')">Bet on this match</button>
+                       </div>
                 </div>
                 <div class="col-sm-4 portfolio-item">
                     <a href="#portfolioModal2" id="1" class="portfolio-link" data-toggle="modal">
@@ -125,6 +128,9 @@
                         </div>
                         <img src="img/portfolio/cvsd.png" class="img-responsive" alt="">
                     </a>
+                    <div class="col-sm-offset-3 col-sm-4">
+                    <button onclick="myFunction(1,'C VS D')">Bet on this match</button>
+                       </div>
                 </div>
                 <div class="col-sm-4 portfolio-item">
                     <a href="#portfolioModal3" id="2" class="portfolio-link" data-toggle="modal">
@@ -135,6 +141,9 @@
                         </div>
                         <img src="img/portfolio/avsd.png" class="img-responsive" alt="">
                     </a>
+                    <div class="col-sm-offset-3 col-sm-4">
+                        <button onclick="myFunction(2,'A VS D')">Bet on this match</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -285,6 +294,7 @@
                 </div>
             </div>
         </div>
+        
     </div>
     <div class="portfolio-modal modal fade" id="portfolioModal2" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-content">
@@ -327,6 +337,7 @@
                         </div>
                     </div>
                 </div>
+                
             </div>
         </div>
     </div>
@@ -371,6 +382,7 @@
                         </div>
                     </div>
                 </div>
+                
             </div>
         </div>
     </div>
@@ -436,6 +448,16 @@
 </html>
 <script>
 $( document ).ready(function() {
+    setInterval(function(){
+        var randomnumber = Math.floor(Math.random() * (2 - 0 + 1)) + 0;
+        console.log("loop interval 2mins");
+        $.getJSON( "/TP3/matchdetails?idMatch="+randomnumber, function( data ) {             
+         alert(data.matchEvent[data.matchEvent.length - 1].message);
+         console.log("popup match "+randomnumber);
+        });       
+    }, 120000);
+        
+   
     console.log( "ready!" );
     $("a.portfolio-link").click(function(e){
         e.preventDefault();
@@ -463,3 +485,37 @@ $( document ).ready(function() {
     });
 });
 </script>
+
+
+<p id="demo"></p>
+
+<script>
+function myFunction(idMatch, infoMatch) {
+    var team = prompt("Match: " + infoMatch + " pick your team!");
+    team = team.toUpperCase();
+    if (team != null) {
+        var montant = prompt("How much to do want to bet?");
+        montant = parseFloat(montant);
+        
+        if(montant !=null){
+            $.get( "/TP3/makeabet?idMatch="+idMatch+"&equipe="+team+"&montant="+montant, function( data ) {
+                if(data == 1)
+                {
+                   alert( "Success! Your bet has been saved!" );
+
+                }
+                else if(data == 0)
+                {
+                                  alert( "Failed! You cannot bet on this match anymore! Second period is over!" );
+                }
+               else
+               {
+                  alert("Failed! something died on the server!"); 
+                }
+
+              });
+        }
+    }
+}
+</script>
+

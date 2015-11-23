@@ -8,6 +8,10 @@
         <servlet-name>matchdetails</servlet-name>
         <servlet-class>matchdetails</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>makeabet</servlet-name>
+        <servlet-class>makeabet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>testServlet</servlet-name>
         <url-pattern>/testServlet</url-pattern>
@@ -15,6 +19,10 @@
     <servlet-mapping>
         <servlet-name>matchdetails</servlet-name>
         <url-pattern>/matchdetails</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>makeabet</servlet-name>
+        <url-pattern>/makeabet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
